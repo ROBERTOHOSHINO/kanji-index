@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>日本株30年変化 × 天然色漢字INDEX™</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Hiragino Sans','Meiryo',sans-serif;background:#fff0f6;color:#2d2d2d;min-height:100vh}
+
+.hero{background:linear-gradient(135deg,#ff6eb4 0%,#ff9a3c 45%,#ffe066 100%);padding:38px 20px 28px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'漢';font-size:180px;position:absolute;top:-30px;right:-20px;opacity:.07;color:#fff;font-weight:900;line-height:1}
+.hero-badge{display:inline-block;background:#fff;color:#ff6eb4;font-size:11px;font-weight:800;padding:5px 14px;border-radius:20px;margin-bottom:12px;letter-spacing:1px;box-shadow:0 2px 8px rgba(0,0,0,.12)}
+.hero h1{font-size:clamp(20px,5vw,34px);font-weight:900;line-height:1.3;margin-bottom:8px;color:#fff;text-shadow:2px 2px 0 rgba(0,0,0,.1)}
+.hero h1 span{color:#ffe066}
+.hero p{color:rgba(255,255,255,.92);font-size:13px;max-width:580px;margin:0 auto 18px;line-height:1.7}
+.hero-stats{display:flex;justify-content:center;gap:14px;flex-wrap:wrap}
+.stat-pill{background:rgba(255,255,255,.88);border-radius:14px;padding:10px 18px;text-align:center;box-shadow:0 3px 12px rgba(0,0,0,.1)}
+.stat-pill .num{font-size:20px;font-weight:900;color:#ff6eb4}
+.stat-pill .lbl{font-size:10px;color:#888;margin-top:2px}
+
+/* CKI説明バー */
+.cki-bar{background:linear-gradient(90deg,#2d2d2d,#444);color:#fff;padding:10px 20px;text-align:center;font-size:12px;display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap}
+.cki-bar b{color:#ffe066}
+.cki-kanji-demo{display:flex;gap:6px;align-items:center}
+.cki-k{font-size:22px;font-weight:900;line-height:1;padding:2px 5px;border-radius:4px}
+
+.section{max-width:960px;margin:0 auto;padding:26px 16px}
+.sec-title{font-size:17px;font-weight:900;margin-bottom:18px;display:flex;align-items:center;gap:8px;color:#333}
+.sec-title::before{content:'';display:block;width:5px;height:22px;background:linear-gradient(180deg,#ff6eb4,#ff9a3c);border-radius:3px}
+
+/* カテゴリータブ — 漢字1字 */
+.cat-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.cat-tab{display:flex;flex-direction:column;align-items:center;padding:8px 14px;border-radius:14px;border:2.5px solid #eee;background:#fff;cursor:pointer;transition:all .2s;min-width:62px;box-shadow:0 2px 6px rgba(0,0,0,.06)}
+.cat-tab:hover{transform:translateY(-2px);box-shadow:0 5px 14px rgba(0,0,0,.1)}
+.cat-tab.active{border-color:currentColor;box-shadow:0 4px 14px rgba(0,0,0,.15);transform:translateY(-2px)}
+.cat-tab .ck{font-size:26px;font-weight:900;line-height:1.1}
+.cat-tab .cl{font-size:9px;color:#888;margin-top:2px;text-align:center;line-height:1.3}
+
+/* Company Grid */
+.company-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(272px,1fr));gap:14px}
+.company-card{background:#fff;border:2.5px solid #ffd6ec;border-radius:18px;padding:18px;cursor:pointer;transition:all .25s;display:none;box-shadow:0 3px 10px rgba(255,110,180,.08)}
+.company-card.show{display:block}
+.company-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.12)}
+.company-card.selected{box-shadow:0 8px 28px rgba(0,0,0,.18)}
+.card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
+.card-name{font-size:14px;font-weight:900;color:#333}
+.card-code{font-size:10px;color:#bbb;margin-top:1px}
+/* 漢字バッジ：メイン業種 */
+.kanji-badge{display:flex;flex-direction:column;align-items:center;width:46px;flex-shrink:0}
+.kanji-badge .kb-k{font-size:32px;font-weight:900;line-height:1}
+.kanji-badge .kb-l{font-size:8px;color:#888;margin-top:2px;text-align:center}
+
+.timeline{display:flex;gap:0;margin:8px 0}
+.tl-item{flex:1;position:relative}
+.tl-item+.tl-item::before{content:'→';position:absolute;left:-10px;top:50%;transform:translateY(-50%);color:#ffb3d9;font-size:15px;font-weight:900}
+.tl-box{border:1.5px solid #ffd6ec;border-radius:10px;padding:7px 6px;font-size:10px;background:#fff8fc}
+.tl-year{color:#ff9a3c;font-size:9px;font-weight:800;margin-bottom:2px}
+.tl-biz{color:#444;font-weight:700;font-size:10px;line-height:1.3}
+.growth-chip{display:inline-block;padding:4px 10px;border-radius:10px;font-size:11px;font-weight:800}
+.up{background:linear-gradient(90deg,#d4fc79,#96e6a1);color:#276749}
+.down{background:linear-gradient(90deg,#ffecd2,#fcb69f);color:#c05000}
+.new{background:linear-gradient(90deg,#a8edea,#fed6e3);color:#806080}
+
+/* Detail */
+.detail-panel{background:#fff;border:2.5px solid #ff6eb4;border-radius:18px;padding:22px;margin-top:16px;display:none;box-shadow:0 8px 32px rgba(255,110,180,.18)}
+.detail-panel.open{display:block}
+.dp-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;flex-wrap:wrap;gap:8px}
+.dp-name{font-size:17px;font-weight:900;color:#333}
+.dp-kanji-row{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;align-items:center}
+.dp-kanji-item{display:flex;flex-direction:column;align-items:center;background:#f8f8f8;border-radius:10px;padding:6px 10px;min-width:52px}
+.dp-kanji-item .dkk{font-size:30px;font-weight:900;line-height:1.1}
+.dp-kanji-item .dkl{font-size:9px;color:#888;margin-top:2px;text-align:center}
+.dp-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:500px){.dp-grid{grid-template-columns:1fr}}
+.dp-box{background:linear-gradient(135deg,#fff5fa,#fff8ff);border:1.5px solid #ffd6ec;border-radius:12px;padding:12px}
+.dp-box-title{font-size:10px;color:#ff9a3c;font-weight:800;margin-bottom:7px}
+.seg-row{display:flex;align-items:center;gap:6px;margin-bottom:5px;font-size:11px}
+.seg-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.seg-pct{font-weight:800;width:28px;text-align:right;color:#ff6eb4}
+
+/* NISA */
+.nisa-section{background:linear-gradient(135deg,#f8ffae,#43c6ac);border-radius:22px;padding:24px;margin:18px 0;box-shadow:0 6px 22px rgba(67,198,172,.2)}
+.nisa-title{font-size:15px;font-weight:900;color:#fff;margin-bottom:14px;text-shadow:1px 1px 3px rgba(0,0,0,.1)}
+.nisa-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px}
+.nisa-card{background:rgba(255,255,255,.86);border-radius:14px;padding:13px}
+.nisa-card h4{font-size:12px;font-weight:800;color:#2b8a6e;margin-bottom:5px}
+.nisa-card p{font-size:11px;color:#555;line-height:1.6}
+.nisa-card .num{font-size:21px;font-weight:900;color:#ff6eb4;display:block;margin-bottom:3px}
+
+/* Compound */
+.compound-section{background:linear-gradient(135deg,#ffecd2,#fff);border:2px solid #ffd6a5;border-radius:18px;padding:20px;margin:18px 0}
+.compound-title{font-size:14px;font-weight:900;margin-bottom:14px;color:#e05000}
+.compound-bars{display:flex;align-items:flex-end;gap:8px;height:130px;margin-bottom:6px}
+.c-bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center}
+.c-bar{width:100%;border-radius:8px 8px 0 0;background:linear-gradient(180deg,#ff6eb4,#ff9a3c);position:relative;min-height:4px}
+.c-bar .c-val{position:absolute;top:-18px;left:50%;transform:translateX(-50%);font-size:9px;font-weight:800;color:#e05000;white-space:nowrap}
+.c-year{font-size:9px;color:#999;text-align:center;margin-top:4px}
+
+/* 産業タイムライン */
+.era-timeline{display:flex;overflow-x:auto;padding-bottom:8px;margin:14px 0;gap:10px}
+.era-item{min-width:108px;padding:12px 10px;border-radius:14px;flex-shrink:0;text-align:center;border:2px solid transparent}
+.era-item:nth-child(1){background:#ffe0f0;border-color:#ffb3d9}
+.era-item:nth-child(2){background:#fff0d6;border-color:#ffd6a5}
+.era-item:nth-child(3){background:#fffbd6;border-color:#ffe066}
+.era-item:nth-child(4){background:#d6ffe8;border-color:#96e6a1}
+.era-item:nth-child(5){background:#d6f0ff;border-color:#90cdf4}
+.era-item:nth-child(6){background:#e8d6ff;border-color:#b794f4}
+.era-item:nth-child(7){background:#ffd6d6;border-color:#fc8181}
+.era-year{font-size:10px;font-weight:800;color:#888;margin-bottom:3px}
+.era-biz{font-size:10px;font-weight:700;color:#444;line-height:1.4}
+.era-icon{font-size:22px;margin-bottom:3px}
+
+footer{text-align:center;padding:18px;font-size:10px;color:#bbb;border-top:3px dashed #ffd6ec;margin-top:20px;background:#fff}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-badge">📈 天然色漢字INDEX™ × 長期投資</div>
+  <h1>日本企業<span>30年</span>の変貌と<br>長期投資の力</h1>
+  <p>1995年→2025年。あの企業はどう変わった？<br>漢字一字で業種を直感的に把握。NISAで未来の自分に投資しよう。</p>
+  <div class="hero-stats">
+    <div class="stat-pill"><div class="num">30年</div><div class="lbl">企業変化の時間軸</div></div>
+    <div class="stat-pill"><div class="num">1,800万円</div><div class="lbl">新NISA 非課税枠</div></div>
+    <div class="stat-pill"><div class="num">×7.6倍</div><div class="lbl">日経平均 1995→2025</div></div>
+  </div>
+</div>
+
+<!-- CKI説明バー -->
+<div class="cki-bar">
+  <b>天然色漢字INDEX™</b>
+  <span>業種を漢字1字＋色で直感表示：</span>
+  <div class="cki-kanji-demo">
+    <span class="cki-k" style="color:#C0A000;background:#fffbe6">融</span><span style="font-size:10px">銀行</span>
+    <span class="cki-k" style="color:#5DADE2;background:#ebf8ff">電</span><span style="font-size:10px">電気機器</span>
+    <span class="cki-k" style="color:#27AE60;background:#e6ffed">通</span><span style="font-size:10px">情報通信</span>
+    <span class="cki-k" style="color:#8E44AD;background:#f5e8ff">務</span><span style="font-size:10px">サービス</span>
+    <span class="cki-k" style="color:#E8700A;background:#fff0e0">食</span><span style="font-size:10px">食料品</span>
+    <span class="cki-k" style="color:#8B6914;background:#faf0dc">機</span><span style="font-size:10px">機械</span>
+  </div>
+  <span style="color:#aaa;font-size:10px">© 株式会社ダンクソフト</span>
+</div>
+
+<div class="section">
+  <div class="sec-title">企業30年変化マップ</div>
+
+  <!-- 漢字カテゴリータブ -->
+  <div class="cat-tabs" id="catTabs"></div>
+
+  <div class="company-grid" id="cards"></div>
+  <div class="detail-panel" id="detail"></div>
+</div>
+
+<!-- NISA -->
+<div class="section">
+  <div class="nisa-section">
+    <div class="nisa-title">🌱 NISAで始める長期投資 — キホンの「き」</div>
+    <div class="nisa-grid">
+      <div class="nisa-card">
+        <h4>💰 新NISA（2024年〜）</h4>
+        <span class="num">1,800万円</span>
+        <p>生涯非課税枠。つみたて投資枠（年120万）＋成長投資枠（年240万）で最大360万円/年投資可能。</p>
+      </div>
+      <div class="nisa-card">
+        <h4>⏳ 複利の魔法</h4>
+        <span class="num">年5%想定</span>
+        <p>毎月3万円を30年積み立てると元本1,080万円→約2,495万円に。利益約1,415万円が非課税！</p>
+      </div>
+      <div class="nisa-card">
+        <h4>🎯 若いほど有利</h4>
+        <span class="num">20歳〜</span>
+        <p>早く始めるほど複利期間が長くなる。10年の差が最終資産に数百万円の差をもたらす。</p>
+      </div>
+      <div class="nisa-card">
+        <h4>🏦 18歳からスタート</h4>
+        <span class="num">成長投資枠</span>
+        <p>ジュニアNISAは2023年終了。新NISAは18歳から。親子で一緒に口座開設を考えよう。</p>
+      </div>
+    </div>
+  </div>
+  <div class="compound-section">
+    <div class="compound-title">📊 毎月3万円積立・年5%運用シミュレーション（新NISA活用）</div>
+    <div class="compound-bars" id="cBars"></div>
+    <div style="display:flex" id="cYears"></div>
+    <p style="font-size:10px;color:#aaa;text-align:center;margin-top:8px">※ 運用利回りは想定値。元本保証なし。投資は自己責任で。</p>
+  </div>
+</div>
+
+<div class="section">
+  <div class="sec-title">産業の「主役」はこう変わった</div>
+  <div class="era-timeline">
+    <div class="era-item"><div class="era-year">1995年</div><div class="era-icon">📺</div><div class="era-biz">家電・重電<br>銀行・商社</div></div>
+    <div class="era-item"><div class="era-year">2000年</div><div class="era-icon">💻</div><div class="era-biz">ITバブル<br>ドットコム</div></div>
+    <div class="era-item"><div class="era-year">2005年</div><div class="era-icon">📱</div><div class="era-biz">携帯・ゲーム<br>楽天EC台頭</div></div>
+    <div class="era-item"><div class="era-year">2010年</div><div class="era-icon">🤳</div><div class="era-biz">スマホ革命<br>ユニクロ躍進</div></div>
+    <div class="era-item"><div class="era-year">2015年</div><div class="era-icon">🌐</div><div class="era-biz">グローバル化<br>インバウンド</div></div>
+    <div class="era-item"><div class="era-year">2020年</div><div class="era-icon">😷</div><div class="era-biz">DX加速<br>巣ごもり需要</div></div>
+    <div class="era-item"><div class="era-year">2025年</div><div class="era-icon">🤖</div><div class="era-biz">AI・EV・<br>コンテンツIP</div></div>
+  </div>
+  <p style="font-size:11px;color:#aaa;margin-top:8px">📌 30年で「主役」が入れ替わる。だから分散投資と長期保有が重要。</p>
+</div>
+
+<footer>
+  ※ 株価・業績データは概算・公開情報をもとにした参考値です。投資判断は自己責任でお願いします。<br>
+  天然色漢字INDEX™ 株式会社ダンクソフト ／ 制作: Claude (Anthropic)
+</footer>
+
+<script>
+// ── 天然色漢字INDEX東証33業種マスター ──
+const TSE = {
+  "7050": { kanji:"融", name:"銀行業",       color:"#C0A000" },
+  "7100": { kanji:"券", name:"証券業",        color:"#566573" },
+  "7150": { kanji:"険", name:"保険業",        color:"#E67E22" },
+  "7200": { kanji:"貸", name:"その他金融",    color:"#D4AC0D" },
+  "5250": { kanji:"通", name:"情報・通信",    color:"#27AE60" },
+  "9050": { kanji:"務", name:"サービス業",    color:"#8E44AD" },
+  "3650": { kanji:"電", name:"電気機器",      color:"#5DADE2" },
+  "3700": { kanji:"輸", name:"輸送用機器",    color:"#7F8C8D" },
+  "3600": { kanji:"機", name:"機械",          color:"#8B6914" },
+  "3050": { kanji:"食", name:"食料品",        color:"#E8700A" },
+  "6100": { kanji:"販", name:"小売業",        color:"#D4AC0D" },
+  "6050": { kanji:"卸", name:"卸売業",        color:"#E74C3C" },
+  "3800": { kanji:"製", name:"その他製品",    color:"#9B59B6" },
+  "3100": { kanji:"織", name:"繊維製品",      color:"#C060A0" },
+  "3200": { kanji:"化", name:"化学",          color:"#00BCD4" },
+  "3300": { kanji:"油", name:"石油・石炭",    color:"#4A90D9" },
+  "3450": { kanji:"鉄", name:"鉄鋼",          color:"#B7770D" },
+  "2050": { kanji:"建", name:"建設業",        color:"#D35400" },
+  "8050": { kanji:"地", name:"不動産業",      color:"#8B4513" },
+  "4050": { kanji:"熱", name:"電気・ガス",    color:"#FF4500" },
+  "3250": { kanji:"薬", name:"医薬品",        color:"#58D68D" },
+};
+
+// ── 企業データ（主業種tseCodeを付与） ──
+const companies = [
+  {
+    id:"nintendo", name:"任天堂", code:"7974",
+    mainTse:"3800", // その他製品（ゲーム）
+    cats:["3800","9050"],
+    listed1995:true,
+    tag1995:"🎮 スーパーファミコン・ゲームボーイ",
+    tagNow:"🌍 Switch・IP・テーマパーク",
+    rev1995:"約4,300億円", revNow:"約1兆6,700億円",
+    price1995:6500, priceNow:9200, mult:1.4,
+    note:"ゲームハード全盛期からSwitch世界1.5億台超へ。マリオ映画・USJで「IP帝国」に変貌。ソフトの資産価値が圧倒的強みに。",
+    isNew:false,
+    past:[{c:"#9B59B6",n:"ゲームハード",p:70},{c:"#ffd93d",n:"ゲームソフト",p:25},{c:"#6bcb77",n:"玩具・その他",p:5}],
+    now:[{c:"#9B59B6",n:"Nintendo Switch",p:55},{c:"#ffd93d",n:"ゲームソフト",p:25},{c:"#8E44AD",n:"IP・映画・テーマパーク",p:12},{c:"#6bcb77",n:"モバイル・その他",p:8}]
+  },
+  {
+    id:"fastretailing", name:"ファーストリテイリング", code:"9983",
+    mainTse:"6100", // 小売業
+    cats:["6100"],
+    listed1995:true,
+    tag1995:"👕 山口県のローカルSPA",
+    tagNow:"🌏 ユニクロ 世界3,000店舗超",
+    rev1995:"約300億円", revNow:"約3兆1,000億円",
+    price1995:2800, priceNow:56000, mult:20,
+    note:"1995年は広島・山口中心の小型SPA企業。フリースブームで全国区→海外展開→現在は世界3位のアパレル企業。売上100倍超、株価約20倍。",
+    isNew:false,
+    past:[{c:"#D4AC0D",n:"ユニクロ国内",p:95},{c:"#ffd93d",n:"その他",p:5}],
+    now:[{c:"#D4AC0D",n:"ユニクロ海外",p:55},{c:"#ffd93d",n:"ユニクロ国内",p:30},{c:"#c084fc",n:"GU・その他",p:15}]
+  },
+  {
+    id:"rakuten", name:"楽天グループ", code:"4755",
+    mainTse:"5250", // 情報・通信
+    cats:["5250","7050","7200"],
+    listed1995:false,
+    tag1995:"🚫 1997年設立（当時未上場）",
+    tagNow:"🛒 EC・金融・モバイルの複合体",
+    rev1995:"—", revNow:"約2兆1,534億円",
+    price1995:0, priceNow:900, mult:null,
+    note:"1997年設立、2000年上場。楽天市場から楽天経済圏へ拡大。銀行・カード・証券・モバイルを一体化。会員1億人超の経済圏を構築。",
+    isNew:true,
+    past:[{c:"#27AE60",n:"（設立前・存在せず）",p:100}],
+    now:[{c:"#27AE60",n:"EC・インターネット",p:35},{c:"#C0A000",n:"フィンテック（銀行・カード）",p:30},{c:"#27AE60",n:"楽天モバイル",p:30},{c:"#8E44AD",n:"AI・その他",p:5}]
+  },
+  {
+    id:"mufg", name:"三菱UFJ FG", code:"8306",
+    mainTse:"7050", // 銀行業
+    cats:["7050","7100","7200"],
+    listed1995:true,
+    tag1995:"🏦 三菱銀行・東京銀行（別々）",
+    tagNow:"🌍 国内最大メガバンク・世界展開",
+    rev1995:"約3兆円", revNow:"約20兆円（業務粗利益）",
+    price1995:1200, priceNow:1900, mult:1.6,
+    note:"三菱銀行・東京銀行等が合併を重ね誕生。金利上昇で純利益が急拡大。米国・ASEANへ積極展開。DX・デジタル銀行にも注力中。",
+    isNew:false,
+    past:[{c:"#C0A000",n:"国内預金・貸出",p:80},{c:"#D4AC0D",n:"外国為替・国際",p:15},{c:"#566573",n:"信託・証券",p:5}],
+    now:[{c:"#C0A000",n:"国内銀行",p:45},{c:"#E67E22",n:"海外（米国・ASEAN）",p:25},{c:"#566573",n:"証券・投資銀行",p:15},{c:"#D4AC0D",n:"信託・AM・リース",p:10},{c:"#27AE60",n:"デジタル・AI",p:5}]
+  },
+  {
+    id:"daiwa", name:"大和証券グループ", code:"8601",
+    mainTse:"7100", // 証券業
+    cats:["7100","7200","7050"],
+    listed1995:true,
+    tag1995:"📋 対面営業・株式委託中心",
+    tagNow:"💼 ウェルスマネジメント・資産運用",
+    rev1995:"約4,000億円", revNow:"6,459億円（純営業収益）",
+    price1995:1100, priceNow:1050, mult:0.95,
+    note:"バブル崩壊後の証券不況期を経て、対面営業から富裕層向けウェルスマネジメントへ転換。資産運用・投資銀行・海外M&A助言が急成長中。",
+    isNew:false,
+    past:[{c:"#566573",n:"株式・債券委託売買",p:80},{c:"#D4AC0D",n:"引受・ディーリング",p:15},{c:"#C0A000",n:"投資信託（黎明期）",p:5}],
+    now:[{c:"#566573",n:"ウェルスマネジメント",p:45},{c:"#D4AC0D",n:"資産運用（投信等）",p:25},{c:"#E67E22",n:"投資銀行・海外",p:15},{c:"#C0A000",n:"大和ネクスト銀行",p:10},{c:"#27AE60",n:"DX・デジタル証券",p:5}]
+  },
+  {
+    id:"mitsubishi", name:"三菱商事", code:"8058",
+    mainTse:"6050", // 卸売業
+    cats:["6050","3300","3050"],
+    listed1995:true,
+    tag1995:"📦 物資トレーディング・川中流通",
+    tagNow:"⛽ 資源・食料・金融の事業投資型",
+    rev1995:"約20兆円（取扱高）", revNow:"約20兆円",
+    price1995:900, priceNow:2800, mult:3.1,
+    note:"総合商社から「事業投資型商社」へ大転換。LNG・石炭などエネルギー資源が最大の稼ぎ頭。ローソン完全子会社化など食品バリューチェーンにも注力。",
+    isNew:false,
+    past:[{c:"#E74C3C",n:"物資トレーディング",p:40},{c:"#8B6914",n:"プラント・機械",p:25},{c:"#4A90D9",n:"エネルギー・化学品",p:20},{c:"#E8700A",n:"食料・繊維",p:15}],
+    now:[{c:"#4A90D9",n:"エネルギー資源（LNG等）",p:28},{c:"#E8700A",n:"食料・ローソン",p:22},{c:"#8B6914",n:"プラント・電力",p:20},{c:"#C0A000",n:"金融・リース",p:15},{c:"#00BCD4",n:"化学品・新素材",p:15}]
+  },
+  {
+    id:"hitachi", name:"日立製作所", code:"6501",
+    mainTse:"3650", // 電気機器
+    cats:["3650","3600","9050"],
+    listed1995:true,
+    tag1995:"🔌 何でもやる総合電機の巨人",
+    tagNow:"💡 DX・社会インフラのグローバル企業",
+    rev1995:"約8兆円", revNow:"約9兆7,833億円",
+    price1995:800, priceNow:3900, mult:4.9,
+    note:"家電・重電・建設機械など「何でも屋」からLumada（DX）・鉄道・エネルギーに絞り込む大変革。家電・化学・金属など次々売却し株価約5倍に。",
+    isNew:false,
+    past:[{c:"#5DADE2",n:"重電・産業機器・家電",p:40},{c:"#8B6914",n:"建設機械・産業機械",p:25},{c:"#D35400",n:"建設・プラント",p:20},{c:"#C0A000",n:"素材系子会社",p:15}],
+    now:[{c:"#8E44AD",n:"DX・Lumada・クラウド",p:29},{c:"#5DADE2",n:"エネルギー（送配電）",p:27},{c:"#7F8C8D",n:"鉄道システム",p:24},{c:"#58D68D",n:"ヘルスケア",p:12},{c:"#8B4513",n:"ビルシステム",p:8}]
+  },
+  {
+    id:"sony", name:"ソニーグループ", code:"6758",
+    mainTse:"3650", // 電気機器→現在はエンタメ複合
+    cats:["3650","3800","7150"],
+    listed1995:true,
+    tag1995:"📺 ウォークマン・トリニトロンTV",
+    tagNow:"🎮 ゲーム・映画・センサーの帝国",
+    rev1995:"約5兆円", revNow:"約13兆2,096億円",
+    price1995:4800, priceNow:2800, mult:0.58,
+    note:"家電王者からエンタメ複合体へ。PS5・ソニーピクチャーズ・ソニーミュージック・イメージセンサー世界首位と、稼ぎ頭が完全に入れ替わった。",
+    isNew:false,
+    past:[{c:"#5DADE2",n:"テレビ・ウォークマン",p:65},{c:"#F1C40F",n:"映画・音楽",p:20},{c:"#9B59B6",n:"ゲーム（PS黎明期）",p:15}],
+    now:[{c:"#9B59B6",n:"ゲーム（PlayStation）",p:35},{c:"#F1C40F",n:"映画・音楽",p:22},{c:"#E67E22",n:"金融（生保・銀行）",p:18},{c:"#5DADE2",n:"イメージセンサー",p:15},{c:"#c084fc",n:"家電・音響",p:10}]
+  },
+  {
+    id:"toyota", name:"トヨタ自動車", code:"7203",
+    mainTse:"3700", // 輸送用機器
+    cats:["3700","7200"],
+    listed1995:true,
+    tag1995:"🚗 国産車メーカー・輸出拡大期",
+    tagNow:"🌐 EV・AI・金融 世界販売首位",
+    rev1995:"約9兆円", revNow:"約48兆367億円",
+    price1995:1200, priceNow:3200, mult:2.7,
+    note:"バブル後の国内自動車メーカーから世界販売首位・売上48兆円へ。HEV戦略が奏功し金融・AI事業も急成長中。",
+    isNew:false,
+    past:[{c:"#7F8C8D",n:"自動車製造・販売",p:88},{c:"#D4AC0D",n:"金融（カーローン）",p:8},{c:"#8B6914",n:"その他部品",p:4}],
+    now:[{c:"#7F8C8D",n:"自動車・HEV",p:76},{c:"#D4AC0D",n:"金融事業",p:16},{c:"#5DADE2",n:"電動化・EV",p:5},{c:"#27AE60",n:"AI・コネクテッド",p:3}]
+  },
+  {
+    id:"ntt", name:"NTTグループ", code:"9432",
+    mainTse:"5250", // 情報・通信
+    cats:["5250","4050"],
+    listed1995:true,
+    tag1995:"☎️ 固定電話の独占インフラ王",
+    tagNow:"📡 通信・DX・再エネ・AI",
+    rev1995:"約7兆円", revNow:"約13兆5,900億円",
+    price1995:700000, priceNow:155, mult:null,
+    note:"固定電話独占→携帯（ドコモ）→DX・IOWN光電融合へ。株式25分割で個人投資家にも買いやすく。再生可能エネルギー事業も急拡大中。",
+    isNew:false,
+    past:[{c:"#27AE60",n:"固定電話",p:85},{c:"#5DADE2",n:"通信機器製造",p:10},{c:"#8E44AD",n:"IT（NTTデータ等）",p:5}],
+    now:[{c:"#27AE60",n:"通信（ドコモ等）",p:45},{c:"#8E44AD",n:"IT・DX（NTTデータ）",p:30},{c:"#FF4500",n:"再エネ・エネルギー",p:12},{c:"#8B4513",n:"不動産・AI・IOWN",p:13}]
+  }
+];
+
+// ── カテゴリータブ生成（漢字1字） ──
+const CAT_ALL = { tse:"all", label:"全社" };
+// 各企業のmainTseから使用漢字を集める
+const usedTse = ["all", ...new Set(companies.map(c=>c.mainTse))];
+const catDefs = [
+  { tse:"all",  kanji:"全", color:"#ff6eb4", label:"全社" },
+  ...usedTse.filter(t=>t!=="all").map(t=>({
+    tse: t,
+    kanji: TSE[t]?.kanji || "?",
+    color: TSE[t]?.color || "#888",
+    label: TSE[t]?.name || t
+  }))
+];
+// 重複除去
+const seen = new Set();
+const uniqueCats = catDefs.filter(c=>{ if(seen.has(c.tse)) return false; seen.add(c.tse); return true; });
+
+let selectedId = null;
+let currentCat = "all";
+
+function buildTabs() {
+  const el = document.getElementById('catTabs');
+  uniqueCats.forEach(c => {
+    const d = document.createElement('div');
+    d.className = 'cat-tab' + (currentCat===c.tse?' active':'');
+    d.style.color = c.color;
+    if(currentCat===c.tse) d.style.borderColor = c.color;
+    d.innerHTML = `<span class="ck">${c.kanji}</span><span class="cl">${c.label}</span>`;
+    d.onclick = () => { currentCat = c.tse; selectedId = null; closeDetail(); buildTabs(); renderCards(); };
+    el.appendChild(d);
+  });
+}
+
+function renderCards() {
+  const g = document.getElementById('cards');
+  g.innerHTML = '';
+  companies.forEach(c => {
+    const show = currentCat==='all' || c.cats.includes(currentCat);
+    const tseInfo = TSE[c.mainTse] || {kanji:'?',color:'#888',name:'—'};
+    const multStr = c.mult===null ? 'IPO後上場' : c.mult>=1 ? `▲${c.mult}倍` : `▼${c.mult}倍`;
+    const multCls = c.mult===null ? 'new' : c.mult>=1 ? 'up' : 'down';
+    const d = document.createElement('div');
+    d.className = 'company-card'+(show?' show':'')+(selectedId===c.id?' selected':'');
+    if(selectedId===c.id) d.style.borderColor = tseInfo.color;
+    d.innerHTML = `
+      <div class="card-top">
+        <div style="flex:1">
+          <div class="card-name">${c.name}</div>
+          <div class="card-code">${c.code}　${c.listed1995?'1995年上場済':'1995年以降設立'}</div>
+          <div style="margin-top:6px;font-size:10px;color:#888">${tseInfo.name}</div>
+        </div>
+        <div class="kanji-badge">
+          <span class="kb-k" style="color:${tseInfo.color}">${tseInfo.kanji}</span>
+          <span class="kb-l">主業種</span>
+        </div>
+      </div>
+      <div class="timeline">
+        <div class="tl-item"><div class="tl-box"><div class="tl-year">1995年頃</div><div class="tl-biz">${c.tag1995}</div></div></div>
+        <div class="tl-item"><div class="tl-box"><div class="tl-year">2025年</div><div class="tl-biz">${c.tagNow}</div></div></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px">
+        <span style="font-size:10px;color:#bbb">株価変化（概算）</span>
+        <span class="growth-chip ${multCls}">${multStr}</span>
+      </div>
+      <div style="font-size:10px;color:#999;margin-top:6px;line-height:1.5">${c.note.substring(0,60)}…</div>
+      <div style="margin-top:9px;font-size:11px;font-weight:700;cursor:pointer;color:${tseInfo.color}" onclick="openDetail('${c.id}')">▶ 詳細・事業変化を見る</div>
+    `;
+    g.appendChild(d);
+  });
+}
+
+function openDetail(id) {
+  selectedId = id;
+  const c = companies.find(x=>x.id===id);
+  const tseInfo = TSE[c.mainTse] || {kanji:'?',color:'#888',name:'—'};
+  const panel = document.getElementById('detail');
+  const pastSegs = c.past.map(s=>`<div class="seg-row"><div class="seg-dot" style="background:${s.c}"></div><div class="seg-name" style="flex:1;color:#555">${s.n}</div><div class="seg-pct">${s.p}%</div></div>`).join('');
+  const nowSegs  = c.now.map(s=>`<div class="seg-row"><div class="seg-dot" style="background:${s.c}"></div><div class="seg-name" style="flex:1;color:#555">${s.n}</div><div class="seg-pct">${s.p}%</div></div>`).join('');
+  const multStr = c.mult===null?'IPO後上場':c.mult>=1?`株価 ▲${c.mult}倍`:`株価 ▼${c.mult}倍`;
+  const multCls = c.mult===null?'new':c.mult>=1?'up':'down';
+
+  // 関連する漢字（catsから複数表示）
+  const kanjiRow = c.cats.map(t=>{
+    const ti = TSE[t];
+    return ti ? `<div class="dp-kanji-item"><span class="dkk" style="color:${ti.color}">${ti.kanji}</span><span class="dkl">${ti.name}</span></div>` : '';
+  }).join('');
+
+  panel.innerHTML = `
+    <div class="dp-head">
+      <div class="dp-name">${c.name} <span style="font-size:12px;color:#bbb">(${c.code})</span></div>
+      <span class="growth-chip ${multCls}" style="font-size:12px">${multStr}</span>
+    </div>
+    <div style="font-size:11px;color:#888;margin-bottom:8px">関連業種（天然色漢字INDEX™）</div>
+    <div class="dp-kanji-row">${kanjiRow}</div>
+    <p style="font-size:12px;color:#666;margin-bottom:14px;line-height:1.8">${c.note}</p>
+    <div class="dp-grid">
+      <div class="dp-box">
+        <div class="dp-box-title">📅 1995年頃の事業構成</div>
+        <div style="font-size:10px;color:#bbb;margin-bottom:6px">売上 ${c.rev1995}</div>${pastSegs}
+      </div>
+      <div class="dp-box">
+        <div class="dp-box-title">🚀 2025年の事業構成</div>
+        <div style="font-size:10px;color:#bbb;margin-bottom:6px">売上 ${c.revNow}</div>${nowSegs}
+      </div>
+    </div>
+    <div style="margin-top:14px;padding:12px;background:linear-gradient(90deg,#fff8e1,#fff0f6);border-radius:10px;border-left:4px solid ${tseInfo.color}">
+      <p style="font-size:11px;font-weight:800;color:${tseInfo.color}">💡 長期投資家へのポイント</p>
+      <p style="font-size:11px;color:#666;margin-top:4px;line-height:1.7">30年前にこの企業を知っていて長期保有していたら？事業変化を先読みする目が長期投資の最大の武器です。</p>
+    </div>
+    <div style="text-align:right;margin-top:12px">
+      <span onclick="closeDetail()" style="font-size:12px;color:#ff6eb4;cursor:pointer;font-weight:700">✕ 閉じる</span>
+    </div>
+  `;
+  panel.classList.add('open');
+  panel.scrollIntoView({behavior:'smooth',block:'nearest'});
+  renderCards();
+}
+
+function closeDetail() {
+  selectedId = null;
+  document.getElementById('detail').classList.remove('open');
+}
+
+function renderCompound() {
+  const data=[{y:5,v:204},{y:10,v:465},{y:15,v:808},{y:20,v:1237},{y:25,v:1778},{y:30,v:2495}];
+  const max=2495, h=120;
+  const bEl=document.getElementById('cBars'), yEl=document.getElementById('cYears');
+  data.forEach(d=>{
+    const bh=Math.round(d.v/max*h);
+    bEl.innerHTML+=`<div class="c-bar-wrap"><div class="c-bar" style="height:${bh}px"><span class="c-val">${d.v}万</span></div></div>`;
+    yEl.innerHTML+=`<div class="c-year" style="flex:1">${d.y}年後</div>`;
+  });
+}
+
+buildTabs();
+renderCards();
+renderCompound();
+</script>
+</body>
+</html>
