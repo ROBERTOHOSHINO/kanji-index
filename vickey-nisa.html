@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VICKEYファミリーのこどもNISAナビ</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #fff8f0; font-family: 'Hiragino Sans','Meiryo',sans-serif; }
+ruby rt { font-size: 0.55em; color: #888; }
+button { font-family: inherit; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState } = React;
+
+function R({ text, ruby }) {
+  return (
+    <span style={{ display:"inline-flex", flexDirection:"column", alignItems:"center", lineHeight:1.2, margin:"0 1px", verticalAlign:"bottom" }}>
+      <span style={{ fontSize:"0.72em", color:"#888", fontWeight:"normal", letterSpacing:"0.05em" }}>{ruby}</span>
+      <span>{text}</span>
+    </span>
+  );
+}
+
+const TERMS = [
+  {
+    word:"非課税", yomi:"ひかぜい", kanji:"免", color:"#C0A000", bg:"#fffbe6",
+    mone:<>もうけたお<R text="金" ruby="かね"/>に<R text="税金" ruby="ぜいきん"/>がかからないこと！ふつうはもうけの約20%が<R text="税金" ruby="ぜいきん"/>でひかれちゃうけど、NISAならまるごと<R text="自分" ruby="じぶん"/>のものになるよ✨</>,
+    mane:<>たとえば10<R text="万円" ruby="まんえん"/>の<R text="利益" ruby="りえき"/>がでたとき、ふつうなら約2<R text="万円" ruby="まんえん"/>が<R text="税金" ruby="ぜいきん"/>でひかれるの。NISAなら0<R text="円" ruby="えん"/>！大きなちがいでしょ？</>,
+    quiz:{ q:<>10<R text="万円" ruby="まんえん"/>の<R text="利益" ruby="りえき"/>、NISAなら<R text="税金" ruby="ぜいきん"/>はいくら？</>, a:"0円", choices:["約2万円","0円","約1万円"] }
+  },
+  {
+    word:"積立投資", yomi:"つみたてとうし", kanji:"積", color:"#27AE60", bg:"#e6ffed",
+    mone:<>毎<R text="月" ruby="つき"/>すこしずつ、コツコツ<R text="買" ruby="か"/>いつづけること！<R text="雪" ruby="ゆき"/>だるまみたいにだんだん大きくなるよ⛄</>,
+    mane:<>毎<R text="月" ruby="つき"/><R text="決" ruby="き"/>まった<R text="金額" ruby="きんがく"/>を<R text="買" ruby="か"/>うと、<R text="値段" ruby="ねだん"/>が<R text="高" ruby="たか"/>いときはすくなく、<R text="安" ruby="やす"/>いときはおおく<R text="買" ruby="か"/>えるの。これを「ドルコスト<R text="平均法" ruby="へいきんほう"/>」っていうよ。</>,
+    quiz:{ q:<>つみたて<R text="投資" ruby="とうし"/>のよいところはどれ？</>, a:"少額から始められる", choices:["必ず儲かる","少額から始められる","すぐお金が増える"] }
+  },
+  {
+    word:"複利", yomi:"ふくり", kanji:"殖", color:"#F59E0B", bg:"#fffbeb",
+    mone:<>ふえたお<R text="金" ruby="かね"/>がさらにふえる<R text="魔法" ruby="まほう"/>のしくみ！<R text="利子" ruby="りし"/>に<R text="利子" ruby="りし"/>がついて、<R text="時間" ruby="じかん"/>がたつほど<R text="強" ruby="つよ"/>くなるよ✨</>,
+    mane:<>100<R text="円" ruby="えん"/>を<R text="年" ruby="ねん"/>10%で<R text="運用" ruby="うんよう"/>すると…1<R text="年後" ruby="ねんご"/>110<R text="円" ruby="えん"/>、2<R text="年後" ruby="ねんご"/>121<R text="円" ruby="えん"/>、10<R text="年後" ruby="ねんご"/>は約259<R text="円" ruby="えん"/>！これが<R text="複利" ruby="ふくり"/>のちからだよ。</>,
+    quiz:{ q:<><R text="複利" ruby="ふくり"/>ってどんな意味？</>, a:"増えたお金にさらに利子がつく", choices:["毎月利子がもらえる","増えたお金にさらに利子がつく","2倍になること"] }
+  },
+  {
+    word:"分散投資", yomi:"ぶんさんとうし", kanji:"散", color:"#3B82F6", bg:"#eff6ff",
+    mone:<>いろんな<R text="会社" ruby="かいしゃ"/>や<R text="国" ruby="くに"/>にすこしずつ<R text="投資" ruby="とうし"/>すること！ひとつがさがってもほかでカバーできるよ🌍</>,
+    mane:<>「ひとつのカゴに<R text="卵" ruby="たまご"/>をぜんぶいれない」っていうの。1<R text="社" ruby="しゃ"/>だけに<R text="投資" ruby="とうし"/>すると、その<R text="会社" ruby="かいしゃ"/>がつぶれたらぜんぶなくなっちゃうでしょ？</>,
+    quiz:{ q:<><R text="分散投資" ruby="ぶんさんとうし"/>の<R text="目的" ruby="もくてき"/>はなに？</>, a:"リスクを減らすため", choices:["早く儲けるため","リスクを減らすため","税金を減らすため"] }
+  },
+  {
+    word:"元本", yomi:"がんぽん", kanji:"元", color:"#8B5CF6", bg:"#f5f3ff",
+    mone:<>さいしょに<R text="自分" ruby="じぶん"/>がだしたお<R text="金" ruby="かね"/>のこと！ふえた<R text="分" ruby="ぶん"/>が「<R text="利益" ruby="りえき"/>」、へった<R text="分" ruby="ぶん"/>が「<R text="損失" ruby="そんしつ"/>」だよ💰</>,
+    mane:<><R text="元本" ruby="がんぽん"/>100<R text="万円" ruby="まんえん"/>で<R text="運用" ruby="うんよう"/>して120<R text="万円" ruby="まんえん"/>になったら、<R text="利益" ruby="りえき"/>は20<R text="万円" ruby="まんえん"/>。でも80<R text="万円" ruby="まんえん"/>になったら<R text="損失" ruby="そんしつ"/>20<R text="万円" ruby="まんえん"/>。<R text="基準" ruby="きじゅん"/>になる大切な数字だよ。</>,
+    quiz:{ q:<><R text="元本" ruby="がんぽん"/>ってなに？</>, a:"最初に投資したお金", choices:["増えたお金","最初に投資したお金","税金の金額"] }
+  },
+  {
+    word:"リスク", yomi:"りすく", kanji:"振", color:"#EF4444", bg:"#fef2f2",
+    mone:<>お<R text="金" ruby="かね"/>がふえたりへったりする「ゆれはば」のこと！大きいほど<R text="変動" ruby="へんどう"/>がはげしいよ⚠️</>,
+    mane:<>リスクは「<R text="危険" ruby="きけん"/>」じゃなくて「ゆれはば」なの。大きくふえる<R text="可能性" ruby="かのうせい"/>も、大きくへる<R text="可能性" ruby="かのうせい"/>もある。<R text="自分" ruby="じぶん"/>に合ったリスクをえらぶのが大切だよ。</>,
+    quiz:{ q:<><R text="投資" ruby="とうし"/>のリスクってどういう意味？</>, a:"値段が上がったり下がったりする幅", choices:["必ず損をすること","値段が上がったり下がったりする幅","税金が高いこと"] }
+  },
+  {
+    word:"長期保有", yomi:"ちょうきほゆう", kanji:"継", color:"#10B981", bg:"#ecfdf5",
+    mone:<>じっともちつづけること！みじかい<R text="間" ruby="あいだ"/>のあがりさがりにまどわされないのが<R text="長期投資" ruby="ちょうきとうし"/>のキホンだよ📅</>,
+    mane:<><R text="歴史的" ruby="れきしてき"/>にみると、<R text="株式市場" ruby="かぶしきしじょう"/>は<R text="短期" ruby="たんき"/>ではあがりさがりするけど、<R text="長期" ruby="ちょうき"/>では<R text="右肩上" ruby="みぎかたあ"/>がりのことがおおいの。だからあわてて<R text="売" ruby="う"/>らないことが大切！</>,
+    quiz:{ q:<><R text="長期投資" ruby="ちょうきとうし"/>で大切なことはなに？</>, a:"短期の値動きに惑わされない", choices:["毎日売買する","短期の値動きに惑わされない","高いときだけ買う"] }
+  },
+  {
+    word:"配当金", yomi:"はいとうきん", kanji:"配", color:"#F97316", bg:"#fff7ed",
+    mone:<><R text="会社" ruby="かいしゃ"/>がもうかったとき、<R text="株" ruby="かぶ"/>をもってるひとにわけてくれるお<R text="金" ruby="かね"/>のこと！もってるだけでもらえるよ🎁</>,
+    mane:<>ぜんぶの<R text="会社" ruby="かいしゃ"/>が<R text="配当金" ruby="はいとうきん"/>をだすわけじゃないよ。<R text="成長中" ruby="せいちょうちゅう"/>の<R text="会社" ruby="かいしゃ"/>は<R text="利益" ruby="りえき"/>をつぎの<R text="投資" ruby="とうし"/>につかうから<R text="配当" ruby="はいとう"/>なしのことも。</>,
+    quiz:{ q:<><R text="配当金" ruby="はいとうきん"/>ってなに？</>, a:"会社の利益を株主に分けるお金", choices:["会社の利益を株主に分けるお金","積み立てたお金","税金の還付金"] }
+  },
+  {
+    word:"投資信託", yomi:"とうししんたく", kanji:"託", color:"#6366F1", bg:"#eef2ff",
+    mone:<>たくさんのひとがお<R text="金" ruby="かね"/>をだしあって、プロに<R text="運用" ruby="うんよう"/>してもらうしくみ！<R text="少額" ruby="しょうがく"/>でも<R text="世界中" ruby="せかいじゅう"/>に<R text="分散投資" ruby="ぶんさんとうし"/>できるよ🌐</>,
+    mane:<>1<R text="本" ruby="ほん"/>の<R text="投資信託" ruby="とうししんたく"/>の中に、<R text="数十" ruby="すうじゅう"/>〜<R text="数千" ruby="すうせん"/>の<R text="銘柄" ruby="めいがら"/>がはいってることも。<R text="自分" ruby="じぶん"/>で1<R text="社" ruby="しゃ"/>ずつかうより手間がかからないから、はじめてでも<R text="安心" ruby="あんしん"/>してつかえるよ。</>,
+    quiz:{ q:<><R text="投資信託" ruby="とうししんたく"/>のメリットはなに？</>, a:"少額で分散投資できる", choices:["元本保証がある","少額で分散投資できる","必ず利益が出る"] }
+  },
+  {
+    word:"つみたて投資枠", yomi:"つみたてとうしわく", kanji:"枠", color:"#0EA5E9", bg:"#f0f9ff",
+    mone:<>あたらしいNISAでつみたて<R text="専用" ruby="せんよう"/>につかえる<R text="枠" ruby="わく"/>のこと！<R text="年間" ruby="ねんかん"/>120<R text="万円" ruby="まんえん"/>までつかえるよ📦</>,
+    mane:<><R text="対象" ruby="たいしょう"/>は<R text="金融庁" ruby="きんゆうちょう"/>がみとめた<R text="長期投資" ruby="ちょうきとうし"/>むけの<R text="投資信託" ruby="とうししんたく"/>だけ。ちゃんとえらばれた<R text="商品" ruby="しょうひん"/>しかかえないから、はじめてでも<R text="安心" ruby="あんしん"/>してつかえるよ。</>,
+    quiz:{ q:<>つみたて<R text="投資枠" ruby="とうしわく"/>で1<R text="年間" ruby="ねんかん"/>に<R text="投資" ruby="とうし"/>できる<R text="上限" ruby="じょうげん"/>は？</>, a:"120万円", choices:["240万円","120万円","360万円"] }
+  },
+];
+
+function CatFace({ type }) {
+  const isMone = type==="mone";
+  return (
+    <div style={{ width:44,height:44,borderRadius:"50%",
+      background:isMone?"linear-gradient(135deg,#ffd700,#f59e0b)":"linear-gradient(135deg,#e2e8f0,#94a3b8)",
+      border:`3px solid ${isMone?"#C9920A":"#475569"}`,
+      display:"flex",alignItems:"center",justifyContent:"center",
+      fontSize:24,flexShrink:0,boxShadow:"0 2px 8px rgba(0,0,0,0.15)"}}>🐱</div>
+  );
+}
+
+function Bubble({ type, text }) {
+  const isMone = type==="mone";
+  const color = isMone?"#C9920A":"#6B7280";
+  return (
+    <div style={{ display:"flex",gap:8,alignItems:"flex-start",marginBottom:12 }}>
+      {isMone && <CatFace type="mone"/>}
+      <div style={{ flex:1 }}>
+        <div style={{ fontSize:11,fontWeight:800,color,marginBottom:3 }}>
+          {isMone?"VICKEY-MONE 💛":"VICKEY-MANE 🩶"}
+        </div>
+        <div style={{ background:isMone?"#fffbeb":"#f8fafc",
+          border:`1.5px solid ${isMone?"#fcd34d":"#cbd5e1"}`,
+          borderRadius:isMone?"4px 16px 16px 16px":"16px 4px 16px 16px",
+          padding:"10px 13px",fontSize:13,lineHeight:2,color:"#374151" }}>{text}</div>
+      </div>
+      {!isMone && <CatFace type="mane"/>}
+    </div>
+  );
+}
+
+function Quiz({ q, a, choices, onCorrect }) {
+  const [sel,setSel] = useState(null);
+  const done = sel!==null;
+  return (
+    <div style={{ background:"#fafafa",border:"1.5px solid #e5e7eb",borderRadius:12,padding:14,marginTop:8 }}>
+      <div style={{ fontSize:12,fontWeight:800,color:"#8B5CF6",marginBottom:8 }}>🎯 ミニクイズ</div>
+      <div style={{ fontSize:13,fontWeight:700,color:"#374151",marginBottom:10,lineHeight:2 }}>{q}</div>
+      <div style={{ display:"flex",flexDirection:"column",gap:6 }}>
+        {choices.map((c,i)=>{
+          const isCorrect=c===a, isSel=sel===i;
+          let bg="#fff",border="#d1d5db",color="#374151";
+          if(done&&isCorrect){bg="#d1fae5";border="#10b981";color="#065f46";}
+          else if(done&&isSel){bg="#fee2e2";border="#ef4444";color="#991b1b";}
+          return (
+            <button key={i} disabled={done} onClick={()=>{setSel(i);if(c===a)onCorrect();}}
+              style={{ background:bg,border:`1.5px solid ${border}`,color,borderRadius:8,
+                padding:"9px 12px",fontSize:12,fontWeight:600,cursor:done?"default":"pointer",textAlign:"left" }}>
+              {done&&isCorrect?"✅ ":done&&isSel?"❌ ":"　"}{c}
+            </button>
+          );
+        })}
+      </div>
+      {done&&choices[sel]===a&&<div style={{ marginTop:8,fontSize:12,color:"#065f46",fontWeight:700 }}>🎉 正解！よくできました！</div>}
+      {done&&choices[sel]!==a&&<div style={{ marginTop:8,fontSize:12,color:"#991b1b",fontWeight:700 }}>💦 正解は「{a}」だよ。覚えておこうね！</div>}
+    </div>
+  );
+}
+
+function App() {
+  const [current,setCurrent] = useState(null);
+  const [tab,setTab] = useState("explain");
+  const [score,setScore] = useState(0);
+  const [cleared,setCleared] = useState(new Set());
+  const t = current!==null ? TERMS[current] : null;
+
+  return (
+    <div style={{ background:"#fff8f0",minHeight:"100vh",fontFamily:"'Hiragino Sans','Meiryo',sans-serif" }}>
+
+      {/* ヘッダー */}
+      <div style={{ background:"linear-gradient(135deg,#ffd700 0%,#f97316 50%,#c084fc 100%)",
+        padding:"16px 16px 14px",display:"flex",alignItems:"center",gap:12 }}>
+        <img src="https://robertohoshino.github.io/kanji-index/Vickey.png"
+          alt="VICKEYファミリー"
+          onError={e=>{e.target.style.display="none";}}
+          style={{ width:88,height:88,objectFit:"cover",borderRadius:16,
+            border:"3px solid rgba(255,255,255,0.8)",boxShadow:"0 4px 14px rgba(0,0,0,0.2)",flexShrink:0 }}/>
+        <div style={{ flex:1 }}>
+          <div style={{ fontSize:10,color:"rgba(255,255,255,0.85)",letterSpacing:2,marginBottom:3 }}>天然色漢字INDEX™ × AI-NAVI</div>
+          <div style={{ fontSize:18,fontWeight:900,color:"#fff",textShadow:"1px 2px 4px rgba(0,0,0,0.2)",lineHeight:1.5 }}>
+            VICKEYファミリーの<br/><R text="子" ruby="こ"/>どもNISAナビ
+          </div>
+          <div style={{ fontSize:10,color:"rgba(255,255,255,0.85)",marginTop:4 }}>
+            <R text="難" ruby="むずか"/>しい<R text="言葉" ruby="ことば"/>を<R text="漢字" ruby="かんじ"/>一<R text="字" ruby="じ"/>でかんたん<R text="理解" ruby="りかい"/>！
+          </div>
+          <div style={{ display:"inline-block",background:"rgba(255,255,255,0.9)",borderRadius:20,
+            padding:"3px 14px",marginTop:7,fontSize:12,fontWeight:800,color:"#f97316" }}>
+            ⭐ スコア：{score} / {TERMS.length}<R text="語" ruby="ご"/>
+          </div>
+        </div>
+      </div>
+
+      <div style={{ padding:14 }}>
+        <div style={{ fontSize:12,fontWeight:800,color:"#6b7280",marginBottom:10 }}>
+          📚 <R text="用語" ruby="ようご"/>を<R text="選" ruby="えら"/>んでね（{TERMS.length}<R text="語" ruby="ご"/>）
+        </div>
+
+        {/* 用語グリッド */}
+        <div style={{ display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(78px,1fr))",gap:8,marginBottom:16 }}>
+          {TERMS.map((tm,i)=>(
+            <div key={i} onClick={()=>{setCurrent(i);setTab("explain");}}
+              style={{ background:cleared.has(i)?tm.bg:"#fff",
+                border:`2px solid ${current===i?tm.color:cleared.has(i)?tm.color:"#e5e7eb"}`,
+                borderRadius:12,padding:"8px 4px",textAlign:"center",cursor:"pointer",
+                boxShadow:current===i?`0 4px 12px ${tm.color}44`:"none",transition:"all 0.2s" }}>
+              <div style={{ fontSize:26,fontWeight:900,color:tm.color,lineHeight:1 }}>{tm.kanji}</div>
+              <div style={{ fontSize:10,color:tm.color,fontWeight:700,marginTop:1 }}>（{tm.yomi.slice(0,2)}）</div>
+              <div style={{ fontSize:8,color:"#9ca3af",marginTop:2,lineHeight:1.3 }}>
+                <ruby>{tm.word}<rt style={{fontSize:"0.8em"}}>{tm.yomi}</rt></ruby>
+              </div>
+              {cleared.has(i)&&<div style={{ fontSize:10,marginTop:2 }}>✅</div>}
+            </div>
+          ))}
+        </div>
+
+        {/* 詳細パネル */}
+        {t&&(
+          <div style={{ background:"#fff",border:`2px solid ${t.color}`,borderRadius:18,padding:16,boxShadow:`0 4px 20px ${t.color}22` }}>
+            <div style={{ display:"flex",alignItems:"center",gap:10,marginBottom:14 }}>
+              <div style={{ width:58,height:58,borderRadius:12,flexShrink:0,background:t.bg,border:`2px solid ${t.color}`,
+                display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center" }}>
+                <span style={{ fontSize:30,fontWeight:900,color:t.color,lineHeight:1 }}>{t.kanji}</span>
+                <span style={{ fontSize:8,color:"#aaa",marginTop:1 }}>天然色漢字</span>
+              </div>
+              <div>
+                <div style={{ fontSize:22,fontWeight:900,color:t.color,letterSpacing:4 }}>
+                  {t.kanji}　<span style={{ fontSize:16,fontWeight:700,color:t.color,letterSpacing:1 }}>{t.yomi}</span>
+                </div>
+                <div style={{ display:"flex",gap:2,alignItems:"flex-end",marginTop:4 }}>
+                  {t.word.split("").map((ch,i)=>(
+                    <span key={i} style={{ display:"inline-flex",flexDirection:"column",alignItems:"center",lineHeight:1.3 }}>
+                      <span style={{ fontSize:10,color:"#94a3b8" }}>{[...t.yomi][i]||""}</span>
+                      <span style={{ fontSize:14,fontWeight:700,color:"#374151" }}>{ch}</span>
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div style={{ display:"flex",gap:8,marginBottom:14 }}>
+              {["explain","quiz"].map(tb=>(
+                <button key={tb} onClick={()=>setTab(tb)}
+                  style={{ flex:1,padding:"7px 0",borderRadius:10,fontSize:12,fontWeight:800,
+                    border:`2px solid ${tab===tb?t.color:"#e5e7eb"}`,
+                    background:tab===tb?t.bg:"#f9fafb",
+                    color:tab===tb?t.color:"#6b7280",cursor:"pointer" }}>
+                  {tb==="explain"?"💬 説明（せつめい）を聞く":"🎯 クイズにちょうせん"}
+                </button>
+              ))}
+            </div>
+
+            {tab==="explain"&&<><Bubble type="mone" text={t.mone}/><Bubble type="mane" text={t.mane}/></>}
+            {tab==="quiz"&&<Quiz q={t.quiz.q} a={t.quiz.a} choices={t.quiz.choices}
+              onCorrect={()=>{if(!cleared.has(current)){setScore(s=>s+1);setCleared(c=>new Set([...c,current]));}}}/>}
+          </div>
+        )}
+
+        {!t&&(
+          <div style={{ textAlign:"center",padding:30,color:"#94a3b8" }}>
+            <div style={{ fontSize:40,marginBottom:8 }}>🐱🐱</div>
+            <div style={{ fontSize:14,fontWeight:700 }}><R text="上" ruby="うえ"/>の<R text="用語" ruby="ようご"/>をタップしてね！</div>
+            <div style={{ fontSize:12,marginTop:4 }}>VICKEY-MONEとVICKEY-MANEが<R text="説明" ruby="せつめい"/>するよ</div>
+          </div>
+        )}
+      </div>
+
+      <div style={{ textAlign:"center",padding:"12px 16px",fontSize:10,color:"#cbd5e1",borderTop:"1px solid #f1f5f9" }}>
+        天然色漢字INDEX™ <R text="株式会社" ruby="かぶしきがいしゃ"/>ダンクソフト ／ VICKEYファミリー<br/>
+        ※ <R text="投資" ruby="とうし"/>は<R text="自己責任" ruby="じこせきにん"/>です。<R text="内容" ruby="ないよう"/>は<R text="学習目的" ruby="がくしゅうもくてき"/>です。
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+</body>
+</html>
