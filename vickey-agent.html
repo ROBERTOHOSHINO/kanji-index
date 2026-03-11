@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VICKEYファミリーのこどもNISAナビ AI版</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#fff8f0;font-family:'Hiragino Sans','Meiryo',sans-serif;}
+button{font-family:inherit;}
+input{font-family:inherit;}
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-thumb{background:#fde68a;border-radius:4px;}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const {useState,useRef,useEffect} = React;
+
+const SYSTEM_PROMPT = `あなたはVICKEYファミリーという金融教育AIです。
+金色の招き猫「VICKEY-MONE（モネ）」と銀色の招き猫「VICKEY-MANE（マネ）」の姉妹が、子どもや初心者にNISA・投資・お金の知識をやさしく教えます。
+
+【キャラクター設定】
+- VICKEY-MONE💛：積極的・明るい・「増やす」視点で話す。語尾は「〜だよ！」「〜するよ！」
+- VICKEY-MANE🩶：慎重・丁寧・「守る・リスク」視点で話す。語尾は「〜なの。」「〜だよね。」
+
+【回答ルール】
+1. 必ずMONEとMANEの2人が交互に話す形式で回答する
+2. 難しい漢字には必ずふりがなをHTMLのrubyタグで付ける（例：<ruby>運用<rt>うんよう</rt></ruby>）
+3. 天然色漢字INDEX™の漢字一字で用語を表現する（例：非課税＝免、複利＝殖）
+4. 小学生でもわかるやさしい言葉と例え話を使う
+5. 最後に必ず「天然色漢字INDEX™」の漢字一字ヒントを出す
+6. 投資は自己責任である旨をやさしく添える
+
+【回答フォーマット（JSON）】
+{
+  "mone": "MONEのセリフ（rubyタグでふりがなあり）",
+  "mane": "MANEのセリフ（rubyタグでふりがなあり）",
+  "kanji": "この質問に対応する漢字一字",
+  "kanjiColor": "漢字に対応する色（16進数）",
+  "yomi": "漢字の読み方",
+  "hint": "子ども向けの覚え方ヒント（一文）"
+}
+必ずJSON形式のみで返答してください。前置きや説明は不要です。`;
+
+const SUGGESTED = [
+  "NISAってなに？","ふくりってどういうこと？","とうしはこわい？",
+  "おこづかいでとうしできる？","かぶってなに？","リスクってなに？"
+];
+
+// ふりがなつきテキストをHTMLで表示
+function RubyText({html}){
+  return <span style={{lineHeight:2}} dangerouslySetInnerHTML={{__html:html}}/>;
+}
+
+function CatFace({type}){
+  const isMone=type==="mone";
+  return(
+    <div style={{
+      width:44,height:44,borderRadius:"50%",flexShrink:0,
+      background:isMone?"linear-gradient(135deg,#ffd700,#f59e0b)":"linear-gradient(135deg,#e2e8f0,#94a3b8)",
+      border:`3px solid ${isMone?"#C9920A":"#475569"}`,
+      display:"flex",alignItems:"center",justifyContent:"center",
+      fontSize:24,boxShadow:"0 2px 8px rgba(0,0,0,0.15)"
+    }}>🐱</div>
+  );
+}
+
+function Bubble({type,html,loading}){
+  const isMone=type==="mone";
+  const color=isMone?"#C9920A":"#6B7280";
+  return(
+    <div style={{display:"flex",gap:8,alignItems:"flex-start",marginBottom:12}}>
+      {isMone&&<CatFace type="mone"/>}
+      <div style={{flex:1}}>
+        <div style={{fontSize:11,fontWeight:800,color,marginBottom:3}}>
+          {isMone?"VICKEY-MONE 💛":"VICKEY-MANE 🩶"}
+        </div>
+        <div style={{
+          background:isMone?"#fffbeb":"#f8fafc",
+          border:`1.5px solid ${isMone?"#fcd34d":"#cbd5e1"}`,
+          borderRadius:isMone?"4px 16px 16px 16px":"16px 4px 16px 16px",
+          padding:"10px 14px",fontSize:13,lineHeight:2,color:"#374151",minHeight:44
+        }}>
+          {loading
+            ? <span style={{color:"#ccc"}}>かんがえちゅう…🐾</span>
+            : <RubyText html={html}/>
+          }
+        </div>
+      </div>
+      {!isMone&&<CatFace type="mane"/>}
+    </div>
+  );
+}
+
+function KanjiCard({kanji,kanjiColor,yomi,hint}){
+  if(!kanji||kanji==="？") return null;
+  return(
+    <div style={{
+      background:"#fff",border:`2px solid ${kanjiColor||"#ddd"}`,
+      borderRadius:14,padding:"10px 14px",marginBottom:8,
+      display:"flex",alignItems:"center",gap:12
+    }}>
+      <div style={{
+        width:56,height:56,borderRadius:10,flexShrink:0,
+        background:`${kanjiColor}18`,border:`2px solid ${kanjiColor}`,
+        display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center"
+      }}>
+        <span style={{fontSize:28,fontWeight:900,color:kanjiColor,lineHeight:1}}>{kanji}</span>
+        <span style={{fontSize:7,color:"#aaa",marginTop:1}}>天然色漢字INDEX™</span>
+      </div>
+      <div>
+        <div style={{fontSize:14,fontWeight:900,color:kanjiColor,letterSpacing:3}}>
+          {kanji}　<span style={{fontSize:13,letterSpacing:1}}>{yomi}</span>
+        </div>
+        {hint&&(
+          <div style={{fontSize:11,color:"#6b7280",marginTop:4,lineHeight:1.7}}>
+            💡 {hint}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function App(){
+  const [messages,setMessages]=useState([]);
+  const [input,setInput]=useState("");
+  const [loading,setLoading]=useState(false);
+  const bottomRef=useRef(null);
+
+  useEffect(()=>{
+    bottomRef.current?.scrollIntoView({behavior:"smooth"});
+  },[messages,loading]);
+
+  async function ask(question){
+    if(!question.trim()||loading) return;
+    const q=question.trim();
+    setInput("");
+    setMessages(m=>[...m,{role:"user",text:q}]);
+    setLoading(true);
+
+    try{
+      const history=messages.map(m=>({
+        role:m.role==="user"?"user":"assistant",
+        content:m.role==="user"?m.text:JSON.stringify(m.data)
+      }));
+
+      const res=await fetch("https://api.anthropic.com/v1/messages",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({
+          model:"claude-sonnet-4-20250514",
+          max_tokens:1000,
+          system:SYSTEM_PROMPT,
+          messages:[...history,{role:"user",content:q}]
+        })
+      });
+
+      const data=await res.json();
+      const raw=data.content?.[0]?.text||"{}";
+      const clean=raw.replace(/```json|```/g,"").trim();
+      const parsed=JSON.parse(clean);
+      setMessages(m=>[...m,{role:"assistant",data:parsed}]);
+    }catch(e){
+      setMessages(m=>[...m,{role:"assistant",data:{
+        mone:"ごめんね、うまく<ruby>聞<rt>き</rt></ruby>き<ruby>取<rt>と</rt></ruby>れなかったよ！もう一<ruby>度<rt>ど</rt></ruby><ruby>聞<rt>き</rt></ruby>いてね😿",
+        mane:"もう一<ruby>度<rt>ど</rt></ruby>ためしてみてね。",
+        kanji:"",kanjiColor:"",yomi:"",hint:""
+      }}]);
+    }
+    setLoading(false);
+  }
+
+  return(
+    <div style={{background:"#fff8f0",height:"100dvh",display:"flex",flexDirection:"column",maxWidth:600,margin:"0 auto"}}>
+
+      {/* ヘッダー */}
+      <div style={{
+        background:"linear-gradient(135deg,#ffd700 0%,#f97316 50%,#c084fc 100%)",
+        padding:"12px 14px",display:"flex",alignItems:"center",gap:12,flexShrink:0
+      }}>
+        <img src="https://robertohoshino.github.io/kanji-index/Vickey.png"
+          alt="VICKEY" onError={e=>e.target.style.display="none"}
+          style={{width:76,height:76,objectFit:"cover",borderRadius:14,
+            border:"3px solid rgba(255,255,255,0.85)",boxShadow:"0 4px 14px rgba(0,0,0,0.2)",flexShrink:0}}/>
+        <div style={{flex:1}}>
+          <div style={{fontSize:9,color:"rgba(255,255,255,0.85)",letterSpacing:2,marginBottom:2}}>
+            天然色漢字INDEX™ × Claude AI
+          </div>
+          <div style={{fontSize:17,fontWeight:900,color:"#fff",textShadow:"1px 2px 4px rgba(0,0,0,0.2)",lineHeight:1.4}}>
+            VICKEYファミリーの<br/>
+            <ruby style={{fontSize:"0.95em"}}>子<rt style={{fontSize:"0.6em",color:"rgba(255,255,255,0.85)"}}>こ</rt></ruby>どもNISAナビ
+            <span style={{fontSize:11,marginLeft:6,background:"rgba(255,255,255,0.25)",padding:"1px 8px",borderRadius:10}}>AI版</span>
+          </div>
+          <div style={{fontSize:10,color:"rgba(255,255,255,0.9)",marginTop:3}}>
+            なんでも<ruby>聞<rt style={{fontSize:"0.65em"}}>き</rt></ruby>いてね！MONEとMANEが<ruby>答<rt style={{fontSize:"0.65em"}}>こた</rt></ruby>えるよ🐱
+          </div>
+        </div>
+      </div>
+
+      {/* チャットエリア */}
+      <div style={{flex:1,overflowY:"auto",padding:"14px 14px 0"}}>
+
+        {messages.length===0&&(
+          <div style={{textAlign:"center",padding:"20px 0 16px"}}>
+            <div style={{fontSize:40,marginBottom:8}}>🐱🐱</div>
+            <div style={{fontSize:15,fontWeight:800,color:"#374151",marginBottom:4}}>
+              こんにちは！VICKEYファミリーだよ！
+            </div>
+            <div style={{fontSize:12,color:"#6b7280",lineHeight:1.9,marginBottom:16}}>
+              NISAや<ruby>投資<rt style={{fontSize:"0.7em"}}>とうし</rt></ruby>のことなら<br/>なんでも<ruby>聞<rt style={{fontSize:"0.7em"}}>き</rt></ruby>いてね😊
+            </div>
+            <div style={{display:"flex",flexWrap:"wrap",gap:8,justifyContent:"center"}}>
+              {SUGGESTED.map((s,i)=>(
+                <button key={i} onClick={()=>ask(s)}
+                  style={{background:"#fff",border:"1.5px solid #fcd34d",borderRadius:20,
+                    padding:"7px 15px",fontSize:12,fontWeight:700,color:"#C9920A",
+                    cursor:"pointer",boxShadow:"0 2px 6px rgba(0,0,0,0.06)"}}>
+                  {s}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {messages.map((m,i)=>(
+          <div key={i}>
+            {m.role==="user"?(
+              <div style={{display:"flex",justifyContent:"flex-end",marginBottom:12}}>
+                <div style={{
+                  background:"linear-gradient(135deg,#f97316,#c084fc)",color:"#fff",
+                  borderRadius:"16px 4px 16px 16px",padding:"10px 14px",
+                  fontSize:13,fontWeight:600,maxWidth:"78%",lineHeight:1.7,
+                  boxShadow:"0 2px 8px rgba(249,115,22,0.25)"
+                }}>{m.text}</div>
+              </div>
+            ):m.data&&(
+              <div style={{marginBottom:8}}>
+                <Bubble type="mone" html={m.data.mone}/>
+                <Bubble type="mane" html={m.data.mane}/>
+                <KanjiCard
+                  kanji={m.data.kanji}
+                  kanjiColor={m.data.kanjiColor}
+                  yomi={m.data.yomi}
+                  hint={m.data.hint}
+                />
+              </div>
+            )}
+          </div>
+        ))}
+
+        {loading&&(
+          <div>
+            <Bubble type="mone" loading={true}/>
+            <Bubble type="mane" loading={true}/>
+          </div>
+        )}
+        <div ref={bottomRef}/>
+      </div>
+
+      {/* 入力エリア */}
+      <div style={{padding:12,background:"#fff",borderTop:"1px solid #f1f5f9",flexShrink:0}}>
+        {messages.length>0&&(
+          <div style={{display:"flex",gap:6,overflowX:"auto",marginBottom:8,paddingBottom:2}}>
+            {SUGGESTED.map((s,i)=>(
+              <button key={i} onClick={()=>ask(s)}
+                style={{background:"#fff8f0",border:"1.5px solid #fde68a",borderRadius:16,
+                  padding:"4px 12px",fontSize:11,fontWeight:700,color:"#C9920A",
+                  cursor:"pointer",whiteSpace:"nowrap",flexShrink:0}}>
+                {s}
+              </button>
+            ))}
+          </div>
+        )}
+        <div style={{display:"flex",gap:8}}>
+          <input value={input} onChange={e=>setInput(e.target.value)}
+            onKeyDown={e=>e.key==="Enter"&&ask(input)}
+            placeholder="なんでもきいてね！（れい：NISAってなに？）"
+            style={{flex:1,border:"2px solid #fde68a",borderRadius:24,
+              padding:"10px 16px",fontSize:13,outline:"none",
+              background:"#fffbeb",color:"#374151"}}/>
+          <button onClick={()=>ask(input)} disabled={loading||!input.trim()}
+            style={{
+              background:"linear-gradient(135deg,#ffd700,#f97316)",
+              border:"none",borderRadius:24,padding:"10px 20px",
+              fontSize:13,fontWeight:800,color:"#fff",
+              cursor:loading||!input.trim()?"default":"pointer",
+              opacity:loading||!input.trim()?0.5:1,
+              boxShadow:"0 3px 10px rgba(249,115,22,0.3)"
+            }}>
+            <ruby>送信<rt style={{fontSize:"0.65em"}}>そうしん</rt></ruby>
+          </button>
+        </div>
+        <div style={{fontSize:10,color:"#cbd5e1",textAlign:"center",marginTop:6}}>
+          天然色漢字INDEX™ 株式会社ダンクソフト ／
+          ※<ruby>投資<rt style={{fontSize:"0.7em"}}>とうし</rt></ruby>は<ruby>自己責任<rt style={{fontSize:"0.7em"}}>じこせきにん</rt></ruby>です
+        </div>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+</body>
+</html>
