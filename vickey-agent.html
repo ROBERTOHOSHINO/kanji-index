@@ -152,7 +152,9 @@ function App(){
 
       const res=await fetch("https://vickey-proxy.roberto-a79.workers.dev",{
         method:"POST",
-        headers:{"Content-Type":"application/json"},
+        headers:{"Content-Type":"application/json",
+                 "anthropic-version":"2023-06-01"
+        },
         body:JSON.stringify({
           model:"claude-sonnet-4-20250514",
           max_tokens:1000,
