@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>天然色漢字INDEX™ × 岩波書店　書籍インデックスデモ</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700;900&family=Noto+Sans+JP:wght@300;400;500;700&display=swap');
+
+:root {
+  --ink: #0e0e18;
+  --ink-mid: #2a2a3a;
+  --ink-light: #7a7a90;
+  --paper: #f5f4f8;
+  --paper-warm: #eceaf2;
+  --paper-mid: #dedae8;
+  --accent: #3d2a6b;
+  --accent2: #7b5ea7;
+  --gold: #a07830;
+  --border: rgba(14,14,24,0.10);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Noto Sans JP', sans-serif; background: var(--paper); color: var(--ink); min-height: 100vh; }
+
+.hero {
+  background: var(--accent);
+  color: #fff;
+  padding: 28px 24px 24px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '哲';
+  font-family: 'Noto Serif JP', serif;
+  font-size: 260px; font-weight: 900;
+  position: absolute; right: -20px; top: -50px;
+  opacity: .06; color: #fff; line-height: 1;
+}
+.hero-eyebrow { font-size: 10px; letter-spacing: 3px; color: rgba(255,255,255,0.45); margin-bottom: 6px; }
+.hero-title { font-family: 'Noto Serif JP', serif; font-size: clamp(17px,3.8vw,25px); font-weight: 700; line-height: 1.55; margin-bottom: 5px; }
+.hero-title em { color: #ffd700; font-style: normal; }
+.hero-sub { font-size: 11px; color: rgba(255,255,255,0.45); }
+.hero-badge { display: inline-block; margin-top: 12px; background: var(--accent2); color: #fff; font-size: 10px; font-weight: 700; padding: 4px 12px; border-radius: 20px; letter-spacing: 1px; }
+
+/* PHILOSOPHER SPOTLIGHT */
+.spotlight {
+  background: #fff;
+  border-left: 4px solid var(--gold);
+  margin: 20px 16px 0;
+  padding: 14px 18px;
+  border-radius: 0 10px 10px 0;
+  font-size: 11px;
+  line-height: 1.9;
+  color: var(--ink-mid);
+}
+.spotlight strong { color: var(--accent); font-family: 'Noto Serif JP', serif; font-size: 13px; }
+.philosophers { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+.phil-card {
+  background: var(--paper-warm);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 10px;
+  border: 1px solid var(--border);
+  flex: 1; min-width: 130px;
+}
+.phil-name { font-family: 'Noto Serif JP', serif; font-size: 15px; font-weight: 700; color: var(--accent); margin-bottom: 3px; }
+.phil-en { font-size: 9px; color: var(--ink-light); letter-spacing: 1px; margin-bottom: 4px; }
+.phil-kanji { display: flex; gap: 3px; }
+.pk { font-family: 'Noto Serif JP', serif; font-size: 14px; font-weight: 700; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; border-radius: 4px; }
+
+.legend-bar { background: var(--paper-warm); border-bottom: 1px solid var(--border); padding: 9px 14px; margin-top: 14px; display: flex; align-items: center; gap: 7px; flex-wrap: wrap; font-size: 10px; color: var(--ink-light); }
+.legend-bar strong { color: var(--ink-mid); margin-right: 4px; }
+.lk { display: inline-flex; align-items: center; gap: 3px; }
+.lk-char { font-family: 'Noto Serif JP', serif; font-size: 15px; font-weight: 700; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; border-radius: 3px; }
+.lk-name { font-size: 9px; color: var(--ink-light); }
+
+.control-area { padding: 14px 16px; background: var(--paper); border-bottom: 1px solid var(--border); display: flex; flex-direction: column; gap: 10px; }
+.search-row { display: flex; gap: 8px; align-items: center; }
+.search-input { flex: 1; border: 1.5px solid var(--border); border-radius: 8px; padding: 8px 12px; font-family: 'Noto Sans JP', sans-serif; font-size: 13px; background: #fff; color: var(--ink); outline: none; transition: border-color .2s; }
+.search-input:focus { border-color: var(--accent); }
+.mode-toggle { display: flex; background: var(--paper-warm); border-radius: 8px; overflow: hidden; border: 1px solid var(--border); }
+.mode-btn { padding: 7px 14px; font-size: 11px; font-weight: 700; font-family: 'Noto Sans JP', sans-serif; border: none; background: transparent; color: var(--ink-light); cursor: pointer; transition: all .2s; letter-spacing: 1px; }
+.mode-btn.active { background: var(--accent); color: #fff; }
+
+.kanji-filters { display: flex; gap: 5px; flex-wrap: wrap; align-items: center; }
+.filter-label { font-size: 10px; color: var(--ink-light); margin-right: 2px; }
+.kf-chip { display: inline-flex; align-items: center; gap: 3px; padding: 3px 8px 3px 4px; border-radius: 20px; border: 1.5px solid transparent; cursor: pointer; font-size: 10px; font-family: 'Noto Sans JP', sans-serif; transition: all .15s; background: var(--paper-warm); color: var(--ink-mid); }
+.kf-chip:hover { transform: translateY(-1px); }
+.kf-chip.active { border-width: 2px; color: #fff; }
+.kf-chip .kc { font-family: 'Noto Serif JP', serif; font-size: 14px; font-weight: 700; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; border-radius: 3px; }
+
+.label-filters { display: flex; gap: 5px; flex-wrap: wrap; }
+.label-chip { padding: 3px 10px; border-radius: 20px; border: 1.5px solid var(--border); font-size: 10px; font-family: 'Noto Sans JP', sans-serif; cursor: pointer; background: transparent; color: var(--ink-mid); transition: all .15s; font-weight: 500; }
+.label-chip:hover { background: var(--paper-warm); }
+.label-chip.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+.results-bar { padding: 7px 16px; font-size: 11px; color: var(--ink-light); border-bottom: 1px solid var(--border); background: var(--paper-warm); display: flex; justify-content: space-between; align-items: center; }
+.results-count { font-weight: 700; color: var(--ink-mid); }
+
+.book-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 0; }
+.book-card { padding: 15px 16px; border-bottom: 1px solid var(--border); border-right: 1px solid var(--border); transition: background .15s; }
+.book-card:hover { background: var(--paper-warm); }
+.book-title { font-family: 'Noto Serif JP', serif; font-size: 14px; font-weight: 700; color: var(--ink); line-height: 1.5; margin-bottom: 3px; }
+.book-author { font-size: 10px; color: var(--ink-light); margin-bottom: 3px; }
+.book-label { display: inline-block; font-size: 9px; padding: 2px 8px; border-radius: 10px; font-weight: 700; letter-spacing: .5px; }
+.book-desc { font-size: 10px; color: var(--ink-light); margin: 5px 0 7px; line-height: 1.6; }
+.book-quote { font-family: 'Noto Serif JP', serif; font-size: 11px; color: var(--accent2); border-left: 2px solid var(--accent2); padding-left: 8px; margin: 6px 0; line-height: 1.7; font-style: italic; }
+.kanji-row { display: flex; gap: 4px; flex-wrap: wrap; }
+.k-chip { display: flex; flex-direction: column; align-items: center; padding: 4px 5px; border-radius: 6px; min-width: 34px; transition: transform .1s; }
+.k-chip:hover { transform: translateY(-2px); }
+.k-char { font-family: 'Noto Serif JP', serif; font-size: 19px; font-weight: 700; line-height: 1.1; }
+.k-label { font-size: 8px; margin-top: 1px; opacity: .8; text-align: center; line-height: 1.2; }
+
+.trend-section { padding: 20px 16px; background: var(--paper-warm); border-top: 1px solid var(--border); }
+.trend-title { font-family: 'Noto Serif JP', serif; font-size: 14px; font-weight: 700; margin-bottom: 14px; color: var(--ink); display: flex; align-items: center; gap: 8px; }
+.trend-title::before { content: ''; display: block; width: 4px; height: 18px; background: var(--accent); border-radius: 2px; }
+.trend-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 10px; }
+.trend-card { background: #fff; border-radius: 10px; padding: 12px; border: 1px solid var(--border); }
+.trend-card-label { font-size: 9px; font-weight: 700; letter-spacing: 1px; margin-bottom: 8px; }
+.trend-kanji-row { display: flex; gap: 4px; flex-wrap: wrap; }
+.tk { font-family: 'Noto Serif JP', serif; font-size: 21px; font-weight: 700; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 5px; }
+
+.empty-state { grid-column: 1/-1; padding: 60px 20px; text-align: center; color: var(--ink-light); font-size: 13px; }
+footer { text-align: center; padding: 16px; font-size: 10px; color: var(--ink-light); border-top: 1px solid var(--border); line-height: 2; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-eyebrow">天然色漢字INDEX™ × COLORFUL KANJI INDEX®</div>
+  <div class="hero-title">岩波書店　書籍インデックス<br><em>漢字1文字＋色</em>で本を発見する</div>
+  <div class="hero-sub">IWANAMI SHOTEN — KANJI TAG DEMO　DUNKSOFT Co., Ltd.</div>
+  <div class="hero-badge">DEMO 2026</div>
+</div>
+
+<div class="spotlight">
+  <strong>哲学の色——スピノザ・荘子・孔子</strong><br>
+  岩波文庫は哲学・思想・歴史の宝庫。「哲」「倫」「宗」「史」が圧倒的に濃く、東西の知が一冊の棚に並ぶ。
+  <div class="philosophers">
+    <div class="phil-card">
+      <div class="phil-name">スピノザ</div>
+      <div class="phil-en">B. de Spinoza 1632–1677</div>
+      <div style="font-size:9px;color:var(--ink-light);margin-bottom:5px">「賢者こそが楽しむ」——Smart Life Stylesの哲学的源泉</div>
+      <div class="phil-kanji">
+        <span class="pk" style="background:#f3e5f5;color:#4a148c">哲</span>
+        <span class="pk" style="background:#fafafa;color:#424242">倫</span>
+        <span class="pk" style="background:#e8f5e9;color:#1b5e20">生</span>
+        <span class="pk" style="background:#f3e5f5;color:#6a1b9a">宗</span>
+      </div>
+    </div>
+    <div class="phil-card">
+      <div class="phil-name">荘子</div>
+      <div class="phil-en">Zhuangzi 紀元前369–286</div>
+      <div style="font-size:9px;color:var(--ink-light);margin-bottom:5px">道家思想・無為自然。「遊」の哲学。</div>
+      <div class="phil-kanji">
+        <span class="pk" style="background:#f3e5f5;color:#4a148c">哲</span>
+        <span class="pk" style="background:#fff9c4;color:#f9a825">遊</span>
+        <span class="pk" style="background:#e3f2fd;color:#0d47a1">然</span>
+        <span class="pk" style="background:#f3e5f5;color:#6a1b9a">宗</span>
+      </div>
+    </div>
+    <div class="phil-card">
+      <div class="phil-name">孔子</div>
+      <div class="phil-en">Confucius 紀元前551–479</div>
+      <div style="font-size:9px;color:var(--ink-light);margin-bottom:5px">儒家思想の祖。「仁・礼・義」の哲学。</div>
+      <div class="phil-kanji">
+        <span class="pk" style="background:#f3e5f5;color:#4a148c">哲</span>
+        <span class="pk" style="background:#fafafa;color:#424242">倫</span>
+        <span class="pk" style="background:#e0f2f1;color:#004d40">教</span>
+        <span class="pk" style="background:#fff9c4;color:#f57f17">史</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="legend-bar">
+  <strong>漢字の色＝部首カテゴリ：</strong>
+  <span class="lk"><span class="lk-char" style="background:#f3e5f5;color:#4a148c">哲</span><span class="lk-name">哲学・思想</span></span>
+  <span class="lk"><span class="lk-char" style="background:#fafafa;color:#424242">倫</span><span class="lk-name">倫理・道徳</span></span>
+  <span class="lk"><span class="lk-char" style="background:#fff9c4;color:#f57f17">史</span><span class="lk-name">歴史・伝記</span></span>
+  <span class="lk"><span class="lk-char" style="background:#e8f5e9;color:#1b5e20">社</span><span class="lk-name">社会科学</span></span>
+  <span class="lk"><span class="lk-char" style="background:#e3f2fd;color:#0d47a1">然</span><span class="lk-name">自然科学</span></span>
+  <span class="lk"><span class="lk-char" style="background:#f3e5f5;color:#6a1b9a">宗</span><span class="lk-name">宗教・精神</span></span>
+  <span class="lk"><span class="lk-char" style="background:#e0f2f1;color:#004d40">教</span><span class="lk-name">教育・学習</span></span>
+  <span class="lk"><span class="lk-char" style="background:#e8f5e9;color:#1b5e20">生</span><span class="lk-name">生命・科学</span></span>
+  <span class="lk"><span class="lk-char" style="background:#fff3e0;color:#e65100">小</span><span class="lk-name">文学・物語</span></span>
+  <span class="lk"><span class="lk-char" style="background:#fff9c4;color:#f9a825">遊</span><span class="lk-name">遊・自由</span></span>
+  <span class="lk"><span class="lk-char" style="background:#ffebee;color:#b71c1c">政</span><span class="lk-name">政治・権力</span></span>
+  <span class="lk"><span class="lk-char" style="background:#e1f5fe;color:#01579b">情</span><span class="lk-name">言語・情報</span></span>
+</div>
+
+<div class="control-area">
+  <div class="search-row">
+    <input class="search-input" id="searchInput" type="text" placeholder="書名・著者名・漢字で検索…" oninput="render()">
+    <div class="mode-toggle">
+      <button class="mode-btn active" id="btnOR" onclick="setMode('OR')">OR</button>
+      <button class="mode-btn" id="btnAND" onclick="setMode('AND')">AND</button>
+    </div>
+  </div>
+  <div class="kanji-filters" id="kanjiFilters"></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+    <span class="filter-label">レーベル：</span>
+    <div class="label-filters" id="labelFilters"></div>
+  </div>
+</div>
+
+<div class="results-bar">
+  <span id="resultsInfo">全書籍を表示中</span>
+  <span id="activeFilters" style="font-size:10px;color:var(--accent2)"></span>
+</div>
+
+<div class="book-grid" id="bookGrid"></div>
+
+<div class="trend-section">
+  <div class="trend-title">レーベル別　漢字の傾向</div>
+  <div class="trend-grid" id="trendGrid"></div>
+</div>
+
+<footer>
+  天然色漢字INDEX™ COLORFUL KANJI INDEX® DUNKSOFT Co., Ltd.<br>
+  ※書籍データはデモ用サンプルです。制作：Claude (Anthropic) × DUNKSOFT Co., Ltd. 2026
+</footer>
+
+<script>
+const KANJI_DEF = {
+  '哲': { label:'哲学・思想', bg:'#f3e5f5', color:'#4a148c' },
+  '倫': { label:'倫理・道徳', bg:'#fafafa', color:'#424242' },
+  '史': { label:'歴史・伝記', bg:'#fff9c4', color:'#f57f17' },
+  '社': { label:'社会科学', bg:'#e8f5e9', color:'#1b5e20' },
+  '然': { label:'自然科学', bg:'#e3f2fd', color:'#0d47a1' },
+  '宗': { label:'宗教・精神', bg:'#f3e5f5', color:'#6a1b9a' },
+  '教': { label:'教育・学習', bg:'#e0f2f1', color:'#004d40' },
+  '生': { label:'生命・科学', bg:'#e8f5e9', color:'#1b5e20' },
+  '小': { label:'文学・物語', bg:'#fff3e0', color:'#e65100' },
+  '遊': { label:'遊・自由', bg:'#fff9c4', color:'#f9a825' },
+  '政': { label:'政治・権力', bg:'#ffebee', color:'#b71c1c' },
+  '情': { label:'言語・情報', bg:'#e1f5fe', color:'#01579b' },
+  '心': { label:'心理・感情', bg:'#fce4ec', color:'#880e4f' },
+  '経': { label:'経済・思想', bg:'#fff8e1', color:'#e65100' },
+  '死': { label:'死・存在', bg:'#eceff1', color:'#37474f' },
+  '美': { label:'美・芸術', bg:'#f1f8e9', color:'#33691e' },
+  '知': { label:'知・認識', bg:'#ede7f6', color:'#311b92' },
+  '語': { label:'言語・文学', bg:'#e1f5fe', color:'#0277bd' },
+};
+
+const BOOKS = [
+  // スピノザ
+  { id:1,  title:'エチカ', author:'スピノザ（畠中尚志訳）', label:'岩波文庫', year:1951,
+    kanji:['哲','倫','生','宗'],
+    quote:'もろもろの物を利用してそれをできる限り楽しむことは賢者にふさわしい。',
+    desc:'17世紀の哲学者スピノザの主著。神・自然・人間を幾何学的方法で論証。「楽しむことは賢者にふさわしい」。' },
+  { id:2,  title:'神学政治論', author:'スピノザ（吉田量彦訳）', label:'岩波文庫', year:2014,
+    kanji:['哲','宗','政','倫'],
+    quote:'自由な国家においては、各人は自分の好むことを考え、自分の考えることを語る自由を持つ。',
+    desc:'宗教と政治の分離を論じたスピノザの問題作。自由と理性の哲学。' },
+
+  // 荘子
+  { id:3,  title:'荘子（全4冊）', author:'荘子（金谷治訳）', label:'岩波文庫', year:1971,
+    kanji:['哲','遊','然','宗'],
+    quote:'北冥に魚あり、その名を鯤という。鯤の大きさは幾千里かを知らず。',
+    desc:'道家思想の根本文献。無為自然・逍遥遊の思想。「遊」の哲学の源泉。' },
+  { id:4,  title:'老子・荘子（上）', author:'荘子（福永光司訳）', label:'中公クラシックス', year:2001,
+    kanji:['哲','然','遊','倫'],
+    quote:'道は常に無為にして、しかも為さざるなし。',
+    desc:'老子と荘子を対訳で読む。道家哲学入門として最良の一冊。' },
+
+  // 孔子・儒家
+  { id:5,  title:'論語', author:'孔子（金谷治訳注）', label:'岩波文庫', year:1999,
+    kanji:['哲','教','倫','史'],
+    quote:'学びて思わざれば則ち罔し、思いて学ばざれば則ち殆し。',
+    desc:'孔子とその弟子たちの言葉を集めた儒家の根本経典。仁・礼・義の哲学。' },
+  { id:6,  title:'孟子（上・下）', author:'孟子（小林勝人訳）', label:'岩波文庫', year:1968,
+    kanji:['哲','倫','政','教'],
+    quote:'仁は人の心なり、義は人の路なり。',
+    desc:'性善説と王道政治を説いた儒家の亜聖・孟子の著作。' },
+
+  // 西洋哲学
+  { id:7,  title:'ソクラテスの弁明・クリトン', author:'プラトン（久保勉訳）', label:'岩波文庫', year:1964,
+    kanji:['哲','倫','死','知'],
+    quote:'吟味されない人生は生きる価値がない。',
+    desc:'死に臨んだソクラテスの最後の言葉。哲学の原点。' },
+  { id:8,  title:'ニコマコス倫理学（上・下）', author:'アリストテレス（高田三郎訳）', label:'岩波文庫', year:1971,
+    kanji:['哲','倫','教','心'],
+    quote:'幸福とは魂の徳に即した活動である。',
+    desc:'幸福・徳・友愛を論じたアリストテレス倫理学の主著。' },
+  { id:9,  title:'純粋理性批判（全3冊）', author:'カント（篠田英雄訳）', label:'岩波文庫', year:1961,
+    kanji:['哲','知','然','倫'],
+    quote:'空虚な直観と盲目な概念——どちらも知識にはなりえない。',
+    desc:'認識論の革命。人間の理性の限界と可能性を徹底的に問う。' },
+  { id:10, title:'精神現象学（上・下）', author:'ヘーゲル（樫山欽四郎訳）', label:'平凡社ライブラリー', year:1997,
+    kanji:['哲','史','知','宗'],
+    quote:'真なるものは全体である。',
+    desc:'意識から絶対精神へ。ヘーゲル哲学の出発点にして頂点。' },
+  { id:11, title:'存在と時間（全3冊）', author:'ハイデガー（細谷貞雄訳）', label:'ちくま学芸文庫', year:1994,
+    kanji:['哲','死','時','然'],
+    quote:'現存在の本質は実存にある。',
+    desc:'存在とは何か。20世紀最大の哲学書とも言われる難解な名著。' },
+
+  // 岩波新書・思想・社会
+  { id:12, title:'日本の思想', author:'丸山眞男', label:'岩波新書', year:1961,
+    kanji:['哲','史','社','倫'],
+    desc:'日本思想の構造的特質を鋭く分析。戦後日本の知性の出発点。' },
+  { id:13, title:'「甘え」の構造', author:'土居健郎', label:'弘文堂', year:1971,
+    kanji:['心','社','哲','教'],
+    desc:'日本人の精神構造を「甘え」という概念で解明した名著。' },
+  { id:14, title:'資本論（全9冊）', author:'マルクス（向坂逸郎訳）', label:'岩波文庫', year:1969,
+    kanji:['経','社','哲','史'],
+    desc:'資本主義の本質を徹底解剖。20世紀を動かした思想の根本文献。' },
+  { id:15, title:'プロテスタンティズムの倫理と資本主義の精神', author:'M.ウェーバー（大塚久雄訳）', label:'岩波文庫', year:1989,
+    kanji:['宗','経','倫','史'],
+    desc:'宗教倫理が資本主義を生んだという歴史社会学の古典。' },
+
+  // 自然科学・生命
+  { id:16, title:'種の起源（上・下）', author:'ダーウィン（八杉龍一訳）', label:'岩波文庫', year:1990,
+    kanji:['然','生','史','哲'],
+    desc:'進化論の原典。自然選択による種の変化を論証した科学史上の革命書。' },
+  { id:17, title:'コペルニクス地動説の論証', author:'コペルニクス（矢島祐利訳）', label:'岩波文庫', year:1953,
+    kanji:['然','史','哲','知'],
+    desc:'天動説を覆した科学革命の書。世界観の転換を論証する。' },
+
+  // 文学・岩波文庫
+  { id:18, title:'源氏物語（全10冊）', author:'紫式部（山岸徳平校注）', label:'岩波文庫', year:1958,
+    kanji:['小','美','愛','史'],
+    desc:'世界最古の長編小説の一つ。平安の雅と人の情を描き尽くす。' },
+  { id:19, title:'万葉集（全4冊）', author:'佐竹昭広他校注', label:'岩波文庫', year:1999,
+    kanji:['小','史','然','語'],
+    desc:'日本最古の和歌集。4500首の声が現代に届く古典の宝庫。' },
+  { id:20, title:'罪と罰（全3冊）', author:'ドストエフスキー（工藤精一郎訳）', label:'新潮文庫', year:1987,
+    kanji:['小','倫','死','心'],
+    desc:'殺人と贖罪。ロシア文学の最高峰。人間の良心と苦悩を描く。' },
+  { id:21, title:'カラマーゾフの兄弟（全4冊）', author:'ドストエフスキー（原卓也訳）', label:'新潮文庫', year:1978,
+    kanji:['小','宗','哲','死'],
+    desc:'信仰・道徳・愛憎・犯罪。ドストエフスキーの集大成。' },
+  { id:22, title:'ファウスト（第一部・第二部）', author:'ゲーテ（相良守峯訳）', label:'岩波文庫', year:1958,
+    kanji:['小','哲','宗','知'],
+    desc:'真理を求め悪魔と契約したファウスト博士。ドイツ文学の最高峰。' },
+
+  // 歴史・政治
+  { id:23, title:'君主論', author:'マキアヴェッリ（河島英昭訳）', label:'岩波文庫', year:1998,
+    kanji:['政','哲','史','倫'],
+    desc:'権力の本質を論じた政治思想の問題書。「目的は手段を正当化する」。' },
+  { id:24, title:'社会契約論', author:'ルソー（桑原武夫訳）', label:'岩波文庫', year:1954,
+    kanji:['社','政','哲','倫'],
+    desc:'フランス革命に影響を与えた政治哲学の古典。人民主権の根拠。' },
+  { id:25, title:'古事記', author:'倉野憲司校注', label:'岩波文庫', year:1963,
+    kanji:['史','宗','小','地'],
+    desc:'日本最古の文献。神話と歴史が混在する日本の原点。' },
+  { id:26, title:'方法序説', author:'デカルト（谷川多佳子訳）', label:'岩波文庫', year:1997,
+    kanji:['哲','知','然','倫'],
+    quote:'われ思う、ゆえにわれあり。',
+    desc:'近代哲学の出発点。「明証性の規則」から始まる合理主義哲学。' },
+
+  // 言語・文化
+  { id:27, title:'言語と行為', author:'オースティン（坂本百大訳）', label:'大修館書店', year:1978,
+    kanji:['語','哲','社','情'],
+    desc:'言語行為論の創始。言葉は世界を記述するだけでなく行為でもある。' },
+  { id:28, title:'贈与論', author:'M.モース（有地亨訳）', label:'勁草書房', year:1962,
+    kanji:['社','倫','史','哲'],
+    desc:'贈り物の文化人類学。互酬性と社会の絆を解明した古典。' },
+  { id:29, title:'菊と刀', author:'R.ベネディクト（長谷川松治訳）', label:'講談社学術文庫', year:2005,
+    kanji:['社','史','倫','哲'],
+    desc:'恥の文化と罪の文化。日本人論の古典的名著。' },
+  { id:30, title:'風姿花伝', author:'世阿弥（野上豊一郎校訂）', label:'岩波文庫', year:1958,
+    kanji:['美','哲','教','宗'],
+    quote:'秘すれば花なり、秘せずば花なるべからず。',
+    desc:'能楽の完成者・世阿弥が書いた芸術論。「花」という美学の核心。' },
+];
+
+const LABELS = [...new Set(BOOKS.map(b=>b.label))].sort();
+const ALL_KANJI = [...new Set(BOOKS.flatMap(b=>b.kanji))].sort();
+
+let selectedKanji = new Set();
+let selectedLabel = null;
+let searchMode = 'OR';
+
+function setMode(m){
+  searchMode=m;
+  document.getElementById('btnOR').classList.toggle('active',m==='OR');
+  document.getElementById('btnAND').classList.toggle('active',m==='AND');
+  render();
+}
+function toggleKanji(k){selectedKanji.has(k)?selectedKanji.delete(k):selectedKanji.add(k);render();}
+function toggleLabel(l){selectedLabel=selectedLabel===l?null:l;render();}
+
+const LABEL_COLORS=[
+  {bg:'#f3e5f5',color:'#4a148c'},{bg:'#fff9c4',color:'#f57f17'},
+  {bg:'#e8f5e9',color:'#1b5e20'},{bg:'#e3f2fd',color:'#0d47a1'},
+  {bg:'#fce4ec',color:'#880e4f'},{bg:'#fff3e0',color:'#e65100'},
+  {bg:'#e0f7fa',color:'#006064'},{bg:'#f1f8e9',color:'#33691e'},
+];
+const lcMap={};
+LABELS.forEach((l,i)=>{lcMap[l]=LABEL_COLORS[i%LABEL_COLORS.length];});
+function getLabelColor(l){return lcMap[l]||{bg:'#eee',color:'#555'};}
+
+function buildFilters(){
+  const kf=document.getElementById('kanjiFilters');
+  kf.innerHTML='<span class="filter-label">漢字で絞り込み：</span>';
+  ALL_KANJI.forEach(k=>{
+    const d=KANJI_DEF[k]||{label:k,bg:'#eee',color:'#333'};
+    const chip=document.createElement('div');
+    chip.className='kf-chip'+(selectedKanji.has(k)?' active':'');
+    chip.style.borderColor=selectedKanji.has(k)?d.color:'transparent';
+    chip.style.background=selectedKanji.has(k)?d.color:'var(--paper-warm)';
+    chip.innerHTML=`<span class="kc" style="background:${d.bg};color:${d.color}">${k}</span>${d.label}`;
+    chip.onclick=()=>toggleKanji(k);
+    kf.appendChild(chip);
+  });
+  const lf=document.getElementById('labelFilters');
+  lf.innerHTML='';
+  LABELS.forEach(l=>{
+    const btn=document.createElement('button');
+    btn.className='label-chip'+(selectedLabel===l?' active':'');
+    btn.textContent=l;
+    btn.onclick=()=>toggleLabel(l);
+    lf.appendChild(btn);
+  });
+}
+
+function matchBook(b){
+  const q=document.getElementById('searchInput').value.trim();
+  if(q&&!b.title.includes(q)&&!b.author.includes(q)&&!b.kanji.some(k=>k===q)&&!b.desc.includes(q)&&!(b.quote&&b.quote.includes(q)))return false;
+  if(selectedLabel&&b.label!==selectedLabel)return false;
+  if(selectedKanji.size===0)return true;
+  const arr=[...selectedKanji];
+  return searchMode==='OR'?arr.some(k=>b.kanji.includes(k)):arr.every(k=>b.kanji.includes(k));
+}
+
+function renderBook(b){
+  const card=document.createElement('div');
+  card.className='book-card';
+  const lc=getLabelColor(b.label);
+  const quoteHtml=b.quote?`<div class="book-quote">${b.quote}</div>`:'';
+  card.innerHTML=`
+    <div class="book-title">${b.title}</div>
+    <div class="book-author">${b.author}　${b.year}年</div>
+    <span class="book-label" style="background:${lc.bg};color:${lc.color}">${b.label}</span>
+    ${quoteHtml}
+    <div class="book-desc">${b.desc}</div>
+    <div class="kanji-row">${b.kanji.map(k=>{
+      const d=KANJI_DEF[k]||{label:k,bg:'#eee',color:'#333'};
+      return`<div class="k-chip" style="background:${d.bg};outline:${selectedKanji.has(k)?'2px solid '+d.color:'none'}">
+        <span class="k-char" style="color:${d.color}">${k}</span>
+        <span class="k-label" style="color:${d.color}">${d.label}</span>
+      </div>`;
+    }).join('')}</div>`;
+  return card;
+}
+
+function renderTrend(){
+  const tg=document.getElementById('trendGrid');
+  tg.innerHTML='';
+  const lk={};
+  BOOKS.forEach(b=>{
+    if(!lk[b.label])lk[b.label]={};
+    b.kanji.forEach(k=>{lk[b.label][k]=(lk[b.label][k]||0)+1;});
+  });
+  Object.entries(lk).forEach(([label,kmap])=>{
+    const top=Object.entries(kmap).sort((a,b)=>b[1]-a[1]).slice(0,5);
+    const lc=getLabelColor(label);
+    const card=document.createElement('div');
+    card.className='trend-card';
+    card.innerHTML=`<div class="trend-card-label" style="color:${lc.color}">${label}</div>
+      <div class="trend-kanji-row">${top.map(([k])=>{
+        const d=KANJI_DEF[k]||{bg:'#eee',color:'#333'};
+        return`<span class="tk" style="background:${d.bg};color:${d.color}" title="${d.label}">${k}</span>`;
+      }).join('')}</div>`;
+    tg.appendChild(card);
+  });
+}
+
+function render(){
+  buildFilters();
+  const matched=BOOKS.filter(matchBook);
+  const grid=document.getElementById('bookGrid');
+  grid.innerHTML='';
+  document.getElementById('resultsInfo').innerHTML=`<span class="results-count">${matched.length}件</span> 表示中`;
+  const filters=[];
+  if(selectedKanji.size>0)filters.push([...selectedKanji].join(` ${searchMode} `));
+  if(selectedLabel)filters.push(selectedLabel);
+  const q=document.getElementById('searchInput').value.trim();
+  if(q)filters.push(`"${q}"`);
+  document.getElementById('activeFilters').textContent=filters.length?'絞り込み中: '+filters.join('　'):'';
+  if(matched.length===0){grid.innerHTML='<div class="empty-state">該当する書籍が見つかりませんでした。</div>';return;}
+  matched.forEach(b=>grid.appendChild(renderBook(b)));
+}
+
+renderTrend();
+render();
+</script>
+</body>
+</html>
