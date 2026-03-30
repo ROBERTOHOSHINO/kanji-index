@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>天然色漢字INDEX™ — 出版社別デモ一覧 | DUNKSOFT Co., Ltd.</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700;900&family=Noto+Sans+JP:wght@300;400;500;700&display=swap');
+
+:root {
+  --ink: #12100e;
+  --ink-mid: #3a3530;
+  --ink-light: #8a837c;
+  --paper: #f8f5f0;
+  --paper-warm: #ede8df;
+  --accent: #b5330a;
+  --gold: #b8860b;
+  --border: rgba(18,16,14,0.10);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  min-height: 100vh;
+}
+
+/* HERO */
+.hero {
+  background: var(--ink);
+  color: #fff;
+  padding: 40px 32px 36px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '索';
+  font-family: 'Noto Serif JP', serif;
+  font-size: 320px;
+  font-weight: 900;
+  position: absolute;
+  right: -30px; top: -60px;
+  opacity: .04;
+  color: #fff;
+  line-height: 1;
+  pointer-events: none;
+}
+.hero-label {
+  font-size: 10px;
+  letter-spacing: 4px;
+  color: rgba(255,255,255,0.45);
+  margin-bottom: 10px;
+}
+.hero-title {
+  font-family: 'Noto Serif JP', serif;
+  font-size: clamp(22px, 5vw, 36px);
+  font-weight: 900;
+  line-height: 1.4;
+  margin-bottom: 8px;
+}
+.hero-title em { color: #ffd700; font-style: normal; }
+.hero-desc {
+  font-size: 13px;
+  color: rgba(255,255,255,0.6);
+  line-height: 1.9;
+  max-width: 560px;
+  margin-bottom: 20px;
+}
+.hero-badges { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.badge {
+  display: inline-block;
+  font-size: 10px; font-weight: 700;
+  padding: 4px 14px; border-radius: 20px;
+  letter-spacing: 1px;
+}
+.badge-red { background: var(--accent); color: #fff; }
+.badge-gold { background: transparent; border: 1px solid rgba(255,215,0,0.5); color: #ffd700; }
+
+/* SANSEIDO MESSAGE */
+.message-block {
+  background: #fff;
+  border-left: 4px solid var(--gold);
+  margin: 24px 24px 0;
+  padding: 16px 20px;
+  border-radius: 0 10px 10px 0;
+  font-size: 12px;
+  line-height: 1.9;
+  color: var(--ink-mid);
+}
+.message-block strong { color: var(--ink); font-size: 13px; }
+
+/* SECTION */
+.section {
+  padding: 28px 24px 8px;
+}
+.section-title {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 15px; font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 16px;
+  display: flex; align-items: center; gap: 10px;
+}
+.section-title::before {
+  content: '';
+  display: block; width: 4px; height: 20px;
+  background: var(--accent); border-radius: 2px;
+}
+
+/* DEMO CARDS */
+.demo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 14px;
+  padding: 0 24px 24px;
+}
+
+.demo-card {
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  overflow: hidden;
+  transition: transform .15s, box-shadow .15s;
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+}
+.demo-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+}
+
+.card-header {
+  padding: 16px 18px 12px;
+  position: relative;
+  overflow: hidden;
+}
+.card-header::after {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 80px;
+  font-weight: 900;
+  position: absolute;
+  right: 8px; top: -8px;
+  opacity: .07;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.card-publisher {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 18px; font-weight: 700;
+  margin-bottom: 4px;
+}
+.card-en {
+  font-size: 9px; letter-spacing: 2px;
+  opacity: .6; margin-bottom: 8px;
+  font-weight: 500;
+}
+.card-desc {
+  font-size: 11px;
+  line-height: 1.7;
+  opacity: .75;
+}
+
+.card-footer {
+  padding: 10px 18px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid var(--border);
+  margin-top: auto;
+}
+.card-count {
+  font-size: 10px;
+  color: var(--ink-light);
+}
+.card-link {
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 1px;
+  display: flex; align-items: center; gap: 4px;
+}
+.card-arrow {
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px;
+}
+
+/* COMING SOON CARD */
+.demo-card.coming {
+  opacity: .55;
+  pointer-events: none;
+  cursor: default;
+}
+.coming-badge {
+  display: inline-block;
+  font-size: 9px; font-weight: 700;
+  padding: 2px 8px; border-radius: 10px;
+  background: var(--paper-warm);
+  color: var(--ink-light);
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+
+/* KANJI SHOWCASE */
+.kanji-showcase {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+.ks {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 16px; font-weight: 700;
+  width: 28px; height: 28px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 5px;
+}
+
+/* CONCEPT SECTION */
+.concept-section {
+  background: var(--paper-warm);
+  margin: 0 24px 24px;
+  border-radius: 12px;
+  padding: 20px 22px;
+  border: 1px solid var(--border);
+}
+.concept-title {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 13px; font-weight: 700;
+  margin-bottom: 12px; color: var(--ink);
+}
+.concept-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+}
+.concept-item {
+  display: flex; gap: 10px; align-items: flex-start;
+}
+.concept-icon {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 22px; font-weight: 700;
+  width: 36px; height: 36px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 8px; flex-shrink: 0;
+}
+.concept-text { font-size: 11px; line-height: 1.7; color: var(--ink-mid); }
+.concept-text strong { color: var(--ink); font-size: 12px; display: block; margin-bottom: 2px; }
+
+footer {
+  text-align: center;
+  padding: 20px 16px;
+  font-size: 10px;
+  color: var(--ink-light);
+  border-top: 1px solid var(--border);
+  line-height: 2.2;
+}
+footer a { color: var(--ink-light); text-decoration: none; }
+footer a:hover { color: var(--ink); }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-label">DUNKSOFT Co., Ltd. × 天然色漢字INDEX™</div>
+  <div class="hero-title"><em>漢字1文字＋色</em>で<br>本との出会いを変える</div>
+  <div class="hero-desc">
+    天然色漢字INDEX™（COLORFUL KANJI INDEX®）は、書籍に含まれる漢字を部首・意味・色で体系化し、読者が「偶然の出会い」を発見できる新しい書籍索引システムです。出版社別デモをご覧ください。
+  </div>
+  <div class="hero-badges">
+    <span class="badge badge-red">DEMO 2026</span>
+    <span class="badge badge-gold">三省堂書店　神保町本店　ご提案資料</span>
+  </div>
+</div>
+
+<div class="message-block">
+  <strong>三省堂書店様へ</strong><br>
+  本デモは、天然色漢字INDEX™を書店の書棚タグ・横断検索・読者コミュニティに応用した場合の体験イメージです。出版社ごとに異なる「漢字の色の傾向」が、書店という場でどのように読者の発見を生むか——ぜひ各社デモをお試しください。
+</div>
+
+<div class="section">
+  <div class="section-title">出版社別　書籍インデックスデモ</div>
+</div>
+
+<div class="demo-grid" id="demoGrid">
+
+  <!-- 早川書房 -->
+  <a class="demo-card" href="https://robertohoshino.github.io/hayakawa-demo/" target="_blank">
+    <div class="card-header" style="background:#0a1628;color:#fff;">
+      <div style="font-size:9px;letter-spacing:2px;opacity:.5;margin-bottom:6px">HAYAKAWA SHOBO</div>
+      <div class="card-publisher">早川書房</div>
+      <div class="card-en">SCI-FI & MYSTERY</div>
+      <div class="card-desc">SF・ミステリの雄。「然」「謎」「技」が色濃く、宇宙・科学・犯罪の漢字が交差する独自の色宇宙。</div>
+      <div class="kanji-showcase">
+        <span class="ks" style="background:#e3f2fd;color:#0d47a1">然</span>
+        <span class="ks" style="background:#ede7f6;color:#311b92">謎</span>
+        <span class="ks" style="background:#e0f7fa;color:#006064">技</span>
+        <span class="ks" style="background:#eceff1;color:#37474f">死</span>
+        <span class="ks" style="background:#fff3e0;color:#e65100">小</span>
+      </div>
+    </div>
+    <div class="card-footer">
+      <span class="card-count">公開中</span>
+      <span class="card-link" style="color:#0d47a1">デモを見る <span class="card-arrow" style="background:#e3f2fd;color:#0d47a1">→</span></span>
+    </div>
+  </a>
+
+  <!-- 集英社 -->
+  <a class="demo-card" href="shueisha-demo.html" target="_blank">
+    <div class="card-header" style="background:#1a0a0a;color:#fff;">
+      <div style="font-size:9px;letter-spacing:2px;opacity:.5;margin-bottom:6px">SHUEISHA</div>
+      <div class="card-publisher">集英社</div>
+      <div class="card-en">LITERATURE & MANGA</div>
+      <div class="card-desc">文芸・漫画・新書の多彩な顔。「愛」「心」「社」が中心に、エンターテインメントから社会派まで幅広い色の振れ幅。</div>
+      <div class="kanji-showcase">
+        <span class="ks" style="background:#fce4ec;color:#c62828">愛</span>
+        <span class="ks" style="background:#fce4ec;color:#880e4f">心</span>
+        <span class="ks" style="background:#fff3e0;color:#e65100">小</span>
+        <span class="ks" style="background:#e8f5e9;color:#1b5e20">社</span>
+        <span class="ks" style="background:#ede7f6;color:#311b92">謎</span>
+      </div>
+    </div>
+    <div class="card-footer">
+      <span class="card-count">28冊収録</span>
+      <span class="card-link" style="color:#c62828">デモを見る <span class="card-arrow" style="background:#fce4ec;color:#c62828">→</span></span>
+    </div>
+  </a>
+
+  <!-- 講談社 -->
+  <a class="demo-card" href="kodansha-demo.html" target="_blank">
+    <div class="card-header" style="background:#0d1b2a;color:#fff;">
+      <div style="font-size:9px;letter-spacing:2px;opacity:.5;margin-bottom:6px">KODANSHA</div>
+      <div class="card-publisher">講談社</div>
+      <div class="card-en">CULTURE & ACADEMIA</div>
+      <div class="card-desc">文芸・学術・漫画・ビジネスを横断する総合出版社。「史」「技」「哲」が混在する知の多様性が特徴。野間道場との縁。</div>
+      <div class="kanji-showcase">
+        <span class="ks" style="background:#fff9c4;color:#f57f17">史</span>
+        <span class="ks" style="background:#e0f7fa;color:#006064">技</span>
+        <span class="ks" style="background:#f3e5f5;color:#4a148c">哲</span>
+        <span class="ks" style="background:#ffebee;color:#b71c1c">戦</span>
+        <span class="ks" style="background:#e8f5e9;color:#1b5e20">社</span>
+      </div>
+    </div>
+    <div class="card-footer">
+      <span class="card-count">30冊収録</span>
+      <span class="card-link" style="color:#1a3a6b">デモを見る <span class="card-arrow" style="background:#e3f2fd;color:#1a3a6b">→</span></span>
+    </div>
+  </a>
+
+  <!-- 小学館 Coming Soon -->
+  <div class="demo-card coming">
+    <div class="card-header" style="background:#2a1a08;color:#fff;">
+      <div class="coming-badge">COMING SOON</div>
+      <div class="card-publisher">小学館</div>
+      <div class="card-en">EDUCATION & CULTURE</div>
+      <div class="card-desc">教育・児童・文芸・ビジネスを網羅。「教」「芸」「食」が色の中心になる予想。</div>
+      <div class="kanji-showcase" style="opacity:.4">
+        <span class="ks" style="background:#e0f2f1;color:#004d40">教</span>
+        <span class="ks" style="background:#f1f8e9;color:#33691e">芸</span>
+        <span class="ks" style="background:#fbe9e7;color:#bf360c">食</span>
+      </div>
+    </div>
+    <div class="card-footer">
+      <span class="card-count">準備中</span>
+      <span class="card-link" style="color:var(--ink-light)">近日公開</span>
+    </div>
+  </div>
+
+  <!-- 岩波書店 Coming Soon -->
+  <div class="demo-card coming">
+    <div class="card-header" style="background:#0a1a0a;color:#fff;">
+      <div class="coming-badge">COMING SOON</div>
+      <div class="card-publisher">岩波書店</div>
+      <div class="card-en">PHILOSOPHY & HISTORY</div>
+      <div class="card-desc">「哲」「史」「社」が圧倒的に濃い。学術・思想の王道。文庫の色が最も深くなる出版社。</div>
+      <div class="kanji-showcase" style="opacity:.4">
+        <span class="ks" style="background:#f3e5f5;color:#4a148c">哲</span>
+        <span class="ks" style="background:#fff9c4;color:#f57f17">史</span>
+        <span class="ks" style="background:#e8f5e9;color:#1b5e20">社</span>
+      </div>
+    </div>
+    <div class="card-footer">
+      <span class="card-count">準備中</span>
+      <span class="card-link" style="color:var(--ink-light)">近日公開</span>
+    </div>
+  </div>
+
+  <!-- 新潮社 Coming Soon -->
+  <div class="demo-card coming">
+    <div class="card-header" style="background:#1a0a1a;color:#fff;">
+      <div class="coming-badge">COMING SOON</div>
+      <div class="card-publisher">新潮社</div>
+      <div class="card-en">LITERATURE & POETRY</div>
+      <div class="card-desc">純文学の牙城。「小」「心」「死」「宗」が深く交差する。芥川賞・直木賞の色が濃い。</div>
+      <div class="kanji-showcase" style="opacity:.4">
+        <span class="ks" style="background:#fff3e0;color:#e65100">小</span>
+        <span class="ks" style="background:#fce4ec;color:#880e4f">心</span>
+        <span class="ks" style="background:#eceff1;color:#37474f">死</span>
+      </div>
+    </div>
+    <div class="card-footer">
+      <span class="card-count">準備中</span>
+      <span class="card-link" style="color:var(--ink-light)">近日公開</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- CONCEPT -->
+<div class="concept-section">
+  <div class="concept-title">天然色漢字INDEX™ が書店にもたらすもの</div>
+  <div class="concept-grid">
+    <div class="concept-item">
+      <span class="concept-icon" style="background:#fff3e0;color:#e65100">発</span>
+      <div class="concept-text">
+        <strong>偶然の発見</strong>
+        「心」という漢字を選ぶと、小説・哲学・医学・詩が同時に見つかる。ジャンルを超えた出会いが生まれる。
+      </div>
+    </div>
+    <div class="concept-item">
+      <span class="concept-icon" style="background:#e3f2fd;color:#0d47a1">横</span>
+      <div class="concept-text">
+        <strong>出版社横断検索</strong>
+        AND/OR検索で複数の漢字を組み合わせ、出版社・レーベルを横断して本を発見できる。
+      </div>
+    </div>
+    <div class="concept-item">
+      <span class="concept-icon" style="background:#e8f5e9;color:#1b5e20">棚</span>
+      <div class="concept-text">
+        <strong>書棚タグへの応用</strong>
+        書棚の背表紙に漢字タグを付与することで、店頭での直感的な棚ブラウジングが変わる。
+      </div>
+    </div>
+    <div class="concept-item">
+      <span class="concept-icon" style="background:#fce4ec;color:#c62828">読</span>
+      <div class="concept-text">
+        <strong>読者コミュニティ</strong>
+        読者が自分でタグを付け、感想を共有するプラットフォームへの拡張可能性。
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  天然色漢字INDEX™ &nbsp;·&nbsp; COLORFUL KANJI INDEX® &nbsp;·&nbsp; DUNKSOFT Co., Ltd.<br>
+  ©2026 DUNKSOFT Co., Ltd. All rights reserved. &nbsp;·&nbsp; 書籍データはデモ用サンプルです。<br>
+  制作：Claude (Anthropic) × DUNKSOFT Co., Ltd. 2026
+</footer>
+
+</body>
+</html>
