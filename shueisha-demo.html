@@ -379,6 +379,19 @@ footer {
   border-top: 1px solid var(--border);
   line-height: 2;
 }
+
+/* Ruby / ふりがな */
+ruby { ruby-align: center; }
+rt {
+  font-size: 0.5em;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: inherit;
+  opacity: 0.75;
+}
+.book-title ruby rt { font-size: 0.48em; }
+.book-author ruby rt { font-size: 0.65em; }
 </style>
 </head>
 <body>
@@ -467,48 +480,48 @@ const KANJI_DEF = {
 
 const BOOKS = [
   // 集英社文庫・文芸
-  { id:1, title:'流浪の月', author:'凪良ゆう', label:'集英社文庫', year:2020, kanji:['小','愛','心','社'], desc:'本屋大賞受賞。愛の形と自由を問う、静かな衝撃作。' },
-  { id:2, title:'推し、燃ゆ', author:'宇佐見りん', label:'集英社文庫', year:2021, kanji:['小','心','愛','芸'], desc:'芥川賞受賞。推しに全てを捧げる女の子の物語。' },
-  { id:3, title:'ツバキ文具店', author:'小川糸', label:'集英社文庫', year:2017, kanji:['小','芸','心','地'], desc:'鎌倉で代書屋を営む女性と文字、手紙の物語。' },
-  { id:4, title:'蜜蜂と遠雷', author:'恩田陸', label:'集英社文庫', year:2019, kanji:['小','芸','心','哲'], desc:'直木賞・本屋大賞W受賞。ピアノコンクールを舞台にした音楽小説。' },
-  { id:5, title:'百年の孤独', author:'G.ガルシア＝マルケス', label:'集英社文庫', year:2024, kanji:['小','史','宗','地'], desc:'文庫化で話題。マジックリアリズムの金字塔。' },
-  { id:6, title:'海辺のカフカ', author:'村上春樹', label:'新潮文庫', year:2005, kanji:['小','哲','宗','心'], desc:'少年と謎が交錯する、村上春樹の長編代表作。' },
+  { id:1, title:'<ruby>流浪の月<rt>るろうのつき</rt></ruby>', author:'<ruby>凪良ゆう<rt>なぎらゆう</rt></ruby>', label:'集英社文庫', year:2020, kanji:['小','愛','心','社'], desc:'本屋大賞受賞。愛の形と自由を問う、静かな衝撃作。' },
+  { id:2, title:'<ruby>推し、燃ゆ<rt>おし、もゆ</rt></ruby>', author:'<ruby>宇佐見りん<rt>うさみりん</rt></ruby>', label:'集英社文庫', year:2021, kanji:['小','心','愛','芸'], desc:'芥川賞受賞。推しに全てを捧げる女の子の物語。' },
+  { id:3, title:'<ruby>ツバキ文具店<rt>ツバキぶんぐてん</rt></ruby>', author:'<ruby>小川糸<rt>おがわいと</rt></ruby>', label:'集英社文庫', year:2017, kanji:['小','芸','心','地'], desc:'鎌倉で代書屋を営む女性と文字、手紙の物語。' },
+  { id:4, title:'<ruby>蜜蜂と遠雷<rt>みつばちとおんらい</rt></ruby>', author:'<ruby>恩田陸<rt>おんだりく</rt></ruby>', label:'集英社文庫', year:2019, kanji:['小','芸','心','哲'], desc:'直木賞・本屋大賞W受賞。ピアノコンクールを舞台にした音楽小説。' },
+  { id:5, title:'<ruby>百年の孤独<rt>ひゃくねんのこどく</rt></ruby>', author:'G.ガルシア＝マルケス', label:'集英社文庫', year:2024, kanji:['小','史','宗','地'], desc:'文庫化で話題。マジックリアリズムの金字塔。' },
+  { id:6, title:'<ruby>海辺のカフカ<rt>うみべのカフカ</rt></ruby>', author:'<ruby>村上春樹<rt>むらかみはるき</rt></ruby>', label:'新潮文庫', year:2005, kanji:['小','哲','宗','心'], desc:'少年と謎が交錯する、<ruby>村上春樹<rt>むらかみはるき</rt></ruby>の長編代表作。' },
 
   // マーガレットコミックス・ノベライズ
   { id:7, title:'コーダ あいのうた（ノベライズ）', author:'シアン・ヘダー原作', label:'集英社みらい文庫', year:2022, kanji:['小','芸','愛','心'], desc:'アカデミー賞作品賞受賞映画のノベライズ。' },
 
   // 集英社新書
-  { id:8, title:'武器としての資本論', author:'白井聡', label:'集英社新書', year:2020, kanji:['社','経','哲','政'], desc:'マルクス『資本論』を現代社会に引きつけて読む。' },
+  { id:8, title:'<ruby>武器としての<ruby>資本論<rt>しほんろん</rt></ruby><rt>ぶきとしてのしほんろん</rt></ruby>', author:'白井聡', label:'集英社新書', year:2020, kanji:['社','経','哲','政'], desc:'マルクス『<ruby>資本論<rt>しほんろん</rt></ruby>』を現代社会に引きつけて読む。' },
   { id:9, title:'ネット右翼の退場', author:'鈴木邦男', label:'集英社新書', year:2019, kanji:['社','政','情','哲'], desc:'日本の言論空間と極右の変容を内側から語る。' },
-  { id:10, title:'82年生まれ、キム・ジヨン', author:'チョ・ナムジュ', label:'集英社文庫', year:2020, kanji:['小','社','心','労'], desc:'韓国発・世界的ベストセラー。ジェンダーと社会の問題作。' },
-  { id:11, title:'ケーキの切れない非行少年たち', author:'宮口幸治', label:'新潮新書', year:2019, kanji:['社','教','心','然'], desc:'認知機能の弱さと非行・犯罪の関係を問う衝撃作。' },
-  { id:12, title:'人新世の「資本論」', author:'斎藤幸平', label:'集英社新書', year:2020, kanji:['社','哲','然','経'], desc:'マルクスと気候変動を接続する気鋭の哲学者の問題作。' },
+  { id:10, title:'<ruby>82年生まれ、キム・ジヨン<rt>はちじゅうにねんうまれ、キム・ジヨン</rt></ruby>', author:'チョ・ナムジュ', label:'集英社文庫', year:2020, kanji:['小','社','心','労'], desc:'韓国発・世界的ベストセラー。ジェンダーと社会の問題作。' },
+  { id:11, title:'<ruby>ケーキの切れない非行少年たち<rt>ケーキのきれないひこうしょうねんたち</rt></ruby>', author:'宮口幸治', label:'新潮新書', year:2019, kanji:['社','教','心','然'], desc:'認知機能の弱さと非行・犯罪の関係を問う衝撃作。' },
+  { id:12, title:'<ruby>人新世の「<ruby>資本論<rt>しほんろん</rt></ruby>」<rt>ひとしんせいの「しほんろん」</rt></ruby>', author:'<ruby>斎藤幸平<rt>さいとうこうへい</rt></ruby>', label:'集英社新書', year:2020, kanji:['社','哲','然','経'], desc:'マルクスと気候変動を接続する気鋭の哲学者の問題作。' },
 
   // 集英社インターナショナル
   { id:13, title:'サピエンス全史（上・下）', author:'ユヴァル・ノア・ハラリ', label:'河出書房新社', year:2016, kanji:['史','社','然','哲'], desc:'人類の歴史を俯瞰する世界的ベストセラー。' },
 
   // 週刊少年ジャンプ関連
-  { id:14, title:'鬼滅の刃 風の道しるべ', author:'吾峠呼世晴原作', label:'集英社みらい文庫', year:2020, kanji:['小','戦','愛','死'], desc:'子ども向け小説版。炭治郎と禰豆子の絆の物語。' },
-  { id:15, title:'SLAM DUNK 新装再編版', author:'井上雄彦', label:'集英社', year:2018, kanji:['小','芸','遊','心'], desc:'バスケットボールと青春。日本漫画の不朽の名作。' },
+  { id:14, title:'<ruby>鬼滅の刃<rt>きめつのやいば</rt></ruby> <ruby>風の道しるべ<rt>かぜのみちしるべ</rt></ruby>', author:'<ruby>吾峠呼世晴<rt>ごとうげこよはる</rt></ruby>原作', label:'集英社みらい文庫', year:2020, kanji:['小','戦','愛','死'], desc:'子ども向け小説版。炭治郎と禰豆子の絆の物語。' },
+  { id:15, title:'SLAM DUNK 新装再編版', author:'<ruby>井上雄彦<rt>いのうえたけひこ</rt></ruby>', label:'集英社', year:2018, kanji:['小','芸','遊','心'], desc:'バスケットボールと青春。日本漫画の不朽の名作。' },
   { id:16, title:'ONE PIECE novel A', author:'尾田栄一郎原案', label:'集英社JUMP j BOOKS', year:2018, kanji:['小','旅','遊','愛'], desc:'エースを主人公にした公式ノベライズ。' },
 
   // 集英社みらい文庫
-  { id:17, title:'魔女の宅急便', author:'角野栄子', label:'集英社みらい文庫', year:2014, kanji:['小','遊','芸','旅'], desc:'名作児童文学の新装版。魔女キキの成長物語。' },
-  { id:18, title:'青の炎', author:'貴志祐介', label:'角川文庫', year:2002, kanji:['小','謎','心','死'], desc:'少年の完全犯罪計画。青春ミステリの傑作。' },
+  { id:17, title:'魔女の宅急便', author:'<ruby>角野栄子<rt>かどのえいこ</rt></ruby>', label:'集英社みらい文庫', year:2014, kanji:['小','遊','芸','旅'], desc:'名作児童文学の新装版。魔女キキの成長物語。' },
+  { id:18, title:'青の炎', author:'<ruby>貴志祐介<rt>きしゆうすけ</rt></ruby>', label:'角川文庫', year:2002, kanji:['小','謎','心','死'], desc:'少年の完全犯罪計画。青春ミステリの傑作。' },
   { id:19, title:'ハリー・ポッターと賢者の石', author:'J.K.ローリング', label:'静山社', year:1999, kanji:['小','謎','遊','芸'], desc:'世界的ベストセラーファンタジーの第1作。' },
   { id:20, title:'博士の愛した数式', author:'小川洋子', label:'新潮文庫', year:2005, kanji:['小','然','愛','心'], desc:'80分しか記憶が続かない博士と家政婦の物語。数と愛。' },
 
   // ヤングジャンプコミックス関連
-  { id:21, title:'インベスターZ', author:'三田紀房', label:'小学館', year:2016, kanji:['経','教','社','技'], desc:'投資とお金を学ぶ青年漫画のノベライズ的解説書。' },
-  { id:22, title:'キングダム 信の戦略', author:'原泰久原案', label:'集英社', year:2022, kanji:['小','戦','史','政'], desc:'春秋戦国時代を描く大河漫画の関連書籍。' },
+  { id:21, title:'インベスターZ', author:'<ruby>三田紀房<rt>みたのりふさ</rt></ruby>', label:'小学館', year:2016, kanji:['経','教','社','技'], desc:'投資とお金を学ぶ青年漫画のノベライズ的解説書。' },
+  { id:22, title:'キングダム 信の戦略', author:'<ruby>原泰久<rt>はらやすひさ</rt></ruby>原案', label:'集英社', year:2022, kanji:['小','戦','史','政'], desc:'春秋戦国時代を描く大河漫画の関連<ruby>書籍<rt>しょせき</rt></ruby>。' },
 
   // ノンフィクション・ドキュメンタリー
-  { id:23, title:'星の子', author:'今村夏子', label:'朝日文庫', year:2020, kanji:['小','宗','心','愛'], desc:'新興宗教と家族。芥川賞候補作にして本屋大賞ノミネート作。' },
-  { id:24, title:'コンビニ人間', author:'村田沙耶香', label:'文春文庫', year:2018, kanji:['小','社','心','労'], desc:'芥川賞受賞。「普通」とは何かを問うコンビニ小説。' },
-  { id:25, title:'52ヘルツのクジラたち', author:'町田そのこ', label:'中公文庫', year:2022, kanji:['小','愛','死','心'], desc:'本屋大賞受賞。声なき者の叫びを聴く物語。' },
-  { id:26, title:'黒牢城', author:'米澤穂信', label:'角川書店', year:2021, kanji:['小','謎','史','戦'], desc:'直木賞・本格ミステリ大賞W受賞。戦国×密室ミステリ。' },
-  { id:27, title:'カフネ', author:'阿部暁子', label:'講談社', year:2024, kanji:['小','食','心','愛'], desc:'本屋大賞受賞。食を通じた癒しの物語。' },
-  { id:28, title:'光のとこにいてね', author:'一穂ミチ', label:'文藝春秋', year:2023, kanji:['小','愛','心','社'], desc:'本屋大賞ノミネート。運命的な二人の女性の物語。' },
+  { id:23, title:'星の子', author:'<ruby>今村夏子<rt>いまむらなつこ</rt></ruby>', label:'朝日文庫', year:2020, kanji:['小','宗','心','愛'], desc:'新興宗教と家族。芥川賞候補作にして本屋大賞ノミネート作。' },
+  { id:24, title:'コンビニ人間', author:'<ruby>村田沙耶香<rt>むらたさやか</rt></ruby>', label:'文春文庫', year:2018, kanji:['小','社','心','労'], desc:'芥川賞受賞。「普通」とは何かを問うコンビニ小説。' },
+  { id:25, title:'52ヘルツのクジラたち', author:'<ruby>町田そのこ<rt>まちだそのこ</rt></ruby>', label:'中公文庫', year:2022, kanji:['小','愛','死','心'], desc:'本屋大賞受賞。声なき者の叫びを聴く物語。' },
+  { id:26, title:'黒牢城', author:'<ruby>米澤穂信<rt>よねざわほのぶ</rt></ruby>', label:'角川書店', year:2021, kanji:['小','謎','史','戦'], desc:'直木賞・本格ミステリ大賞W受賞。戦国×密室ミステリ。' },
+  { id:27, title:'カフネ', author:'<ruby>阿部暁子<rt>あべあきこ</rt></ruby>', label:'講談社', year:2024, kanji:['小','食','心','愛'], desc:'本屋大賞受賞。食を通じた癒しの物語。' },
+  { id:28, title:'光のとこにいてね', author:'<ruby>一穂ミチ<rt>いちほみち</rt></ruby>', label:'文藝春秋', year:2023, kanji:['小','愛','心','社'], desc:'本屋大賞ノミネート。運命的な二人の女性の物語。' },
 ];
 
 const LABELS = [...new Set(BOOKS.map(b => b.label))].sort();

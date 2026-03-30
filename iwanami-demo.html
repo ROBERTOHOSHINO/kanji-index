@@ -123,6 +123,19 @@ body { font-family: 'Noto Sans JP', sans-serif; background: var(--paper); color:
 
 .empty-state { grid-column: 1/-1; padding: 60px 20px; text-align: center; color: var(--ink-light); font-size: 13px; }
 footer { text-align: center; padding: 16px; font-size: 10px; color: var(--ink-light); border-top: 1px solid var(--border); line-height: 2; }
+
+/* Ruby / ふりがな */
+ruby { ruby-align: center; }
+rt {
+  font-size: 0.5em;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: inherit;
+  opacity: 0.75;
+}
+.book-title ruby rt { font-size: 0.48em; }
+.book-author ruby rt { font-size: 0.65em; }
 </style>
 </head>
 <body>
@@ -246,7 +259,7 @@ const KANJI_DEF = {
 
 const BOOKS = [
   // スピノザ
-  { id:1,  title:'エチカ', author:'スピノザ（畠中尚志訳）', label:'岩波文庫', year:1951,
+  { id:1,  title:'エチカ', author:'スピノザ（<ruby>畠中尚志<rt>はたけなかひさし</rt></ruby>訳）', label:'岩波文庫', year:1951,
     kanji:['哲','倫','生','宗'],
     quote:'もろもろの物を利用してそれをできる限り楽しむことは賢者にふさわしい。',
     desc:'17世紀の哲学者スピノザの主著。神・自然・人間を幾何学的方法で論証。「楽しむことは賢者にふさわしい」。' },
@@ -256,35 +269,35 @@ const BOOKS = [
     desc:'宗教と政治の分離を論じたスピノザの問題作。自由と理性の哲学。' },
 
   // 荘子
-  { id:3,  title:'荘子（全4冊）', author:'荘子（金谷治訳）', label:'岩波文庫', year:1971,
+  { id:3,  title:'<ruby>荘子<rt>そうし</rt></ruby>（全4冊）', author:'<ruby>荘子<rt>そうし</rt></ruby>（<ruby>金谷治<rt>かなやおさむ</rt></ruby>訳）', label:'岩波文庫', year:1971,
     kanji:['哲','遊','然','宗'],
     quote:'北冥に魚あり、その名を鯤という。鯤の大きさは幾千里かを知らず。',
     desc:'道家思想の根本文献。無為自然・逍遥遊の思想。「遊」の哲学の源泉。' },
-  { id:4,  title:'老子・荘子（上）', author:'荘子（福永光司訳）', label:'中公クラシックス', year:2001,
+  { id:4,  title:'<ruby>老子<rt>ろうし</rt></ruby>・<ruby>荘子<rt>そうし</rt></ruby>（上）', author:'<ruby>荘子<rt>そうし</rt></ruby>（<ruby>福永光司<rt>ふくながみつじ</rt></ruby>訳）', label:'中公クラシックス', year:2001,
     kanji:['哲','然','遊','倫'],
     quote:'道は常に無為にして、しかも為さざるなし。',
-    desc:'老子と荘子を対訳で読む。道家哲学入門として最良の一冊。' },
+    desc:'<ruby>老子<rt>ろうし</rt></ruby>と<ruby>荘子<rt>そうし</rt></ruby>を対訳で読む。道家哲学入門として最良の一冊。' },
 
   // 孔子・儒家
-  { id:5,  title:'論語', author:'孔子（金谷治訳注）', label:'岩波文庫', year:1999,
+  { id:5,  title:'<ruby>論語<rt>ろんご</rt></ruby>', author:'<ruby>孔子<rt>こうし</rt></ruby>（<ruby>金谷治<rt>かなやおさむ</rt></ruby>訳注）', label:'岩波文庫', year:1999,
     kanji:['哲','教','倫','史'],
     quote:'学びて思わざれば則ち罔し、思いて学ばざれば則ち殆し。',
-    desc:'孔子とその弟子たちの言葉を集めた儒家の根本経典。仁・礼・義の哲学。' },
-  { id:6,  title:'孟子（上・下）', author:'孟子（小林勝人訳）', label:'岩波文庫', year:1968,
+    desc:'<ruby>孔子<rt>こうし</rt></ruby>とその弟子たちの言葉を集めた儒家の根本経典。仁・礼・義の哲学。' },
+  { id:6,  title:'<ruby>孟子<rt>もうし</rt></ruby>（上・下）', author:'<ruby>孟子<rt>もうし</rt></ruby>（<ruby>小林勝人<rt>こばやしかつんど</rt></ruby>訳）', label:'岩波文庫', year:1968,
     kanji:['哲','倫','政','教'],
     quote:'仁は人の心なり、義は人の路なり。',
-    desc:'性善説と王道政治を説いた儒家の亜聖・孟子の著作。' },
+    desc:'性善説と王道政治を説いた儒家の亜聖・<ruby>孟子<rt>もうし</rt></ruby>の著作。' },
 
   // 西洋哲学
-  { id:7,  title:'ソクラテスの弁明・クリトン', author:'プラトン（久保勉訳）', label:'岩波文庫', year:1964,
+  { id:7,  title:'ソクラテスの弁明・クリトン', author:'プラトン（<ruby>久保勉<rt>くぼつとむ</rt></ruby>訳）', label:'岩波文庫', year:1964,
     kanji:['哲','倫','死','知'],
     quote:'吟味されない人生は生きる価値がない。',
     desc:'死に臨んだソクラテスの最後の言葉。哲学の原点。' },
-  { id:8,  title:'ニコマコス倫理学（上・下）', author:'アリストテレス（高田三郎訳）', label:'岩波文庫', year:1971,
+  { id:8,  title:'ニコマコス倫理学（上・下）', author:'アリストテレス（<ruby>高田三郎<rt>たかださぶろう</rt></ruby>訳）', label:'岩波文庫', year:1971,
     kanji:['哲','倫','教','心'],
     quote:'幸福とは魂の徳に即した活動である。',
     desc:'幸福・徳・友愛を論じたアリストテレス倫理学の主著。' },
-  { id:9,  title:'純粋理性批判（全3冊）', author:'カント（篠田英雄訳）', label:'岩波文庫', year:1961,
+  { id:9,  title:'純粋理性批判（全3冊）', author:'カント（<ruby>篠田英雄<rt>しのだひでお</rt></ruby>訳）', label:'岩波文庫', year:1961,
     kanji:['哲','知','然','倫'],
     quote:'空虚な直観と盲目な概念——どちらも知識にはなりえない。',
     desc:'認識論の革命。人間の理性の限界と可能性を徹底的に問う。' },
@@ -292,27 +305,27 @@ const BOOKS = [
     kanji:['哲','史','知','宗'],
     quote:'真なるものは全体である。',
     desc:'意識から絶対精神へ。ヘーゲル哲学の出発点にして頂点。' },
-  { id:11, title:'存在と時間（全3冊）', author:'ハイデガー（細谷貞雄訳）', label:'ちくま学芸文庫', year:1994,
+  { id:11, title:'存在と時間（全3冊）', author:'ハイデガー（<ruby>細谷貞雄<rt>ほそやさだお</rt></ruby>訳）', label:'ちくま学芸文庫', year:1994,
     kanji:['哲','死','時','然'],
     quote:'現存在の本質は実存にある。',
     desc:'存在とは何か。20世紀最大の哲学書とも言われる難解な名著。' },
 
   // 岩波新書・思想・社会
-  { id:12, title:'日本の思想', author:'丸山眞男', label:'岩波新書', year:1961,
+  { id:12, title:'<ruby>日本の思想<rt>にほんのしそう</rt></ruby>', author:'<ruby>丸山眞男<rt>まるやままさお</rt></ruby>', label:'岩波新書', year:1961,
     kanji:['哲','史','社','倫'],
     desc:'日本思想の構造的特質を鋭く分析。戦後日本の知性の出発点。' },
-  { id:13, title:'「甘え」の構造', author:'土居健郎', label:'弘文堂', year:1971,
+  { id:13, title:'「甘え」の構造', author:'<ruby>土居健郎<rt>どいたけお</rt></ruby>', label:'弘文堂', year:1971,
     kanji:['心','社','哲','教'],
     desc:'日本人の精神構造を「甘え」という概念で解明した名著。' },
-  { id:14, title:'資本論（全9冊）', author:'マルクス（向坂逸郎訳）', label:'岩波文庫', year:1969,
+  { id:14, title:'<ruby>資本論<rt>しほんろん</rt></ruby>（全9冊）', author:'マルクス（<ruby>向坂逸郎<rt>さきさかいつろう</rt></ruby>訳）', label:'岩波文庫', year:1969,
     kanji:['経','社','哲','史'],
     desc:'資本主義の本質を徹底解剖。20世紀を動かした思想の根本文献。' },
-  { id:15, title:'プロテスタンティズムの倫理と資本主義の精神', author:'M.ウェーバー（大塚久雄訳）', label:'岩波文庫', year:1989,
+  { id:15, title:'プロテスタンティズムの倫理と資本主義の精神', author:'M.ウェーバー（<ruby>大塚久雄<rt>おおつかひさお</rt></ruby>訳）', label:'岩波文庫', year:1989,
     kanji:['宗','経','倫','史'],
     desc:'宗教倫理が資本主義を生んだという歴史社会学の古典。' },
 
   // 自然科学・生命
-  { id:16, title:'種の起源（上・下）', author:'ダーウィン（八杉龍一訳）', label:'岩波文庫', year:1990,
+  { id:16, title:'<ruby>種の起源<rt>しゅのきげん</rt></ruby>（上・下）', author:'ダーウィン（八杉龍一訳）', label:'岩波文庫', year:1990,
     kanji:['然','生','史','哲'],
     desc:'進化論の原典。自然選択による種の変化を論証した科学史上の革命書。' },
   { id:17, title:'コペルニクス地動説の論証', author:'コペルニクス（矢島祐利訳）', label:'岩波文庫', year:1953,
@@ -320,51 +333,51 @@ const BOOKS = [
     desc:'天動説を覆した科学革命の書。世界観の転換を論証する。' },
 
   // 文学・岩波文庫
-  { id:18, title:'源氏物語（全10冊）', author:'紫式部（山岸徳平校注）', label:'岩波文庫', year:1958,
+  { id:18, title:'<ruby>源氏物語<rt>げんじものがたり</rt></ruby>（全10冊）', author:'<ruby>紫式部<rt>むらさきしきぶ</rt></ruby>（<ruby>山岸徳平<rt>やまぎしとくへい</rt></ruby>校注）', label:'岩波文庫', year:1958,
     kanji:['小','美','愛','史'],
     desc:'世界最古の長編小説の一つ。平安の雅と人の情を描き尽くす。' },
-  { id:19, title:'万葉集（全4冊）', author:'佐竹昭広他校注', label:'岩波文庫', year:1999,
+  { id:19, title:'<ruby>万葉集<rt>まんようしゅう</rt></ruby>（全4冊）', author:'<ruby>佐竹昭広<rt>さたけあきひろ</rt></ruby>他校注', label:'岩波文庫', year:1999,
     kanji:['小','史','然','語'],
     desc:'日本最古の和歌集。4500首の声が現代に届く古典の宝庫。' },
-  { id:20, title:'罪と罰（全3冊）', author:'ドストエフスキー（工藤精一郎訳）', label:'新潮文庫', year:1987,
+  { id:20, title:'<ruby>罪と罰<rt>つみとばつ</rt></ruby>（全3冊）', author:'ドストエフスキー（<ruby>工藤精一郎<rt>くどうせいいちろう</rt></ruby>訳）', label:'新潮文庫', year:1987,
     kanji:['小','倫','死','心'],
     desc:'殺人と贖罪。ロシア文学の最高峰。人間の良心と苦悩を描く。' },
-  { id:21, title:'カラマーゾフの兄弟（全4冊）', author:'ドストエフスキー（原卓也訳）', label:'新潮文庫', year:1978,
+  { id:21, title:'<ruby>カラマーゾフの兄弟<rt>カラマーゾフのきょうだい</rt></ruby>（全4冊）', author:'ドストエフスキー（<ruby>原卓也<rt>はらたくや</rt></ruby>訳）', label:'新潮文庫', year:1978,
     kanji:['小','宗','哲','死'],
     desc:'信仰・道徳・愛憎・犯罪。ドストエフスキーの集大成。' },
-  { id:22, title:'ファウスト（第一部・第二部）', author:'ゲーテ（相良守峯訳）', label:'岩波文庫', year:1958,
+  { id:22, title:'ファウスト（第一部・第二部）', author:'ゲーテ（<ruby>相良守峯<rt>さがらもりみね</rt></ruby>訳）', label:'岩波文庫', year:1958,
     kanji:['小','哲','宗','知'],
     desc:'真理を求め悪魔と契約したファウスト博士。ドイツ文学の最高峰。' },
 
   // 歴史・政治
-  { id:23, title:'君主論', author:'マキアヴェッリ（河島英昭訳）', label:'岩波文庫', year:1998,
+  { id:23, title:'<ruby>君主論<rt>くんしゅろん</rt></ruby>', author:'マキアヴェッリ（<ruby>河島英昭<rt>かわしまひであき</rt></ruby>訳）', label:'岩波文庫', year:1998,
     kanji:['政','哲','史','倫'],
     desc:'権力の本質を論じた政治思想の問題書。「目的は手段を正当化する」。' },
-  { id:24, title:'社会契約論', author:'ルソー（桑原武夫訳）', label:'岩波文庫', year:1954,
+  { id:24, title:'<ruby>社会契約論<rt>しゃかいけいやくろん</rt></ruby>', author:'ルソー（<ruby>桑原武夫<rt>くわばらたけお</rt></ruby>訳）', label:'岩波文庫', year:1954,
     kanji:['社','政','哲','倫'],
     desc:'フランス革命に影響を与えた政治哲学の古典。人民主権の根拠。' },
-  { id:25, title:'古事記', author:'倉野憲司校注', label:'岩波文庫', year:1963,
+  { id:25, title:'<ruby>古事記<rt>こじき</rt></ruby>', author:'<ruby>倉野憲司<rt>くらのけんじ</rt></ruby>校注', label:'岩波文庫', year:1963,
     kanji:['史','宗','小','地'],
     desc:'日本最古の文献。神話と歴史が混在する日本の原点。' },
-  { id:26, title:'方法序説', author:'デカルト（谷川多佳子訳）', label:'岩波文庫', year:1997,
+  { id:26, title:'<ruby>方法序説<rt>ほうほうじょせつ</rt></ruby>', author:'デカルト（<ruby>谷川多佳子<rt>たにがわたかこ</rt></ruby>訳）', label:'岩波文庫', year:1997,
     kanji:['哲','知','然','倫'],
     quote:'われ思う、ゆえにわれあり。',
     desc:'近代哲学の出発点。「明証性の規則」から始まる合理主義哲学。' },
 
   // 言語・文化
-  { id:27, title:'言語と行為', author:'オースティン（坂本百大訳）', label:'大修館書店', year:1978,
+  { id:27, title:'言語と行為', author:'オースティン（<ruby>坂本百大<rt>さかもともとひろ</rt></ruby>訳）', label:'大修館書店', year:1978,
     kanji:['語','哲','社','情'],
     desc:'言語行為論の創始。言葉は世界を記述するだけでなく行為でもある。' },
-  { id:28, title:'贈与論', author:'M.モース（有地亨訳）', label:'勁草書房', year:1962,
+  { id:28, title:'贈与論', author:'M.モース（<ruby>有地亨<rt>ありちとおる</rt></ruby>訳）', label:'勁草書房', year:1962,
     kanji:['社','倫','史','哲'],
     desc:'贈り物の文化人類学。互酬性と社会の絆を解明した古典。' },
-  { id:29, title:'菊と刀', author:'R.ベネディクト（長谷川松治訳）', label:'講談社学術文庫', year:2005,
+  { id:29, title:'菊と刀', author:'R.ベネディクト（<ruby>長谷川松治<rt>はせがわまつじ</rt></ruby>訳）', label:'講談社学術文庫', year:2005,
     kanji:['社','史','倫','哲'],
     desc:'恥の文化と罪の文化。日本人論の古典的名著。' },
-  { id:30, title:'風姿花伝', author:'世阿弥（野上豊一郎校訂）', label:'岩波文庫', year:1958,
+  { id:30, title:'<ruby>風姿花伝<rt>ふうしかでん</rt></ruby>', author:'<ruby>世阿弥<rt>ぜあみ</rt></ruby>（<ruby>野上豊一郎<rt>のがみとよいちろう</rt></ruby>校訂）', label:'岩波文庫', year:1958,
     kanji:['美','哲','教','宗'],
     quote:'秘すれば花なり、秘せずば花なるべからず。',
-    desc:'能楽の完成者・世阿弥が書いた芸術論。「花」という美学の核心。' },
+    desc:'能楽の完成者・<ruby>世阿弥<rt>ぜあみ</rt></ruby>が書いた芸術論。「花」という美学の核心。' },
 ];
 
 const LABELS = [...new Set(BOOKS.map(b=>b.label))].sort();

@@ -95,6 +95,19 @@ body { font-family: 'Noto Sans JP', sans-serif; background: var(--paper); color:
 
 .empty-state { grid-column: 1/-1; padding: 60px 20px; text-align: center; color: var(--ink-light); font-size: 13px; }
 footer { text-align: center; padding: 16px; font-size: 10px; color: var(--ink-light); border-top: 1px solid var(--border); line-height: 2; }
+
+/* Ruby / ふりがな */
+ruby { ruby-align: center; }
+rt {
+  font-size: 0.5em;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: inherit;
+  opacity: 0.75;
+}
+.book-title ruby rt { font-size: 0.48em; }
+.book-author ruby rt { font-size: 0.65em; }
 </style>
 </head>
 <body>
@@ -181,48 +194,48 @@ const KANJI_DEF = {
 
 const BOOKS = [
   // 小学館文庫・文芸
-  { id:1,  title:'鹿の王', author:'上橋菜穂子', label:'角川文庫', year:2017, kanji:['小','生','然','愛'], desc:'本屋大賞受賞。疫病と医療、命の意味を問うファンタジー大作。' },
-  { id:2,  title:'舟を編む', author:'三浦しをん', label:'光文社文庫', year:2013, kanji:['小','教','芸','愛'], desc:'辞書編纂に情熱を注ぐ人々の物語。本屋大賞受賞。' },
+  { id:1,  title:'<ruby>鹿の王<rt>しかのおう</rt></ruby>', author:'<ruby>上橋菜穂子<rt>うえはしなおこ</rt></ruby>', label:'角川文庫', year:2017, kanji:['小','生','然','愛'], desc:'本屋大賞受賞。疫病と医療、命の意味を問うファンタジー大作。' },
+  { id:2,  title:'<ruby>舟を編む<rt>ふねをあむ</rt></ruby>', author:'<ruby>三浦しをん<rt>みうらしをん</rt></ruby>', label:'光文社文庫', year:2013, kanji:['小','教','芸','愛'], desc:'辞書編纂に情熱を注ぐ人々の物語。本屋大賞受賞。' },
   { id:3,  title:'プリズン・ブック・クラブ', author:'アン・ウォームズリー', label:'小学館', year:2017, kanji:['小','社','教','心'], desc:'刑務所での読書会が囚人たちを変えていく実話ノンフィクション。' },
-  { id:4,  title:'ナミヤ雑貨店の奇蹟', author:'東野圭吾', label:'角川文庫', year:2014, kanji:['小','謎','愛','心'], desc:'時間を超えた手紙のやりとりが生む奇跡。東野ミステリの名作。' },
-  { id:5,  title:'銀河鉄道の夜', author:'宮沢賢治', label:'新潮文庫', year:1989, kanji:['小','然','宗','死'], desc:'星と旅と死。宮沢賢治が生涯をかけて書き続けた幻想的傑作。' },
+  { id:4,  title:'ナミヤ雑貨店の奇蹟', author:'<ruby>東野圭吾<rt>ひがしのけいご</rt></ruby>', label:'角川文庫', year:2014, kanji:['小','謎','愛','心'], desc:'時間を超えた手紙のやりとりが生む奇跡。東野ミステリの名作。' },
+  { id:5,  title:'<ruby>銀河鉄道の夜<rt>ぎんがてつどうのよる</rt></ruby>', author:'<ruby>宮沢賢治<rt>みやざわけんじ</rt></ruby>', label:'新潮文庫', year:1989, kanji:['小','然','宗','死'], desc:'星と旅と死。<ruby>宮沢賢治<rt>みやざわけんじ</rt></ruby>が生涯をかけて書き続けた幻想的傑作。' },
 
   // 小学館新書・ノンフィクション
-  { id:6,  title:'勉強の哲学', author:'千葉雅也', label:'文春文庫', year:2020, kanji:['哲','教','社','心'], desc:'勉強とは自己破壊である。哲学者による学びの本質論。' },
-  { id:7,  title:'嫌われる勇気', author:'岸見一郎・古賀史健', label:'ダイヤモンド社', year:2013, kanji:['哲','心','社','教'], desc:'アドラー心理学を哲学対話形式で解説した現代の大ベストセラー。' },
-  { id:8,  title:'学力の経済学', author:'中室牧子', label:'ディスカヴァー', year:2015, kanji:['教','経','社','然'], desc:'教育の効果を経済学のデータで解明。子育ての常識を覆す。' },
+  { id:6,  title:'<ruby>勉強の哲学<rt>べんきょうのてつがく</rt></ruby>', author:'<ruby>千葉雅也<rt>ちばまさや</rt></ruby>', label:'文春文庫', year:2020, kanji:['哲','教','社','心'], desc:'勉強とは自己破壊である。哲学者による学びの本質論。' },
+  { id:7,  title:'<ruby>嫌われる勇気<rt>きらわれるゆうき</rt></ruby>', author:'岸見一郎・古賀史健', label:'ダイヤモンド社', year:2013, kanji:['哲','心','社','教'], desc:'アドラー心理学を哲学対話形式で解説した現代の大ベストセラー。' },
+  { id:8,  title:'<ruby>学力の経済学<rt>がくりょくのけいざいがく</rt></ruby>', author:'<ruby>中室牧子<rt>なかむろまきこ</rt></ruby>', label:'ディスカヴァー', year:2015, kanji:['教','経','社','然'], desc:'教育の効果を経済学のデータで解明。子育ての常識を覆す。' },
   { id:9,  title:'「空腹」こそ最強のクスリ', author:'青木厚', label:'アスコム', year:2019, kanji:['食','生','然','心'], desc:'16時間断食の健康効果を医学的に解説した健康書のベストセラー。' },
   { id:10, title:'SHOE DOG', author:'フィル・ナイト', label:'東洋経済新報社', year:2017, kanji:['経','労','史','心'], desc:'NIKEの創業者が語る起業と挑戦の物語。ビジネス自伝の傑作。' },
 
   // 小学館の図鑑・学習
-  { id:11, title:'小学館の図鑑NEO 恐竜', author:'小学館編', label:'小学館の図鑑NEO', year:2014, kanji:['然','教','史','地'], desc:'最新研究を反映した子ども向け恐竜図鑑の決定版。' },
-  { id:12, title:'小学館の図鑑NEO 植物', author:'小学館編', label:'小学館の図鑑NEO', year:2015, kanji:['然','教','食','地'], desc:'身近な植物から熱帯植物まで網羅した植物図鑑。' },
-  { id:13, title:'日本大百科全書', author:'小学館編', label:'小学館', year:2001, kanji:['教','史','社','然'], desc:'全25巻。日本語で読める最大の百科事典。' },
+  { id:11, title:'<ruby><ruby>小学館<rt>しょうがくかん</rt></ruby>の図鑑NEO<rt>しょうがくかんのずかんネオ</rt></ruby> 恐竜', author:'<ruby>小学館<rt>しょうがくかん</rt></ruby>編', label:'小学館の図鑑NEO', year:2014, kanji:['然','教','史','地'], desc:'最新研究を反映した子ども向け恐竜図鑑の決定版。' },
+  { id:12, title:'<ruby><ruby>小学館<rt>しょうがくかん</rt></ruby>の図鑑NEO<rt>しょうがくかんのずかんネオ</rt></ruby> 植物', author:'<ruby>小学館<rt>しょうがくかん</rt></ruby>編', label:'小学館の図鑑NEO', year:2015, kanji:['然','教','食','地'], desc:'身近な植物から熱帯植物まで網羅した植物図鑑。' },
+  { id:13, title:'日本大百科全書', author:'<ruby>小学館<rt>しょうがくかん</rt></ruby>編', label:'小学館', year:2001, kanji:['教','史','社','然'], desc:'全25巻。日本語で読める最大の百科事典。' },
 
   // ビッグコミック系漫画
-  { id:14, title:'美味しんぼ', author:'雁屋哲・花咲アキラ', label:'小学館', year:1983, kanji:['食','芸','社','小'], desc:'食を通じた人間ドラマ。日本の食文化を変えた食漫画の金字塔。' },
-  { id:15, title:'浦沢直樹 MONSTER', author:'浦沢直樹', label:'小学館', year:1994, kanji:['小','謎','死','心'], desc:'天才外科医と怪物の追跡劇。浦沢直樹の最高傑作とも言われる。' },
-  { id:16, title:'20世紀少年', author:'浦沢直樹', label:'小学館', year:1999, kanji:['小','謎','遊','史'], desc:'幼少期の記憶と巨大な陰謀が交差するSFミステリ大作。' },
-  { id:17, title:'YAWARA!', author:'浦沢直樹', label:'小学館', year:1986, kanji:['小','芸','愛','社'], desc:'柔道と青春と恋愛。浦沢直樹の出世作にして不朽のスポーツ漫画。' },
+  { id:14, title:'<ruby>美味しんぼ<rt>おいしんぼ</rt></ruby>', author:'<ruby>雁屋哲<rt>かりやてつ</rt></ruby>・花咲アキラ', label:'小学館', year:1983, kanji:['食','芸','社','小'], desc:'食を通じた人間ドラマ。日本の食文化を変えた食漫画の金字塔。' },
+  { id:15, title:'<ruby>浦沢直樹<rt>うらさわなおき</rt></ruby> MONSTER', author:'<ruby>浦沢直樹<rt>うらさわなおき</rt></ruby>', label:'小学館', year:1994, kanji:['小','謎','死','心'], desc:'天才外科医と怪物の追跡劇。<ruby>浦沢直樹<rt>うらさわなおき</rt></ruby>の最高傑作とも言われる。' },
+  { id:16, title:'20世紀少年', author:'<ruby>浦沢直樹<rt>うらさわなおき</rt></ruby>', label:'小学館', year:1999, kanji:['小','謎','遊','史'], desc:'幼少期の記憶と巨大な陰謀が交差するSFミステリ大作。' },
+  { id:17, title:'YAWARA!', author:'<ruby>浦沢直樹<rt>うらさわなおき</rt></ruby>', label:'小学館', year:1986, kanji:['小','芸','愛','社'], desc:'柔道と青春と恋愛。<ruby>浦沢直樹<rt>うらさわなおき</rt></ruby>の出世作にして不朽のスポーツ漫画。' },
   { id:18, title:'さいとう・たかを ゴルゴ13', author:'さいとう・たかを', label:'小学館', year:1968, kanji:['小','謎','政','地'], desc:'世界を舞台にするスナイパーの長寿漫画。現実政治と交差する物語。' },
 
   // 女性・ライフスタイル
-  { id:19, title:'キッチン', author:'吉本ばなな', label:'角川文庫', year:1991, kanji:['小','食','死','愛'], desc:'キッチンという場所と喪失と再生。吉本ばなな的世界観の原点。' },
-  { id:20, title:'ソロモンの偽証', author:'宮部みゆき', label:'新潮文庫', year:2014, kanji:['小','謎','教','社'], desc:'中学校を舞台にした大長編法廷ミステリ。宮部みゆきの集大成。' },
+  { id:19, title:'キッチン', author:'<ruby>吉本ばなな<rt>よしもとばなな</rt></ruby>', label:'角川文庫', year:1991, kanji:['小','食','死','愛'], desc:'キッチンという場所と喪失と再生。<ruby>吉本ばなな<rt>よしもとばなな</rt></ruby>的世界観の原点。' },
+  { id:20, title:'ソロモンの偽証', author:'<ruby>宮部みゆき<rt>みやべみゆき</rt></ruby>', label:'新潮文庫', year:2014, kanji:['小','謎','教','社'], desc:'中学校を舞台にした大長編法廷ミステリ。<ruby>宮部みゆき<rt>みやべみゆき</rt></ruby>の集大成。' },
   { id:21, title:'風と共に去りぬ', author:'マーガレット・ミッチェル', label:'新潮文庫', year:1977, kanji:['小','史','愛','地'], desc:'南北戦争と一人の女性の壮大な生。世界文学の不朽の名作。' },
 
   // ビジネス・経営
-  { id:22, title:'失敗の本質', author:'戸部良一ほか', label:'中公文庫', year:1991, kanji:['史','社','政','倫'], desc:'太平洋戦争を組織論で分析した日本のビジネス必読書。' },
+  { id:22, title:'<ruby>失敗の本質<rt>しっぱいのほんしつ</rt></ruby>', author:'戸部良一ほか', label:'中公文庫', year:1991, kanji:['史','社','政','倫'], desc:'太平洋戦争を組織論で分析した日本のビジネス必読書。' },
   { id:23, title:'7つの習慣', author:'コヴィー', label:'キングベアー出版', year:1996, kanji:['教','哲','倫','心'], desc:'個人と組織の成功原則を体系化した自己啓発書の世界的ベストセラー。' },
   { id:24, title:'イノベーションのジレンマ', author:'クレイトン・クリステンセン', label:'翔泳社', year:2001, kanji:['経','技','社','哲'], desc:'なぜ優良企業が破壊的技術に敗れるのか。経営戦略の古典。' },
 
   // 料理・生活
-  { id:25, title:'土井善晴の素食のすすめ', author:'土井善晴', label:'小学館', year:2021, kanji:['食','芸','心','然'], desc:'一汁一菜という哲学。料理研究家による日本の食文化論。' },
+  { id:25, title:'<ruby>土井善晴<rt>どいよしはる</rt></ruby>の素食のすすめ', author:'<ruby>土井善晴<rt>どいよしはる</rt></ruby>', label:'小学館', year:2021, kanji:['食','芸','心','然'], desc:'一汁一菜という哲学。料理研究家による日本の食文化論。' },
   { id:26, title:'きのう何食べた？', author:'よしながふみ', label:'小学館', year:2007, kanji:['食','愛','小','心'], desc:'弁護士とヘアドレッサーのカップルの日常と料理。食漫画の傑作。' },
   { id:27, title:'ダンジョン飯', author:'九井諒子', label:'KADOKAWA', year:2014, kanji:['食','遊','小','然'], desc:'ダンジョンの魔物を食べながら冒険するユニークなファンタジー漫画。' },
 
   // 児童・絵本
-  { id:28, title:'ズッコケ三人組', author:'那須正幹', label:'ポプラ社', year:1978, kanji:['小','遊','謎','教'], desc:'子どもたちの冒険と友情を描いた国民的シリーズ。' },
+  { id:28, title:'ズッコケ三人組', author:'<ruby>那須正幹<rt>なすまさもと</rt></ruby>', label:'ポプラ社', year:1978, kanji:['小','遊','謎','教'], desc:'子どもたちの冒険と友情を描いた国民的シリーズ。' },
   { id:29, title:'はじめてのおつかい', author:'筒井頼子', label:'福音館書店', year:1977, kanji:['小','教','愛','心'], desc:'5歳の女の子のはじめての一人おつかい。絵本の名作。' },
   { id:30, title:'ぐりとぐら', author:'中川李枝子', label:'福音館書店', year:1967, kanji:['小','食','遊','愛'], desc:'カステラを焼く野ネズミのぐりとぐら。日本の絵本の代表作。' },
 ];

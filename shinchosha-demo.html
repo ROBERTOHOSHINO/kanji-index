@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>天然色漢字INDEX™ × 新潮社　書籍インデックスデモ</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700;900&family=Noto+Sans+JP:wght@300;400;500;700&display=swap');
+
+:root {
+  --ink: #0e0c18;
+  --ink-mid: #2e2a3e;
+  --ink-light: #7a7690;
+  --paper: #f6f5fb;
+  --paper-warm: #eceaf4;
+  --paper-mid: #dddae8;
+  --accent: #1a0a3a;
+  --accent2: #5c3d8f;
+  --red: #8b1a1a;
+  --gold: #9a7820;
+  --border: rgba(14,12,24,0.10);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Noto Sans JP', sans-serif; background: var(--paper); color: var(--ink); min-height: 100vh; }
+
+.hero {
+  background: var(--accent);
+  color: #fff;
+  padding: 28px 24px 24px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '謎';
+  font-family: 'Noto Serif JP', serif;
+  font-size: 260px; font-weight: 900;
+  position: absolute; right: -20px; top: -50px;
+  opacity: .06; color: #fff; line-height: 1;
+}
+.hero-eyebrow { font-size: 10px; letter-spacing: 3px; color: rgba(255,255,255,0.45); margin-bottom: 6px; }
+.hero-title { font-family: 'Noto Serif JP', serif; font-size: clamp(17px,3.8vw,25px); font-weight: 700; line-height: 1.55; margin-bottom: 5px; }
+.hero-title em { color: #ffd700; font-style: normal; }
+.hero-sub { font-size: 11px; color: rgba(255,255,255,0.45); }
+.hero-badges { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; align-items: center; }
+.hero-badge { display: inline-block; background: var(--red); color: #fff; font-size: 10px; font-weight: 700; padding: 4px 12px; border-radius: 20px; letter-spacing: 1px; }
+.hero-badge-gold { display: inline-block; background: transparent; border: 1px solid rgba(255,215,0,0.5); color: #ffd700; font-size: 10px; padding: 4px 12px; border-radius: 20px; letter-spacing: 1px; }
+
+/* ARCHER SPOTLIGHT */
+.spotlight {
+  background: #fff;
+  border-left: 4px solid var(--gold);
+  margin: 20px 16px 0;
+  padding: 14px 18px;
+  border-radius: 0 10px 10px 0;
+  font-size: 11px;
+  line-height: 1.9;
+  color: var(--ink-mid);
+}
+.spotlight strong { color: var(--accent); font-family: 'Noto Serif JP', serif; font-size: 13px; }
+.author-cards { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+.author-card {
+  background: var(--paper-warm);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 10px;
+  border: 1px solid var(--border);
+  flex: 1; min-width: 140px;
+}
+.author-name { font-family: 'Noto Serif JP', serif; font-size: 14px; font-weight: 700; color: var(--accent2); margin-bottom: 2px; }
+.author-en { font-size: 9px; color: var(--ink-light); letter-spacing: 1px; margin-bottom: 4px; }
+.author-kanji { display: flex; gap: 3px; }
+.ak { font-family: 'Noto Serif JP', serif; font-size: 14px; font-weight: 700; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; border-radius: 4px; }
+
+.legend-bar { background: var(--paper-warm); border-bottom: 1px solid var(--border); padding: 9px 14px; margin-top: 14px; display: flex; align-items: center; gap: 7px; flex-wrap: wrap; font-size: 10px; color: var(--ink-light); }
+.legend-bar strong { color: var(--ink-mid); margin-right: 4px; }
+.lk { display: inline-flex; align-items: center; gap: 3px; }
+.lk-char { font-family: 'Noto Serif JP', serif; font-size: 15px; font-weight: 700; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; border-radius: 3px; }
+.lk-name { font-size: 9px; color: var(--ink-light); }
+
+.control-area { padding: 14px 16px; background: var(--paper); border-bottom: 1px solid var(--border); display: flex; flex-direction: column; gap: 10px; }
+.search-row { display: flex; gap: 8px; align-items: center; }
+.search-input { flex: 1; border: 1.5px solid var(--border); border-radius: 8px; padding: 8px 12px; font-family: 'Noto Sans JP', sans-serif; font-size: 13px; background: #fff; color: var(--ink); outline: none; transition: border-color .2s; }
+.search-input:focus { border-color: var(--accent2); }
+.mode-toggle { display: flex; background: var(--paper-warm); border-radius: 8px; overflow: hidden; border: 1px solid var(--border); }
+.mode-btn { padding: 7px 14px; font-size: 11px; font-weight: 700; font-family: 'Noto Sans JP', sans-serif; border: none; background: transparent; color: var(--ink-light); cursor: pointer; transition: all .2s; letter-spacing: 1px; }
+.mode-btn.active { background: var(--accent); color: #fff; }
+
+.kanji-filters { display: flex; gap: 5px; flex-wrap: wrap; align-items: center; }
+.filter-label { font-size: 10px; color: var(--ink-light); margin-right: 2px; }
+.kf-chip { display: inline-flex; align-items: center; gap: 3px; padding: 3px 8px 3px 4px; border-radius: 20px; border: 1.5px solid transparent; cursor: pointer; font-size: 10px; font-family: 'Noto Sans JP', sans-serif; transition: all .15s; background: var(--paper-warm); color: var(--ink-mid); }
+.kf-chip:hover { transform: translateY(-1px); }
+.kf-chip.active { border-width: 2px; color: #fff; }
+.kf-chip .kc { font-family: 'Noto Serif JP', serif; font-size: 14px; font-weight: 700; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; border-radius: 3px; }
+
+.label-filters { display: flex; gap: 5px; flex-wrap: wrap; }
+.label-chip { padding: 3px 10px; border-radius: 20px; border: 1.5px solid var(--border); font-size: 10px; font-family: 'Noto Sans JP', sans-serif; cursor: pointer; background: transparent; color: var(--ink-mid); transition: all .15s; font-weight: 500; }
+.label-chip:hover { background: var(--paper-warm); }
+.label-chip.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+.results-bar { padding: 7px 16px; font-size: 11px; color: var(--ink-light); border-bottom: 1px solid var(--border); background: var(--paper-warm); display: flex; justify-content: space-between; align-items: center; }
+.results-count { font-weight: 700; color: var(--ink-mid); }
+
+.book-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 0; }
+.book-card { padding: 15px 16px; border-bottom: 1px solid var(--border); border-right: 1px solid var(--border); transition: background .15s; }
+.book-card:hover { background: var(--paper-warm); }
+.book-title { font-family: 'Noto Serif JP', serif; font-size: 14px; font-weight: 700; color: var(--ink); line-height: 1.5; margin-bottom: 3px; }
+.book-author { font-size: 10px; color: var(--ink-light); margin-bottom: 3px; }
+.book-label { display: inline-block; font-size: 9px; padding: 2px 8px; border-radius: 10px; font-weight: 700; letter-spacing: .5px; }
+.book-desc { font-size: 10px; color: var(--ink-light); margin: 5px 0 7px; line-height: 1.6; }
+.kanji-row { display: flex; gap: 4px; flex-wrap: wrap; }
+.k-chip { display: flex; flex-direction: column; align-items: center; padding: 4px 5px; border-radius: 6px; min-width: 34px; transition: transform .1s; }
+.k-chip:hover { transform: translateY(-2px); }
+.k-char { font-family: 'Noto Serif JP', serif; font-size: 19px; font-weight: 700; line-height: 1.1; }
+.k-label { font-size: 8px; margin-top: 1px; opacity: .8; text-align: center; line-height: 1.2; }
+
+.trend-section { padding: 20px 16px; background: var(--paper-warm); border-top: 1px solid var(--border); }
+.trend-title { font-family: 'Noto Serif JP', serif; font-size: 14px; font-weight: 700; margin-bottom: 14px; color: var(--ink); display: flex; align-items: center; gap: 8px; }
+.trend-title::before { content: ''; display: block; width: 4px; height: 18px; background: var(--accent2); border-radius: 2px; }
+.trend-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 10px; }
+.trend-card { background: #fff; border-radius: 10px; padding: 12px; border: 1px solid var(--border); }
+.trend-card-label { font-size: 9px; font-weight: 700; letter-spacing: 1px; margin-bottom: 8px; }
+.trend-kanji-row { display: flex; gap: 4px; flex-wrap: wrap; }
+.tk { font-family: 'Noto Serif JP', serif; font-size: 21px; font-weight: 700; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 5px; }
+
+.empty-state { grid-column: 1/-1; padding: 60px 20px; text-align: center; color: var(--ink-light); font-size: 13px; }
+footer { text-align: center; padding: 16px; font-size: 10px; color: var(--ink-light); border-top: 1px solid var(--border); line-height: 2; }
+
+/* Ruby / ふりがな */
+ruby { ruby-align: center; }
+rt {
+  font-size: 0.5em;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: inherit;
+  opacity: 0.75;
+}
+.book-title ruby rt { font-size: 0.48em; }
+.book-author ruby rt { font-size: 0.65em; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-eyebrow">天然色漢字INDEX™ × COLORFUL KANJI INDEX®</div>
+  <div class="hero-title">新潮社　書籍インデックス<br><em>漢字1文字＋色</em>で本を発見する</div>
+  <div class="hero-sub">SHINCHOSHA — KANJI TAG DEMO　DUNKSOFT Co., Ltd.</div>
+  <div class="hero-badges">
+    <span class="hero-badge">DEMO 2026</span>
+    <span class="hero-badge-gold">海外ミステリ・純文学の殿堂</span>
+  </div>
+</div>
+
+<div class="spotlight">
+  <strong>新潮文庫が誇る海外ミステリ作家たち</strong><br>
+  新潮文庫は海外ミステリの名訳で日本の読書文化を作ってきた。「謎」「策」「欺」「逃」——どんでん返しと知略の漢字が炸裂する。
+  <div class="author-cards">
+    <div class="author-card">
+      <div class="author-name">J・アーチャー</div>
+      <div class="author-en">Jeffrey Archer 1940–</div>
+      <div style="font-size:9px;color:var(--ink-light);margin-bottom:5px">政界・財界を舞台にした逆転劇の名手</div>
+      <div class="author-kanji">
+        <span class="ak" style="background:#ede7f6;color:#311b92">謎</span>
+        <span class="ak" style="background:#fffde7;color:#f57f17">策</span>
+        <span class="ak" style="background:#ffebee;color:#b71c1c">欺</span>
+        <span class="ak" style="background:#fff8e1;color:#e65100">経</span>
+      </div>
+    </div>
+    <div class="author-card">
+      <div class="author-name">アガサ・クリスティ</div>
+      <div class="author-en">Agatha Christie 1890–1976</div>
+      <div style="font-size:9px;color:var(--ink-light);margin-bottom:5px">ミステリの女王。ポワロ・マープルの創造者</div>
+      <div class="author-kanji">
+        <span class="ak" style="background:#ede7f6;color:#311b92">謎</span>
+        <span class="ak" style="background:#eceff1;color:#37474f">死</span>
+        <span class="ak" style="background:#fce4ec;color:#880e4f">心</span>
+        <span class="ak" style="background:#e0f7fa;color:#006064">地</span>
+      </div>
+    </div>
+    <div class="author-card">
+      <div class="author-name">レイモンド・チャンドラー</div>
+      <div class="author-en">R. Chandler 1888–1959</div>
+      <div style="font-size:9px;color:var(--ink-light);margin-bottom:5px">ハードボイルドの創造者。フィリップ・マーロウ</div>
+      <div class="author-kanji">
+        <span class="ak" style="background:#ede7f6;color:#311b92">謎</span>
+        <span class="ak" style="background:#eceff1;color:#37474f">死</span>
+        <span class="ak" style="background:#e8eaf6;color:#283593">街</span>
+        <span class="ak" style="background:#fce4ec;color:#880e4f">心</span>
+      </div>
+    </div>
+    <div class="author-card">
+      <div class="author-name">コナン・ドイル</div>
+      <div class="author-en">A. C. Doyle 1859–1930</div>
+      <div style="font-size:9px;color:var(--ink-light);margin-bottom:5px">シャーロック・ホームズの創造者</div>
+      <div class="author-kanji">
+        <span class="ak" style="background:#ede7f6;color:#311b92">謎</span>
+        <span class="ak" style="background:#e3f2fd;color:#0d47a1">然</span>
+        <span class="ak" style="background:#e0f7fa;color:#006064">地</span>
+        <span class="ak" style="background:#fce4ec;color:#880e4f">心</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="legend-bar">
+  <strong>漢字の色＝部首カテゴリ：</strong>
+  <span class="lk"><span class="lk-char" style="background:#ede7f6;color:#311b92">謎</span><span class="lk-name">謎・ミステリ</span></span>
+  <span class="lk"><span class="lk-char" style="background:#eceff1;color:#37474f">死</span><span class="lk-name">死・喪失</span></span>
+  <span class="lk"><span class="lk-char" style="background:#fce4ec;color:#880e4f">心</span><span class="lk-name">心理・感情</span></span>
+  <span class="lk"><span class="lk-char" style="background:#fffde7;color:#f57f17">策</span><span class="lk-name">策略・計略</span></span>
+  <span class="lk"><span class="lk-char" style="background:#ffebee;color:#b71c1c">欺</span><span class="lk-name">欺き・騙し</span></span>
+  <span class="lk"><span class="lk-char" style="background:#fff3e0;color:#e65100">小</span><span class="lk-name">文学・物語</span></span>
+  <span class="lk"><span class="lk-char" style="background:#e3f2fd;color:#0d47a1">然</span><span class="lk-name">自然・科学</span></span>
+  <span class="lk"><span class="lk-char" style="background:#e0f7fa;color:#006064">地</span><span class="lk-name">地理・場所</span></span>
+  <span class="lk"><span class="lk-char" style="background:#fff8e1;color:#e65100">経</span><span class="lk-name">経済・財政</span></span>
+  <span class="lk"><span class="lk-char" style="background:#fffde7;color:#f57f17">政</span><span class="lk-name">政治・権力</span></span>
+  <span class="lk"><span class="lk-char" style="background:#fce4ec;color:#c62828">愛</span><span class="lk-name">愛・恋愛</span></span>
+  <span class="lk"><span class="lk-char" style="background:#f3e5f5;color:#4a148c">哲</span><span class="lk-name">哲学・思想</span></span>
+</div>
+
+<div class="control-area">
+  <div class="search-row">
+    <input class="search-input" id="searchInput" type="text" placeholder="書名・著者名・漢字で検索…" oninput="render()">
+    <div class="mode-toggle">
+      <button class="mode-btn active" id="btnOR" onclick="setMode('OR')">OR</button>
+      <button class="mode-btn" id="btnAND" onclick="setMode('AND')">AND</button>
+    </div>
+  </div>
+  <div class="kanji-filters" id="kanjiFilters"></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+    <span class="filter-label">レーベル：</span>
+    <div class="label-filters" id="labelFilters"></div>
+  </div>
+</div>
+
+<div class="results-bar">
+  <span id="resultsInfo">全書籍を表示中</span>
+  <span id="activeFilters" style="font-size:10px;color:var(--accent2)"></span>
+</div>
+
+<div class="book-grid" id="bookGrid"></div>
+
+<div class="trend-section">
+  <div class="trend-title">レーベル別　漢字の傾向</div>
+  <div class="trend-grid" id="trendGrid"></div>
+</div>
+
+<footer>
+  天然色漢字INDEX™ COLORFUL KANJI INDEX® DUNKSOFT Co., Ltd.<br>
+  ※書籍データはデモ用サンプルです。制作：Claude (Anthropic) × DUNKSOFT Co., Ltd. 2026
+</footer>
+
+<script>
+const KANJI_DEF = {
+  '謎': { label:'謎・ミステリ', bg:'#ede7f6', color:'#311b92' },
+  '死': { label:'死・喪失', bg:'#eceff1', color:'#37474f' },
+  '心': { label:'心理・感情', bg:'#fce4ec', color:'#880e4f' },
+  '策': { label:'策略・計略', bg:'#fffde7', color:'#f57f17' },
+  '欺': { label:'欺き・騙し', bg:'#ffebee', color:'#b71c1c' },
+  '小': { label:'文学・物語', bg:'#fff3e0', color:'#e65100' },
+  '然': { label:'自然・科学', bg:'#e3f2fd', color:'#0d47a1' },
+  '地': { label:'地理・場所', bg:'#e0f7fa', color:'#006064' },
+  '経': { label:'経済・財政', bg:'#fff8e1', color:'#e65100' },
+  '政': { label:'政治・権力', bg:'#fffde7', color:'#f57f17' },
+  '愛': { label:'愛・恋愛', bg:'#fce4ec', color:'#c62828' },
+  '哲': { label:'哲学・思想', bg:'#f3e5f5', color:'#4a148c' },
+  '史': { label:'歴史・伝記', bg:'#fff9c4', color:'#b8860b' },
+  '逃': { label:'逃走・追跡', bg:'#fbe9e7', color:'#bf360c' },
+  '街': { label:'都市・街', bg:'#e8eaf6', color:'#283593' },
+  '罪': { label:'罪・法律', bg:'#ffcdd2', color:'#c62828' },
+  '社': { label:'社会科学', bg:'#e8f5e9', color:'#1b5e20' },
+  '宗': { label:'宗教・精神', bg:'#f3e5f5', color:'#6a1b9a' },
+};
+
+const BOOKS = [
+  // ジェフリー・アーチャー
+  { id:1,  title:'<ruby>ケインとアベル<rt>ケインとアベル</rt></ruby>', author:'ジェフリー・アーチャー（<ruby>永井淳<rt>ながいじゅん</rt></ruby>訳）', label:'新潮文庫', year:1982,
+    kanji:['小','謎','経','欺'],
+    desc:'20世紀を生きる二人の男の宿命の対決。アーチャー最高傑作との呼び声高い大河小説。' },
+  { id:2,  title:'ロスノフスキ家の娘', author:'ジェフリー・アーチャー（<ruby>永井淳<rt>ながいじゅん</rt></ruby>訳）', label:'新潮文庫', year:1984,
+    kanji:['小','経','策','愛'],
+    desc:'<ruby>ケインとアベル<rt>ケインとアベル</rt></ruby>の続編。アベルの娘フロレンティナの壮大な物語。' },
+  { id:3,  title:'<ruby>百万ドルを取り返せ！<rt>ひゃくまんドルをとりかえせ！</rt></ruby>', author:'ジェフリー・アーチャー（<ruby>永井淳<rt>ながいじゅん</rt></ruby>訳）', label:'新潮文庫', year:1980,
+    kanji:['謎','策','欺','経'],
+    desc:'騙し取られた百万ドルを4人の仲間が奪い返す痛快な逆転劇。デビュー作。' },
+  { id:4,  title:'スキャンダル', author:'ジェフリー・アーチャー（<ruby>永井淳<rt>ながいじゅん</rt></ruby>訳）', label:'新潮文庫', year:1991,
+    kanji:['謎','政','欺','策'],
+    desc:'政界の恥部を描く短編集。アーチャー流の皮肉と逆転が冴え渡る。' },
+  { id:5,  title:'プリズナー', author:'ジェフリー・アーチャー（<ruby>戸田裕之<rt>とだひろゆき</rt></ruby>訳）', label:'新潮文庫', year:2009,
+    kanji:['謎','罪','逃','策'],
+    desc:'刑務所での体験をもとにした自伝的小説。アーチャー自身の獄中記。' },
+  { id:6,  title:'チェルシー・テラスへの道', author:'ジェフリー・アーチャー（<ruby>永井淳<rt>ながいじゅん</rt></ruby>訳）', label:'新潮文庫', year:1988,
+    kanji:['小','謎','策','経'],
+    desc:'アーチャー短編集の傑作。人生の皮肉と逆転をコンパクトに描く。' },
+
+  // アガサ・クリスティ
+  { id:7,  title:'<ruby>そして誰もいなくなった<rt>そしてだれもいなくなった</rt></ruby>', author:'アガサ・クリスティ（<ruby>青木久惠<rt>あおきひさえ</rt></ruby>訳）', label:'早川文庫', year:2010,
+    kanji:['謎','死','地','欺'],
+    desc:'孤島に集められた10人が次々と死んでいく。世界で最も読まれたミステリ。' },
+  { id:8,  title:'<ruby>オリエント急行の殺人<rt>オリエントきゅうこうのさつじん</rt></ruby>', author:'アガサ・クリスティ（<ruby>山本やよい<rt>やまもとやよい</rt></ruby>訳）', label:'早川文庫', year:2003,
+    kanji:['謎','死','地','策'],
+    desc:'豪華列車の個室で起きた殺人。ポワロが挑む不可能犯罪。' },
+  { id:9,  title:'<ruby>アクロイド殺し<rt>アクロイドごろし</rt></ruby>', author:'アガサ・クリスティ（<ruby>羽田詩津子<rt>はたしづこ</rt></ruby>訳）', label:'早川文庫', year:2003,
+    kanji:['謎','死','欺','心'],
+    desc:'叙述トリックの金字塔。ミステリ史上最大の驚愕ラスト。' },
+  { id:10, title:'ナイルに死す', author:'アガサ・クリスティ（<ruby>加島祥造<rt>かじましょうぞう</rt></ruby>訳）', label:'早川文庫', year:2003,
+    kanji:['謎','死','地','愛'],
+    desc:'エジプト・ナイル川クルーズで起きた殺人。ポワロ傑作の一つ。' },
+
+  // レイモンド・チャンドラー
+  { id:11, title:'<ruby>大いなる眠り<rt>おおいなるねむり</rt></ruby>', author:'レイモンド・チャンドラー（<ruby><ruby>村上春樹<rt>むらかみはるき</rt></ruby>訳<rt>むらかみはるきやく</rt></ruby>）', label:'早川文庫', year:2014,
+    kanji:['謎','死','街','心'],
+    desc:'私立探偵フィリップ・マーロウの初登場作。LA の闇と腐敗を描く。' },
+  { id:12, title:'<ruby>長いお別れ<rt>ながいおわかれ</rt></ruby>', author:'レイモンド・チャンドラー（<ruby><ruby>村上春樹<rt>むらかみはるき</rt></ruby>訳<rt>むらかみはるきやく</rt></ruby>）', label:'早川文庫', year:2007,
+    kanji:['謎','死','愛','街'],
+    desc:'<ruby><ruby>村上春樹<rt>むらかみはるき</rt></ruby>訳<rt>むらかみはるきやく</rt></ruby>で話題に。マーロウの孤独と友情を描くハードボイルドの最高峰。' },
+
+  // コナン・ドイル
+  { id:13, title:'シャーロック・ホームズの冒険', author:'コナン・ドイル（<ruby>延原謙<rt>のぶはらけん</rt></ruby>訳）', label:'新潮文庫', year:1953,
+    kanji:['謎','然','地','心'],
+    desc:'ホームズ短編の決定版。「緋色の研究」から始まる名探偵の冒険。' },
+  { id:14, title:'<ruby>バスカヴィル家の犬<rt>バスカヴィルけのいぬ</rt></ruby>', author:'コナン・ドイル（<ruby>延原謙<rt>のぶはらけん</rt></ruby>訳）', label:'新潮文庫', year:1955,
+    kanji:['謎','死','地','然'],
+    desc:'荒野に現れる怪犬の伝説。ホームズ長編の最高傑作。' },
+
+  // 新潮文庫・純文学
+  { id:15, title:'<ruby>ノルウェイの森<rt>ノルウェイのもり</rt></ruby>（上・下）', author:'<ruby>村上春樹<rt>むらかみはるき</rt></ruby>', label:'講談社文庫', year:2004,
+    kanji:['小','愛','死','心'],
+    desc:'喪失と再生。1960年代の学生運動期を背景にした<ruby>村上春樹<rt>むらかみはるき</rt></ruby>の代表作。' },
+  { id:16, title:'<ruby>雪国<rt>ゆきぐに</rt></ruby>', author:'<ruby>川端康成<rt>かわばたやすなり</rt></ruby>', label:'新潮文庫', year:1956,
+    kanji:['小','愛','地','死'],
+    desc:'ノーベル賞作家・<ruby>川端康成<rt>かわばたやすなり</rt></ruby>の代表作。<ruby>雪国<rt>ゆきぐに</rt></ruby>の芸者との儚い恋。' },
+  { id:17, title:'<ruby>伊豆の踊子<rt>いずのおどりこ</rt></ruby>', author:'<ruby>川端康成<rt>かわばたやすなり</rt></ruby>', label:'新潮文庫', year:1950,
+    kanji:['小','愛','旅','心'],
+    desc:'学生と旅芸人の少女の出会いと別れ。川端文学の原点。' },
+  { id:18, title:'<ruby>こころ<rt>こころ</rt></ruby>', author:'<ruby>夏目漱石<rt>なつめそうせき</rt></ruby>', label:'新潮文庫', year:1952,
+    kanji:['小','心','死','罪'],
+    desc:'先生と学生、秘密と罪。近代日本文学の最高峰の一つ。' },
+  { id:19, title:'<ruby>坊っちゃん<rt>ぼっちゃん</rt></ruby>', author:'<ruby>夏目漱石<rt>なつめそうせき</rt></ruby>', label:'新潮文庫', year:1950,
+    kanji:['小','心','地','哲'],
+    desc:'江戸っ子気質の青年教師の痛快な奮戦。漱石ユーモアの傑作。' },
+  { id:20, title:'変身', author:'カフカ（<ruby>高橋義孝<rt>たかはしよしたか</rt></ruby>訳）', label:'新潮文庫', year:1952,
+    kanji:['小','死','哲','社'],
+    desc:'ある朝、虫に変身したグレゴール。実存主義文学の原点。' },
+
+  // 新潮新書・ノンフィクション
+  { id:21, title:'<ruby>バカの壁<rt>バカのかべ</rt></ruby>', author:'<ruby>養老孟司<rt>ようろうたけし</rt></ruby>', label:'新潮新書', year:2003,
+    kanji:['哲','社','然','心'],
+    desc:'200万部のベストセラー。「わからない」ことの本質を解く。' },
+  { id:22, title:'超訳 ニーチェの言葉', author:'フリードリヒ・ニーチェ（<ruby>白取春彦<rt>しらとりはるひこ</rt></ruby>訳）', label:'ディスカヴァー', year:2010,
+    kanji:['哲','心','愛','死'],
+    desc:'ニーチェの言葉を現代語で。弱さと強さ、孤独と意志。' },
+  { id:23, title:'ハーバード流交渉術', author:'R.フィッシャー他（<ruby>金山宣夫<rt>かなやまのぶお</rt></ruby>訳）', label:'三笠書房', year:1990,
+    kanji:['策','経','社','心'],
+    desc:'YES交渉術の原典。利害に基づく交渉の原則を体系化。' },
+
+  // スパイ・政治スリラー
+  { id:24, title:'<ruby>寒い国から帰ってきたスパイ<rt>さむいくにからかえってきたスパイ</rt></ruby>', author:'ル・カレ（<ruby>宇野利泰<rt>うのりたい</rt></ruby>訳）', label:'早川文庫', year:1965,
+    kanji:['謎','政','欺','死'],
+    desc:'冷戦時代のスパイの虚無と絶望。ル・カレ最高傑作。' },
+  { id:25, title:'ジャッカルの日', author:'フレデリック・フォーサイス（<ruby>篠原慎<rt>しのはらしん</rt></ruby>訳）', label:'角川文庫', year:1973,
+    kanji:['謎','政','策','死'],
+    desc:'ドゴール大統領暗殺計画。息をつかせぬ政治スリラーの傑作。' },
+  { id:26, title:'オデッサ・ファイル', author:'フレデリック・フォーサイス（<ruby>篠原慎<rt>しのはらしん</rt></ruby>訳）', label:'角川文庫', year:1974,
+    kanji:['謎','史','政','欺'],
+    desc:'ナチス戦犯組織ODBSAを追うドイツ人記者の戦い。' },
+
+  // 現代海外文学
+  { id:27, title:'告白（リスボンのハルモニア）', author:'パウロ・コエーリョ（<ruby>山川紘矢<rt>やまかわひろや</rt></ruby>訳）', label:'角川文庫', year:1997,
+    kanji:['小','哲','宗','旅'],
+    desc:'自分の伝説を生きよ。世界中で読まれた魂の旅の物語。' },
+  { id:28, title:'ダ・ヴィンチ・コード（上・下）', author:'ダン・ブラウン（<ruby>越前敏弥<rt>えちぜんとしや</rt></ruby>訳）', label:'角川文庫', year:2004,
+    kanji:['謎','史','宗','策'],
+    desc:'ルーブル美術館の殺人から始まる巨大な謎。全世界8000万部。' },
+  { id:29, title:'ミレニアム 1（上・下）', author:'スティーグ・ラーソン（<ruby>ヘレンハルメ美穂<rt>ヘレンハルメみほ</rt></ruby>訳）', label:'早川文庫', year:2008,
+    kanji:['謎','死','社','欺'],
+    desc:'スウェーデン発の社会派ミステリ。ドラゴン・タトゥーの女。' },
+  { id:30, title:'ゴーン・ガール（上・下）', author:'ギリアン・フリン（<ruby>中谷友紀子<rt>なかたにゆきこ</rt></ruby>訳）', label:'小学館文庫', year:2013,
+    kanji:['謎','欺','愛','心'],
+    desc:'失踪した妻と夫への疑惑。心理スリラーの新たな金字塔。' },
+];
+
+const LABELS = [...new Set(BOOKS.map(b=>b.label))].sort();
+const ALL_KANJI = [...new Set(BOOKS.flatMap(b=>b.kanji))].sort();
+
+let selectedKanji = new Set();
+let selectedLabel = null;
+let searchMode = 'OR';
+
+function setMode(m){
+  searchMode=m;
+  document.getElementById('btnOR').classList.toggle('active',m==='OR');
+  document.getElementById('btnAND').classList.toggle('active',m==='AND');
+  render();
+}
+function toggleKanji(k){selectedKanji.has(k)?selectedKanji.delete(k):selectedKanji.add(k);render();}
+function toggleLabel(l){selectedLabel=selectedLabel===l?null:l;render();}
+
+const LABEL_COLORS=[
+  {bg:'#ede7f6',color:'#311b92'},{bg:'#fff3e0',color:'#e65100'},
+  {bg:'#e8f5e9',color:'#1b5e20'},{bg:'#e3f2fd',color:'#0d47a1'},
+  {bg:'#fce4ec',color:'#880e4f'},{bg:'#fff9c4',color:'#f57f17'},
+  {bg:'#e0f7fa',color:'#006064'},{bg:'#f3e5f5',color:'#4a148c'},
+];
+const lcMap={};
+LABELS.forEach((l,i)=>{lcMap[l]=LABEL_COLORS[i%LABEL_COLORS.length];});
+function getLabelColor(l){return lcMap[l]||{bg:'#eee',color:'#555'};}
+
+function buildFilters(){
+  const kf=document.getElementById('kanjiFilters');
+  kf.innerHTML='<span class="filter-label">漢字で絞り込み：</span>';
+  ALL_KANJI.forEach(k=>{
+    const d=KANJI_DEF[k]||{label:k,bg:'#eee',color:'#333'};
+    const chip=document.createElement('div');
+    chip.className='kf-chip'+(selectedKanji.has(k)?' active':'');
+    chip.style.borderColor=selectedKanji.has(k)?d.color:'transparent';
+    chip.style.background=selectedKanji.has(k)?d.color:'var(--paper-warm)';
+    chip.innerHTML=`<span class="kc" style="background:${d.bg};color:${d.color}">${k}</span>${d.label}`;
+    chip.onclick=()=>toggleKanji(k);
+    kf.appendChild(chip);
+  });
+  const lf=document.getElementById('labelFilters');
+  lf.innerHTML='';
+  LABELS.forEach(l=>{
+    const btn=document.createElement('button');
+    btn.className='label-chip'+(selectedLabel===l?' active':'');
+    btn.textContent=l;
+    btn.onclick=()=>toggleLabel(l);
+    lf.appendChild(btn);
+  });
+}
+
+function matchBook(b){
+  const q=document.getElementById('searchInput').value.trim();
+  if(q&&!b.title.includes(q)&&!b.author.includes(q)&&!b.kanji.some(k=>k===q)&&!b.desc.includes(q))return false;
+  if(selectedLabel&&b.label!==selectedLabel)return false;
+  if(selectedKanji.size===0)return true;
+  const arr=[...selectedKanji];
+  return searchMode==='OR'?arr.some(k=>b.kanji.includes(k)):arr.every(k=>b.kanji.includes(k));
+}
+
+function renderBook(b){
+  const card=document.createElement('div');
+  card.className='book-card';
+  const lc=getLabelColor(b.label);
+  card.innerHTML=`
+    <div class="book-title">${b.title}</div>
+    <div class="book-author">${b.author}　${b.year}年</div>
+    <span class="book-label" style="background:${lc.bg};color:${lc.color}">${b.label}</span>
+    <div class="book-desc">${b.desc}</div>
+    <div class="kanji-row">${b.kanji.map(k=>{
+      const d=KANJI_DEF[k]||{label:k,bg:'#eee',color:'#333'};
+      return`<div class="k-chip" style="background:${d.bg};outline:${selectedKanji.has(k)?'2px solid '+d.color:'none'}">
+        <span class="k-char" style="color:${d.color}">${k}</span>
+        <span class="k-label" style="color:${d.color}">${d.label}</span>
+      </div>`;
+    }).join('')}</div>`;
+  return card;
+}
+
+function renderTrend(){
+  const tg=document.getElementById('trendGrid');
+  tg.innerHTML='';
+  const lk={};
+  BOOKS.forEach(b=>{
+    if(!lk[b.label])lk[b.label]={};
+    b.kanji.forEach(k=>{lk[b.label][k]=(lk[b.label][k]||0)+1;});
+  });
+  Object.entries(lk).forEach(([label,kmap])=>{
+    const top=Object.entries(kmap).sort((a,b)=>b[1]-a[1]).slice(0,5);
+    const lc=getLabelColor(label);
+    const card=document.createElement('div');
+    card.className='trend-card';
+    card.innerHTML=`<div class="trend-card-label" style="color:${lc.color}">${label}</div>
+      <div class="trend-kanji-row">${top.map(([k])=>{
+        const d=KANJI_DEF[k]||{bg:'#eee',color:'#333'};
+        return`<span class="tk" style="background:${d.bg};color:${d.color}" title="${d.label}">${k}</span>`;
+      }).join('')}</div>`;
+    tg.appendChild(card);
+  });
+}
+
+function render(){
+  buildFilters();
+  const matched=BOOKS.filter(matchBook);
+  const grid=document.getElementById('bookGrid');
+  grid.innerHTML='';
+  document.getElementById('resultsInfo').innerHTML=`<span class="results-count">${matched.length}件</span> 表示中`;
+  const filters=[];
+  if(selectedKanji.size>0)filters.push([...selectedKanji].join(` ${searchMode} `));
+  if(selectedLabel)filters.push(selectedLabel);
+  const q=document.getElementById('searchInput').value.trim();
+  if(q)filters.push(`"${q}"`);
+  document.getElementById('activeFilters').textContent=filters.length?'絞り込み中: '+filters.join('　'):'';
+  if(matched.length===0){grid.innerHTML='<div class="empty-state">該当する書籍が見つかりませんでした。</div>';return;}
+  matched.forEach(b=>grid.appendChild(renderBook(b)));
+}
+
+renderTrend();
+render();
+</script>
+</body>
+</html>
