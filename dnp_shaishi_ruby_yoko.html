@@ -1,0 +1,143 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;700&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#fff;font-family:'Noto Sans JP',sans-serif}
+.wrap{padding:32px 28px;max-width:860px}
+.meta{font-size:10px;color:#aaa;letter-spacing:.12em;margin-bottom:28px}
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;align-items:center}
+.btn{font-size:10px;padding:4px 12px;border-radius:10px;border:1px solid #ddd;background:#f5f5f5;color:#999;cursor:pointer;transition:all .15s}
+.btn.on{border-color:#1432AA;color:#1432AA;background:#e8ecfa}
+.size-label{font-size:10px;color:#bbb;margin-left:8px}
+input[type=range]{width:100px;accent-color:#1432AA}
+.text-block{line-height:3.2;letter-spacing:.02em;margin-bottom:36px;word-break:break-all}
+.section-title{font-size:10px;color:#bbb;letter-spacing:.15em;margin-bottom:12px;border-left:2px solid #eee;padding-left:10px}
+.legend{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px;padding-top:20px;border-top:1px solid #f0f0f0}
+.leg{display:flex;align-items:center;gap:5px;font-size:10px;color:#aaa}
+.leg-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+/* ルビを標準的な横表示に */
+ruby{ruby-align:center}
+ruby rt{font-size:.5em;color:#999;letter-spacing:.01em}
+span.k:hover{opacity:.6;cursor:default;transition:opacity .15s}
+.dnp-word{color:#1432AA!important;font-weight:700}
+</style>
+<div class="wrap">
+  <div class="meta">天然色漢字INDEX™ × DNP 社史デモ — 部首ベース自動色付与 ＋ ふりがな</div>
+  <div class="controls">
+    <button class="btn on" onclick="setMode('bushu',this)">部首色</button>
+    <button class="btn" onclick="setMode('mono',this)">モノクロ</button>
+    <button class="btn on" id="ruby-btn" onclick="toggleRuby()">ふりがな ON</button>
+    <span class="size-label">文字サイズ</span>
+    <input type="range" min="14" max="48" value="22" oninput="setSize(this.value)">
+    <span id="sz-val" style="font-size:10px;color:#bbb;min-width:28px">22px</span>
+  </div>
+  <div class="section-title">創業期 1876〜1935</div>
+  <div class="text-block" id="block1"></div>
+  <div class="section-title">技術革新期 1958〜1985</div>
+  <div class="text-block" id="block2"></div>
+  <div class="section-title">情報・グローバル期 1995〜2005</div>
+  <div class="text-block" id="block3"></div>
+  <div class="legend" id="legend"></div>
+  <div style="margin-top:16px;display:flex;align-items:center;gap:6px">
+    <span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:#1432AA"></span>
+    <span style="font-size:10px;color:#1432AA;font-weight:700">DNPブルー (PANTONE 286C)</span>
+    <span style="font-size:10px;color:#bbb">— 「DNP」「DNPグループ」に適用</span>
+  </div>
+  <div style="margin-top:10px;font-size:9px;color:#ccc;letter-spacing:.08em">天然色漢字INDEX™ は株式会社ダンクソフトの商標です。</div>
+</div>
+<script>
+const BUSHU_COLOR={"氵":"#4FC3F7","水":"#29B6F6","火":"#FF7043","灬":"#FF5722","木":"#66BB6A","林":"#4CAF50","金":"#FFB300","糸":"#EC407A","言":"#4DD0E1","人":"#BA68C8","亻":"#AB47BC","土":"#A1887F","日":"#F9A825","曰":"#F57F17","月":"#FFA726","手":"#D4E157","扌":"#C0CA33","心":"#F06292","忄":"#EC407A","艸":"#9CCC65","艹":"#8BC34A","口":"#FFA726","囗":"#FF9800","刀":"#90A4AE","刂":"#78909C","石":"#9E9E9E","車":"#26A69A","貝":"#D4E157","食":"#FFCA28","宀":"#80DEEA","力":"#CE93D8","大":"#90A4AE","田":"#C5E1A5","門":"#4DB6AC","雨":"#7986CB","竹":"#A5D6A7","示":"#EF9A9A","礻":"#E57373","衣":"#CE93D8","辶":"#4DB6AC","邑":"#FFAB40","禾":"#D4AC0D","目":"#4CAF50","足":"#FFCC80"};
+const KANJI_BUSHU={"秀":"禾","英":"艹","舎":"人","創":"刀","業":"木","印":"卩","刷":"刀","刊":"刀","活":"氵","字":"宀","技":"扌","発":"癶","開":"門","設":"言","社":"礻","名":"口","称":"禾","大":"大","日":"日","本":"木","合":"口","併":"亻","歴":"止","史":"口","年":"干","初":"刀","代":"亻","時":"日","期":"月","以":"人","来":"木","間":"門","前":"刀","後":"彳","新":"斤","変":"攵","化":"亻","進":"辶","研":"石","成":"戈","功":"力","製":"衣","造":"辶","機":"木","電":"雨","体":"亻","光":"儿","学":"子","科":"禾","経":"糸","営":"火","管":"竹","会":"人","組":"糸","部":"邑","課":"言","員":"口","万":"力","億":"亻","利":"刀","情":"忄","報":"土","通":"辶","信":"亻","網":"糸","算":"竹","記":"言","録":"金","人":"人","労":"力","働":"亻","給":"糸","金":"金","界":"田","市":"巾","場":"土","地":"土","紙":"糸","墨":"土","彩":"彡","色":"色","編":"糸","著":"艹","流":"氵","書":"曰","誌":"言","章":"立","節":"艹","稿":"禾","権":"木","表":"衣","索":"糸","校":"木","鋳":"金","洋":"氵","装":"衣","改":"攵","最":"日","清":"氵","株":"木","辞":"辛","典":"八","着":"目","医":"匸","分":"刀","総":"糸","試":"言","作":"亻","有":"月","周":"口","視":"示","覚":"見","世":"一","導":"寸","半":"十","品":"口","高":"高","益":"皿","野":"里","型":"土","再":"冂","立":"立","式":"弋","建":"廴","容":"宀","量":"里","生":"生","産":"生","術":"行","国":"囗","内":"冂","究":"穴","絡":"糸","理":"玉","円":"囗","療":"疒","事":"亅","向":"囗","用":"用","版":"片"};
+const PHRASE_RUBY=[["大日本印刷株式会社","だいにっぽんいんさつかぶしきがいしゃ"],["大日本印刷","だいにっぽんいんさつ"],["秀英舎","しゅうえいしゃ"],["日清印刷","にっしんいんさつ"],["科学技術用語辞典","かがくぎじゅつようごじてん"],["印刷物","いんさつぶつ"],["印刷会社","いんさつがいしゃ"],["活版印刷","かっぱんいんさつ"],["活字","かつじ"],["鋳造","ちゅうぞう"],["洋装本","ようそうぼん"],["株式会社","かぶしきがいしゃ"],["前身","ぜんしん"],["創業","そうぎょう"],["合併","がっぺい"],["社名","しゃめい"],["初代","しょだい"],["事業","じぎょう"],["製造","せいぞう"],["記録","きろく"],["建設","けんせつ"],["工場","こうじょう"],["開始","かいし"],["試作","しさく"],["成功","せいこう"],["半導体","はんどうたい"],["売上高","うりあげだか"],["当期利益","とうきりえき"],["国内","こくない"],["最大","さいだい"],["開発","かいはつ"],["電子辞書","でんしじしょ"],["記憶容量","きおくようりょう"],["世界初","せかいはつ"],["着手","ちゃくしゅ"],["総合","そうごう"],["有機","ゆうき"],["創立","そうりつ"],["周年","しゅうねん"],["発表","はっぴょう"],["情報","じょうほう"],["研究開発","けんきゅうかいはつ"],["設立","せつりつ"],["関連","かんれん"],["事業化","じぎょうか"],["再生医療","さいせいいりょう"],["分野","ぶんや"],["進出","しんしゅつ"],["東京","とうきょう"],["市谷","いちがや"]];
+const SINGLE_RUBY={"一":"いち","二":"に","三":"さん","四":"し","五":"ご","六":"ろく","七":"なな","八":"はち","九":"く","十":"じゅう","百":"ひゃく","千":"せん","万":"まん","億":"おく","年":"ねん","月":"つき","日":"にち","時":"とき","代":"だい","大":"おお","小":"しょう","中":"なか","本":"ほん","前":"まえ","後":"のち","新":"しん","旧":"きゅう","初":"はじめ","最":"さい","高":"こう","半":"はん","印":"いん","刷":"さつ","版":"はん","刊":"かん","活":"かつ","字":"じ","技":"ぎ","術":"じゅつ","発":"はつ","開":"かい","設":"せつ","社":"しゃ","名":"めい","合":"ごう","歴":"れき","史":"し","期":"き","以":"い","来":"らい","間":"かん","変":"へん","化":"か","進":"しん","研":"けん","成":"せい","功":"こう","製":"せい","造":"ぞう","機":"き","電":"でん","体":"たい","光":"こう","学":"がく","科":"か","経":"けい","営":"えい","管":"かん","会":"かい","組":"そ","部":"ぶ","課":"か","員":"いん","情":"じょう","報":"ほう","通":"つう","信":"しん","網":"もう","算":"さん","記":"き","録":"ろく","人":"ひと","労":"ろう","働":"どう","給":"きゅう","金":"きん","界":"かい","市":"し","場":"じょう","地":"ち","紙":"し","墨":"すみ","彩":"さい","色":"しょく","編":"へん","著":"ちょ","流":"りゅう","書":"しょ","誌":"し","章":"しょう","節":"せつ","稿":"こう","権":"けん","表":"ひょう","索":"さく","校":"こう","鋳":"ちゅう","洋":"よう","装":"そう","改":"かい","清":"せい","株":"かぶ","辞":"じ","典":"てん","着":"ちゃく","医":"い","分":"ぶん","総":"そう","試":"し","作":"さく","有":"ゆう","周":"しゅう","視":"し","覚":"かく","世":"せ","導":"どう","品":"ひん","益":"えき","野":"や","型":"がた","再":"さい","立":"りつ","式":"しき","建":"けん","容":"よう","量":"りょう","生":"せい","産":"さん","国":"こく","内":"ない","外":"がい","究":"きゅう","理":"り","療":"りょう","事":"じ","向":"こう","用":"よう","秀":"しゅう","英":"えい","舎":"しゃ","創":"そう","業":"ぎょう","身":"しん"};
+
+let currentMode="bushu",currentSize=22,rubyOn=true;
+
+function getColor(c,mode){
+  if(mode==="mono")return"#ccc";
+  if(!/[\u4e00-\u9fff]/.test(c))return null;
+  const b=KANJI_BUSHU[c];
+  if(b&&BUSHU_COLOR[b])return BUSHU_COLOR[b];
+  return`hsl(${(c.charCodeAt(0)*37)%360},55%,62%)`;
+}
+
+// 1文字をカラースパンで包む（rubyの外側で色指定）
+function colorSpan(c,mode,sz){
+  const col=getColor(c,mode);
+  if(!col)return`<span style="color:#ccc;font-size:${sz}px">${c}</span>`;
+  return`<span style="color:${col};font-size:${sz}px;font-weight:${sz>30?300:400}">${c}</span>`;
+}
+
+// ruby要素：テキスト全体を1つのrubyに（横並び保証）
+function makeRuby(text,reading,mode,sz){
+  if(!rubyOn){
+    return text.split("").map(c=>colorSpan(c,mode,sz)).join("");
+  }
+  // 各文字をspanで色付け → ruby本体にまとめる
+  const base = text.split("").map(c=>colorSpan(c,mode,sz)).join("");
+  const rtSize = Math.max(9, sz*0.44);
+  // ruby全体に色を継承させ、rtは薄グレー固定
+  return `<ruby>${base}<rt style="font-size:${rtSize}px;color:#999;letter-spacing:.01em">${reading}</rt></ruby>`;
+}
+
+function processKanji(text,mode,sz){
+  let r="",i=0;
+  while(i<text.length){
+    let matched=false;
+    for(const[p,rd]of PHRASE_RUBY){
+      if(text.startsWith(p,i)){
+        r+=makeRuby(p,rd,mode,sz);
+        i+=p.length;
+        matched=true;
+        break;
+      }
+    }
+    if(!matched){
+      const c=text[i];
+      const isK=/[\u4e00-\u9fff]/.test(c);
+      if(isK&&rubyOn&&SINGLE_RUBY[c]){
+        r+=makeRuby(c,SINGLE_RUBY[c],mode,sz);
+      } else {
+        r+=colorSpan(c,mode,sz);
+      }
+      i++;
+    }
+  }
+  return r;
+}
+
+function renderTextWithDNP(text,mode,sz){
+  const pat=/DNPグループ|DNP/g;
+  const parts=[];let last=0,m;
+  while((m=pat.exec(text))!==null){
+    if(m.index>last)parts.push({t:'text',v:text.slice(last,m.index)});
+    parts.push({t:'dnp',v:m[0]});
+    last=m.index+m[0].length;
+  }
+  if(last<text.length)parts.push({t:'text',v:text.slice(last)});
+  return parts.map(p=>p.t==='dnp'
+    ?`<span class="dnp-word" style="font-size:${sz}px;font-weight:700">${p.v}</span>`
+    :processKanji(p.v,mode,sz)
+  ).join("");
+}
+
+const T1=`一八七六年、大日本印刷の前身である「秀英舎」が創業された。初代の事業は活版印刷による洋装本の製造であり、「改正西国立志編」がその最初の印刷物として記録されている。一八八二年には活字の鋳造を開始し、一八八六年には東京・市谷に第一工場を建設した。一九三五年、秀英舎と日清印刷が合併し、社名を「大日本印刷株式会社」とした。`;
+const T2=`一九五八年、カラーテレビ用シャドウマスクの試作に成功。一九五九年には売上高・当期利益ともに国内最大の印刷会社となり、半導体用フォトマスクの試作にも成功した。一九八三年にICカードを開発、一九八五年には世界初のCD‐ROM版電子辞書「最新科学技術用語辞典」を開発し、大記憶容量の光カードの開発にも着手した。`;
+const T3=`一九九五年、インターネット総合サービス「メディアギャラクシー」を開始。二〇〇一年にはフレキシブル有機ELディスプレイの開発に成功し、創立一二五周年を機に「DNPグループ二十一世紀ビジョン」を発表した。二〇〇四年には「情報コミュニケーション研究開発センター」を設立し、バイオ関連の事業化に向け再生医療分野にも進出した。`;
+
+function render(){
+  document.getElementById("block1").innerHTML=renderTextWithDNP(T1,currentMode,currentSize);
+  document.getElementById("block2").innerHTML=renderTextWithDNP(T2,currentMode,currentSize);
+  document.getElementById("block3").innerHTML=renderTextWithDNP(T3,currentMode,currentSize);
+  renderLegend();
+}
+function renderLegend(){
+  if(currentMode!=="bushu"){document.getElementById("legend").innerHTML="";return;}
+  const s=[["氵","水系・流・通","#4FC3F7"],["火","火系・発・営","#FF7043"],["木","木系・本・機","#66BB6A"],["金","金系・金属","#FFB300"],["糸","糸系・経・編","#EC407A"],["言","言系・誌・報","#4DD0E1"],["亻","人系・社員","#BA68C8"],["土","土系・地・場","#A1887F"],["日","日系・時代","#F9A825"],["雨","雨系・電気","#7986CB"]];
+  document.getElementById("legend").innerHTML=s.map(([b,l,c])=>`<div class="leg"><div class="leg-dot" style="background:${c}"></div><span>${b}部 — ${l}</span></div>`).join("");
+}
+function setMode(mode,btn){currentMode=mode;document.querySelectorAll(".btn:not(#ruby-btn)").forEach(b=>b.classList.remove("on"));btn.classList.add("on");render();}
+function toggleRuby(){rubyOn=!rubyOn;const btn=document.getElementById("ruby-btn");btn.textContent=rubyOn?"ふりがな ON":"ふりがな OFF";btn.classList.toggle("on",rubyOn);render();}
+function setSize(v){currentSize=parseInt(v);document.getElementById("sz-val").textContent=v+"px";render();}
+render();
+</script>
