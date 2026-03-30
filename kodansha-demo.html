@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>天然色漢字INDEX™ × 講談社　書籍インデックスデモ</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700;900&family=Noto+Sans+JP:wght@300;400;500;700&display=swap');
+
+:root {
+  --ink: #0d1b2a;
+  --ink-mid: #2c3e50;
+  --ink-light: #7f8c8d;
+  --paper: #f7f9fc;
+  --paper-warm: #eef2f7;
+  --paper-mid: #dde4ed;
+  --accent: #1a3a6b;
+  --accent-red: #c0392b;
+  --accent-gold: #b8860b;
+  --border: rgba(13,27,42,0.10);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Noto Sans JP', sans-serif; background: var(--paper); color: var(--ink); min-height: 100vh; }
+
+/* HERO */
+.hero {
+  background: var(--accent);
+  color: #fff;
+  padding: 28px 24px 24px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '講';
+  font-family: 'Noto Serif JP', serif;
+  font-size: 260px;
+  font-weight: 900;
+  position: absolute;
+  right: -24px; top: -50px;
+  opacity: .05;
+  color: #fff;
+  line-height: 1;
+}
+.hero-eyebrow {
+  font-size: 10px;
+  letter-spacing: 3px;
+  color: rgba(255,255,255,0.55);
+  margin-bottom: 6px;
+}
+.hero-title {
+  font-family: 'Noto Serif JP', serif;
+  font-size: clamp(17px, 3.8vw, 25px);
+  font-weight: 700;
+  line-height: 1.55;
+  margin-bottom: 5px;
+}
+.hero-title em { color: #ffd700; font-style: normal; }
+.hero-sub { font-size: 11px; color: rgba(255,255,255,0.5); letter-spacing: .5px; }
+.hero-badges { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; align-items: center; }
+.hero-badge {
+  display: inline-block;
+  background: var(--accent-red);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 20px;
+  letter-spacing: 1px;
+}
+.hero-note {
+  font-size: 10px;
+  color: rgba(255,255,255,0.45);
+  border-left: 2px solid rgba(255,215,0,0.5);
+  padding-left: 8px;
+  line-height: 1.6;
+}
+
+/* LEGEND */
+.legend-bar {
+  background: var(--paper-warm);
+  border-bottom: 1px solid var(--border);
+  padding: 9px 14px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex-wrap: wrap;
+  font-size: 10px;
+  color: var(--ink-light);
+}
+.legend-bar strong { color: var(--ink-mid); margin-right: 4px; }
+.lk { display: inline-flex; align-items: center; gap: 3px; }
+.lk-char {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 15px;
+  font-weight: 700;
+  width: 22px; height: 22px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 3px;
+}
+.lk-name { font-size: 9px; color: var(--ink-light); }
+
+/* CONTROLS */
+.control-area {
+  padding: 14px 16px;
+  background: var(--paper);
+  border-bottom: 1px solid var(--border);
+  display: flex; flex-direction: column; gap: 10px;
+}
+.search-row { display: flex; gap: 8px; align-items: center; }
+.search-input {
+  flex: 1;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 13px;
+  background: #fff;
+  color: var(--ink);
+  outline: none;
+  transition: border-color .2s;
+}
+.search-input:focus { border-color: var(--accent); }
+.mode-toggle {
+  display: flex;
+  background: var(--paper-warm);
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+.mode-btn {
+  padding: 7px 14px;
+  font-size: 11px; font-weight: 700;
+  font-family: 'Noto Sans JP', sans-serif;
+  border: none; background: transparent;
+  color: var(--ink-light);
+  cursor: pointer; transition: all .2s;
+  letter-spacing: 1px;
+}
+.mode-btn.active { background: var(--accent); color: #fff; }
+
+.kanji-filters { display: flex; gap: 5px; flex-wrap: wrap; align-items: center; }
+.filter-label { font-size: 10px; color: var(--ink-light); margin-right: 2px; }
+.kf-chip {
+  display: inline-flex; align-items: center; gap: 3px;
+  padding: 3px 8px 3px 4px;
+  border-radius: 20px; border: 1.5px solid transparent;
+  cursor: pointer; font-size: 10px;
+  font-family: 'Noto Sans JP', sans-serif;
+  transition: all .15s;
+  background: var(--paper-warm); color: var(--ink-mid);
+}
+.kf-chip:hover { transform: translateY(-1px); }
+.kf-chip.active { border-width: 2px; color: #fff; }
+.kf-chip .kc {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 14px; font-weight: 700;
+  width: 20px; height: 20px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 3px;
+}
+
+.label-filters { display: flex; gap: 5px; flex-wrap: wrap; }
+.label-chip {
+  padding: 3px 10px;
+  border-radius: 20px;
+  border: 1.5px solid var(--border);
+  font-size: 10px;
+  font-family: 'Noto Sans JP', sans-serif;
+  cursor: pointer; background: transparent;
+  color: var(--ink-mid); transition: all .15s; font-weight: 500;
+}
+.label-chip:hover { background: var(--paper-warm); }
+.label-chip.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+/* RESULTS BAR */
+.results-bar {
+  padding: 7px 16px;
+  font-size: 11px; color: var(--ink-light);
+  border-bottom: 1px solid var(--border);
+  background: var(--paper-warm);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.results-count { font-weight: 700; color: var(--ink-mid); }
+
+/* GRID */
+.book-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 0;
+}
+.book-card {
+  padding: 15px 16px;
+  border-bottom: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  transition: background .15s;
+}
+.book-card:hover { background: var(--paper-warm); }
+.book-title {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 14px; font-weight: 700;
+  color: var(--ink); line-height: 1.5; margin-bottom: 3px;
+}
+.book-author { font-size: 10px; color: var(--ink-light); margin-bottom: 3px; }
+.book-label {
+  display: inline-block;
+  font-size: 9px; padding: 2px 8px;
+  border-radius: 10px; font-weight: 700; letter-spacing: .5px;
+}
+.book-desc { font-size: 10px; color: var(--ink-light); margin: 5px 0 7px; line-height: 1.6; }
+.kanji-row { display: flex; gap: 4px; flex-wrap: wrap; }
+.k-chip {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 4px 5px; border-radius: 6px; min-width: 34px;
+  transition: transform .1s;
+}
+.k-chip:hover { transform: translateY(-2px); }
+.k-char { font-family: 'Noto Serif JP', serif; font-size: 19px; font-weight: 700; line-height: 1.1; }
+.k-label { font-size: 8px; margin-top: 1px; opacity: .8; text-align: center; line-height: 1.2; }
+
+/* TREND */
+.trend-section {
+  padding: 20px 16px;
+  background: var(--paper-warm);
+  border-top: 1px solid var(--border);
+}
+.trend-title {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 14px; font-weight: 700;
+  margin-bottom: 14px; color: var(--ink);
+  display: flex; align-items: center; gap: 8px;
+}
+.trend-title::before {
+  content: ''; display: block;
+  width: 4px; height: 18px;
+  background: var(--accent); border-radius: 2px;
+}
+.trend-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 10px; }
+.trend-card {
+  background: #fff; border-radius: 10px; padding: 12px;
+  border: 1px solid var(--border);
+}
+.trend-card-label { font-size: 9px; font-weight: 700; letter-spacing: 1px; margin-bottom: 8px; }
+.trend-kanji-row { display: flex; gap: 4px; flex-wrap: wrap; }
+.tk {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 21px; font-weight: 700;
+  width: 32px; height: 32px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 5px;
+}
+
+/* DOJO NOTE */
+.dojo-note {
+  margin: 0 16px 0;
+  padding: 14px 16px;
+  background: #fff;
+  border-left: 3px solid var(--accent-gold);
+  border-radius: 0 8px 8px 0;
+  font-size: 11px;
+  color: var(--ink-mid);
+  line-height: 1.8;
+}
+.dojo-note strong { color: var(--accent); font-weight: 700; }
+
+.empty-state { grid-column: 1/-1; padding: 60px 20px; text-align: center; color: var(--ink-light); font-size: 13px; }
+
+footer {
+  text-align: center; padding: 16px;
+  font-size: 10px; color: var(--ink-light);
+  border-top: 1px solid var(--border); line-height: 2;
+}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-eyebrow">天然色漢字INDEX™ × COLORFUL KANJI INDEX®</div>
+  <div class="hero-title">講談社　書籍インデックス<br><em>漢字1文字＋色</em>で本を発見する</div>
+  <div class="hero-sub">KODANSHA BOOKS — KANJI TAG DEMO　DUNKSOFT Co., Ltd.</div>
+  <div class="hero-badges">
+    <span class="hero-badge">DEMO 2026</span>
+    <span class="hero-note">音羽・野間道場に縁ある DUNKSOFTより</span>
+  </div>
+</div>
+
+<div style="padding:12px 16px 0">
+  <div class="dojo-note">
+    <strong>野間道場と天然色漢字INDEX™</strong>　講談社音羽本社の裏山にかつて存在した剣道場・野間道場。DUNKSOFTの星野は8歳から15歳まで、父（6段錬士）のもとでここで稽古を積みました。1970年代、隣接する倉庫には少年マガジンの在庫が山積みされていた——その場所から生まれた本と人への想いが、この天然色漢字INDEXに流れています。
+  </div>
+</div>
+
+<div class="legend-bar" style="margin-top:12px">
+  <strong>漢字の色＝部首カテゴリ：</strong>
+  <span class="lk"><span class="lk-char" style="background:#fff3e0;color:#e65100">小</span><span class="lk-name">文学・物語</span></span>
+  <span class="lk"><span class="lk-char" style="background:#e8f5e9;color:#1b5e20">社</span><span class="lk-name">社会科学</span></span>
+  <span class="lk"><span class="lk-char" style="background:#e3f2fd;color:#0d47a1">然</span><span class="lk-name">自然科学</span></span>
+  <span class="lk"><span class="lk-char" style="background:#fce4ec;color:#880e4f">心</span><span class="lk-name">心理・感情</span></span>
+  <span class="lk"><span class="lk-char" style="background:#f3e5f5;color:#4a148c">哲</span><span class="lk-name">哲学・思想</span></span>
+  <span class="lk"><span class="lk-char" style="background:#fff9c4;color:#f57f17">史</span><span class="lk-name">歴史・伝記</span></span>
+  <span class="lk"><span class="lk-char" style="background:#e0f7fa;color:#006064">技</span><span class="lk-name">技術・工学</span></span>
+  <span class="lk"><span class="lk-char" style="background:#f1f8e9;color:#33691e">芸</span><span class="lk-name">芸術・文化</span></span>
+  <span class="lk"><span class="lk-char" style="background:#ede7f6;color:#311b92">謎</span><span class="lk-name">謎・ミステリ</span></span>
+  <span class="lk"><span class="lk-char" style="background:#fce4ec;color:#c62828">愛</span><span class="lk-name">愛・恋愛</span></span>
+  <span class="lk"><span class="lk-char" style="background:#fff8e1;color:#e65100">経</span><span class="lk-name">経済・お金</span></span>
+  <span class="lk"><span class="lk-char" style="background:#eceff1;color:#37474f">死</span><span class="lk-name">死・喪失</span></span>
+</div>
+
+<div class="control-area">
+  <div class="search-row">
+    <input class="search-input" id="searchInput" type="text" placeholder="書名・著者名・漢字で検索…" oninput="render()">
+    <div class="mode-toggle">
+      <button class="mode-btn active" id="btnOR" onclick="setMode('OR')">OR</button>
+      <button class="mode-btn" id="btnAND" onclick="setMode('AND')">AND</button>
+    </div>
+  </div>
+  <div class="kanji-filters" id="kanjiFilters"></div>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+    <span class="filter-label">レーベル：</span>
+    <div class="label-filters" id="labelFilters"></div>
+  </div>
+</div>
+
+<div class="results-bar">
+  <span id="resultsInfo">全書籍を表示中</span>
+  <span id="activeFilters" style="font-size:10px;color:var(--accent-red)"></span>
+</div>
+
+<div class="book-grid" id="bookGrid"></div>
+
+<div class="trend-section">
+  <div class="trend-title">レーベル別　漢字の傾向</div>
+  <div class="trend-grid" id="trendGrid"></div>
+</div>
+
+<footer>
+  天然色漢字INDEX™ COLORFUL KANJI INDEX® DUNKSOFT Co., Ltd.<br>
+  ※書籍データはデモ用サンプルです。制作：Claude (Anthropic) × DUNKSOFT 2026<br>
+  野間道場の記憶とともに、音羽より。
+</footer>
+
+<script>
+const KANJI_DEF = {
+  '小': { label:'文学・物語', bg:'#fff3e0', color:'#e65100' },
+  '社': { label:'社会科学', bg:'#e8f5e9', color:'#1b5e20' },
+  '然': { label:'自然科学', bg:'#e3f2fd', color:'#0d47a1' },
+  '心': { label:'心理・感情', bg:'#fce4ec', color:'#880e4f' },
+  '哲': { label:'哲学・思想', bg:'#f3e5f5', color:'#4a148c' },
+  '史': { label:'歴史・伝記', bg:'#fff9c4', color:'#f57f17' },
+  '技': { label:'技術・工学', bg:'#e0f7fa', color:'#006064' },
+  '芸': { label:'芸術・文化', bg:'#f1f8e9', color:'#33691e' },
+  '謎': { label:'謎・ミステリ', bg:'#ede7f6', color:'#311b92' },
+  '愛': { label:'愛・恋愛', bg:'#fce4ec', color:'#c62828' },
+  '経': { label:'経済・お金', bg:'#fff8e1', color:'#e65100' },
+  '死': { label:'死・喪失', bg:'#eceff1', color:'#37474f' },
+  '政': { label:'政治・権力', bg:'#fffde7', color:'#f57f17' },
+  '教': { label:'教育・学習', bg:'#e0f2f1', color:'#004d40' },
+  '情': { label:'情報・AI', bg:'#e1f5fe', color:'#01579b' },
+  '生': { label:'生命・医療', bg:'#e8f5e9', color:'#1b5e20' },
+  '戦': { label:'戦争・対立', bg:'#ffebee', color:'#b71c1c' },
+  '地': { label:'地理・場所', bg:'#f1f8e9', color:'#2e7d32' },
+  '宗': { label:'宗教・精神', bg:'#f3e5f5', color:'#6a1b9a' },
+  '食': { label:'食・料理', bg:'#fbe9e7', color:'#bf360c' },
+  '倫': { label:'倫理・道徳', bg:'#fafafa', color:'#424242' },
+  '遊': { label:'娯楽・遊び', bg:'#fff9c4', color:'#f9a825' },
+  '旅': { label:'旅・冒険', bg:'#e0f7fa', color:'#006064' },
+  '労': { label:'労働・社会', bg:'#e8eaf6', color:'#283593' },
+};
+
+const BOOKS = [
+  // 講談社文庫・文芸
+  { id:1,  title:'カフネ', author:'阿部暁子', label:'講談社', year:2024, kanji:['小','食','心','愛'], desc:'2025年本屋大賞受賞。食を通じた癒しと再生の物語。' },
+  { id:2,  title:'火花', author:'又吉直樹', label:'文春文庫', year:2015, kanji:['小','芸','心','哲'], desc:'芥川賞受賞。芸人の友情と葛藤を描く現代文学。' },
+  { id:3,  title:'騎士団長殺し', author:'村上春樹', label:'新潮社', year:2017, kanji:['小','芸','謎','宗'], desc:'肖像画家と謎の老人をめぐる壮大な物語。' },
+  { id:4,  title:'ミッドナイト・ジャーナル', author:'本城雅人', label:'講談社文庫', year:2017, kanji:['小','謎','社','情'], desc:'新聞記者が挑む夜の事件。社会派ミステリ。' },
+  { id:5,  title:'チョコレートコスモス', author:'恩田陸', label:'毎日新聞出版', year:2006, kanji:['小','芸','心','愛'], desc:'演劇と才能、嫉妬と憧れ。舞台を舞台にした傑作。' },
+  { id:6,  title:'マスカレード・ホテル', author:'東野圭吾', label:'集英社文庫', year:2011, kanji:['小','謎','社','心'], desc:'ホテルを舞台にした東野ミステリの人気シリーズ。' },
+  { id:7,  title:'三体', author:'劉慈欣', label:'早川書房', year:2019, kanji:['小','然','技','史'], desc:'中国SF最高峰。宇宙文明の衝突を描く壮大な三部作。' },
+  { id:8,  title:'光のとこにいてね', author:'一穂ミチ', label:'文藝春秋', year:2023, kanji:['小','愛','心','社'], desc:'本屋大賞ノミネート。運命的な二人の女性の物語。' },
+
+  // 講談社現代新書・ブルーバックス
+  { id:9,  title:'スマホ脳', author:'アンデシュ・ハンセン', label:'新潮新書', year:2020, kanji:['然','心','技','社'], desc:'スマートフォンが脳に与える影響を科学的に解明。' },
+  { id:10, title:'「空気」の研究', author:'山本七平', label:'文春文庫', year:1983, kanji:['社','哲','史','倫'], desc:'日本人の意思決定を支配する「空気」を分析した名著。' },
+  { id:11, title:'数学的な思考法', author:'芳沢光雄', label:'講談社現代新書', year:2020, kanji:['然','教','技','哲'], desc:'数学的思考を日常と仕事に活かす実践書。' },
+  { id:12, title:'生命とは何か', author:'シュレーディンガー', label:'岩波文庫', year:2008, kanji:['然','哲','生','技'], desc:'量子物理学者が生命の本質に迫った20世紀の名著。' },
+  { id:13, title:'AIの衝撃', author:'小林雅一', label:'講談社現代新書', year:2013, kanji:['技','社','情','経'], desc:'AIが社会・経済・産業に与える変化を先読みした書。' },
+  { id:14, title:'人口論', author:'マルサス', label:'中公文庫', year:2019, kanji:['社','経','史','然'], desc:'人口と食糧の問題を論じた経済学・社会学の古典。' },
+
+  // 週刊少年マガジン・漫画関連
+  { id:15, title:'進撃の巨人 Before the Fall', author:'壬生ろく', label:'講談社', year:2013, kanji:['小','戦','謎','死'], desc:'進撃の巨人前日譚。立体起動装置誕生の秘密を描く。' },
+  { id:16, title:'デビルマン（完全版）', author:'永井豪', label:'講談社', year:2004, kanji:['小','戦','宗','死'], desc:'人間と悪魔の間で苦悩する不滅の名作漫画。' },
+  { id:17, title:'コウノドリ', author:'鈴ノ木ユウ', label:'講談社', year:2012, kanji:['小','生','愛','心'], desc:'産婦人科医と命の誕生を描く感動の医療漫画。' },
+  { id:18, title:'ドラゴン桜', author:'三田紀房', label:'講談社', year:2003, kanji:['小','教','社','経'], desc:'東大受験を通じて日本社会の本質に迫る教育漫画。' },
+
+  // 講談社学術文庫・歴史
+  { id:19, title:'坂の上の雲', author:'司馬遼太郎', label:'文春文庫', year:1999, kanji:['小','史','戦','社'], desc:'明治日本の近代化と日露戦争を描く司馬遼太郎の代表作。' },
+  { id:20, title:'竜馬がゆく', author:'司馬遼太郎', label:'文春文庫', year:1998, kanji:['小','史','政','旅'], desc:'幕末の革命児・坂本龍馬の生涯を描く歴史大河小説。' },
+  { id:21, title:'昭和史 1926-1945', author:'半藤一利', label:'平凡社ライブラリー', year:2004, kanji:['史','戦','政','社'], desc:'昭和の戦争の時代を平易に語った現代の古典。' },
+  { id:22, title:'応仁の乱', author:'呉座勇一', label:'中公新書', year:2016, kanji:['史','戦','政','地'], desc:'なぜ乱は起きたか。中世日本の政治を読み解く。' },
+
+  // ビジネス・経済
+  { id:23, title:'ファクトフルネス', author:'H.ロスリング他', label:'日経BP', year:2019, kanji:['社','経','然','教'], desc:'世界の真実を数字で読む。思い込みを壊す一冊。' },
+  { id:24, title:'ティール組織', author:'F.ラルー', label:'英治出版', year:2018, kanji:['社','経','哲','教'], desc:'管理なき組織の未来形を提示した経営書の革命。' },
+  { id:25, title:'21世紀の資本', author:'T.ピケティ', label:'みすず書房', year:2014, kanji:['経','社','史','政'], desc:'格差問題を300年のデータで解析した経済学の大著。' },
+  { id:26, title:'ゼロ・トゥ・ワン', author:'P.ティール', label:'NHK出版', year:2014, kanji:['経','技','哲','社'], desc:'スタートアップと独占、未来の作り方。' },
+
+  // 講談社青い鳥文庫・児童
+  { id:27, title:'若おかみは小学生！', author:'令丈ヒロ子', label:'講談社青い鳥文庫', year:2003, kanji:['小','心','愛','旅'], desc:'旅館を舞台にした少女の成長物語。映画化もされた人気作。' },
+  { id:28, title:'かいけつゾロリ', author:'原ゆたか', label:'ポプラ社', year:1987, kanji:['小','遊','旅','謎'], desc:'わるものを目指す狐と二匹の子豚の愉快な冒険。' },
+
+  // ノンフィクション
+  { id:29, title:'下町ロケット', author:'池井戸潤', label:'小学館', year:2010, kanji:['小','技','経','労'], desc:'直木賞受賞。中小企業と夢、巨大企業との戦い。' },
+  { id:30, title:'64（ロクヨン）', author:'横山秀夫', label:'文春文庫', year:2012, kanji:['小','謎','社','政'], desc:'昭和64年の誘拐事件と組織の論理。警察小説の傑作。' },
+];
+
+const LABELS = [...new Set(BOOKS.map(b => b.label))].sort();
+const ALL_KANJI = [...new Set(BOOKS.flatMap(b => b.kanji))].sort();
+
+let selectedKanji = new Set();
+let selectedLabel = null;
+let searchMode = 'OR';
+
+function setMode(m) {
+  searchMode = m;
+  document.getElementById('btnOR').classList.toggle('active', m === 'OR');
+  document.getElementById('btnAND').classList.toggle('active', m === 'AND');
+  render();
+}
+
+function toggleKanji(k) {
+  if (selectedKanji.has(k)) selectedKanji.delete(k);
+  else selectedKanji.add(k);
+  render();
+}
+
+function toggleLabel(l) {
+  selectedLabel = selectedLabel === l ? null : l;
+  render();
+}
+
+const LABEL_COLORS = [
+  { bg:'#e3f2fd', color:'#0d47a1' },
+  { bg:'#fff3e0', color:'#e65100' },
+  { bg:'#e8f5e9', color:'#1b5e20' },
+  { bg:'#fce4ec', color:'#880e4f' },
+  { bg:'#f3e5f5', color:'#4a148c' },
+  { bg:'#fff9c4', color:'#f57f17' },
+  { bg:'#e0f7fa', color:'#006064' },
+  { bg:'#f1f8e9', color:'#33691e' },
+];
+const labelColorMap = {};
+LABELS.forEach((l, i) => { labelColorMap[l] = LABEL_COLORS[i % LABEL_COLORS.length]; });
+function getLabelColor(l) { return labelColorMap[l] || { bg:'#eee', color:'#555' }; }
+
+function buildFilters() {
+  const kf = document.getElementById('kanjiFilters');
+  kf.innerHTML = '<span class="filter-label">漢字で絞り込み：</span>';
+  ALL_KANJI.forEach(k => {
+    const d = KANJI_DEF[k] || { label: k, bg:'#eee', color:'#333' };
+    const chip = document.createElement('div');
+    chip.className = 'kf-chip' + (selectedKanji.has(k) ? ' active' : '');
+    chip.style.borderColor = selectedKanji.has(k) ? d.color : 'transparent';
+    chip.style.background = selectedKanji.has(k) ? d.color : 'var(--paper-warm)';
+    chip.innerHTML = `<span class="kc" style="background:${d.bg};color:${d.color}">${k}</span>${d.label}`;
+    chip.onclick = () => toggleKanji(k);
+    kf.appendChild(chip);
+  });
+
+  const lf = document.getElementById('labelFilters');
+  lf.innerHTML = '';
+  LABELS.forEach(l => {
+    const btn = document.createElement('button');
+    btn.className = 'label-chip' + (selectedLabel === l ? ' active' : '');
+    btn.textContent = l;
+    btn.onclick = () => toggleLabel(l);
+    lf.appendChild(btn);
+  });
+}
+
+function matchBook(b) {
+  const q = document.getElementById('searchInput').value.trim();
+  const textMatch = !q || b.title.includes(q) || b.author.includes(q) || b.kanji.some(k => k === q) || b.desc.includes(q);
+  if (!textMatch) return false;
+  if (selectedLabel && b.label !== selectedLabel) return false;
+  if (selectedKanji.size === 0) return true;
+  const arr = [...selectedKanji];
+  if (searchMode === 'OR') return arr.some(k => b.kanji.includes(k));
+  return arr.every(k => b.kanji.includes(k));
+}
+
+function renderBook(b) {
+  const card = document.createElement('div');
+  card.className = 'book-card';
+  const lc = getLabelColor(b.label);
+  card.innerHTML = `
+    <div class="book-title">${b.title}</div>
+    <div class="book-author">${b.author}　${b.year}年</div>
+    <span class="book-label" style="background:${lc.bg};color:${lc.color}">${b.label}</span>
+    <div class="book-desc">${b.desc}</div>
+    <div class="kanji-row">
+      ${b.kanji.map(k => {
+        const d = KANJI_DEF[k] || { label:k, bg:'#eee', color:'#333' };
+        const isActive = selectedKanji.has(k);
+        return `<div class="k-chip" style="background:${d.bg};outline:${isActive ? '2px solid '+d.color : 'none'}">
+          <span class="k-char" style="color:${d.color}">${k}</span>
+          <span class="k-label" style="color:${d.color}">${d.label}</span>
+        </div>`;
+      }).join('')}
+    </div>`;
+  return card;
+}
+
+function renderTrend() {
+  const tg = document.getElementById('trendGrid');
+  tg.innerHTML = '';
+  const lk = {};
+  BOOKS.forEach(b => {
+    if (!lk[b.label]) lk[b.label] = {};
+    b.kanji.forEach(k => { lk[b.label][k] = (lk[b.label][k] || 0) + 1; });
+  });
+  Object.entries(lk).forEach(([label, kmap]) => {
+    const top = Object.entries(kmap).sort((a,b) => b[1]-a[1]).slice(0,5);
+    const lc = getLabelColor(label);
+    const card = document.createElement('div');
+    card.className = 'trend-card';
+    card.innerHTML = `
+      <div class="trend-card-label" style="color:${lc.color}">${label}</div>
+      <div class="trend-kanji-row">
+        ${top.map(([k]) => {
+          const d = KANJI_DEF[k] || { bg:'#eee', color:'#333' };
+          return `<span class="tk" style="background:${d.bg};color:${d.color}" title="${d.label}">${k}</span>`;
+        }).join('')}
+      </div>`;
+    tg.appendChild(card);
+  });
+}
+
+function render() {
+  buildFilters();
+  const matched = BOOKS.filter(matchBook);
+  const grid = document.getElementById('bookGrid');
+  grid.innerHTML = '';
+  const info = document.getElementById('resultsInfo');
+  const af = document.getElementById('activeFilters');
+  info.innerHTML = `<span class="results-count">${matched.length}件</span> 表示中`;
+  const filters = [];
+  if (selectedKanji.size > 0) filters.push([...selectedKanji].join(` ${searchMode} `));
+  if (selectedLabel) filters.push(selectedLabel);
+  const q = document.getElementById('searchInput').value.trim();
+  if (q) filters.push(`"${q}"`);
+  af.textContent = filters.length ? '絞り込み中: ' + filters.join('　') : '';
+  if (matched.length === 0) {
+    grid.innerHTML = '<div class="empty-state">該当する書籍が見つかりませんでした。</div>';
+    return;
+  }
+  matched.forEach(b => grid.appendChild(renderBook(b)));
+}
+
+renderTrend();
+render();
+</script>
+</body>
+</html>
