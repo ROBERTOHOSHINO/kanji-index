@@ -1,0 +1,316 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans)}
+.wrap{padding:16px 8px}
+h1{font-size:19px;font-weight:500;color:var(--color-text-primary);text-align:center;margin-bottom:4px}
+.sub{font-size:13px;color:var(--color-text-secondary);text-align:center;margin-bottom:16px}
+.bushu-tabs{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:16px}
+.bt{padding:8px 14px;border-radius:20px;border:0.5px solid var(--color-border-secondary);
+  background:var(--color-background-primary);cursor:pointer;font-family:var(--font-sans);
+  font-size:14px;color:var(--color-text-secondary);display:flex;align-items:center;gap:6px;transition:all .15s}
+.bt.active{color:#fff;border-color:transparent}
+.bt-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
+.panel{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);
+  border-radius:var(--border-radius-lg);padding:16px;margin-bottom:14px}
+.panel-head{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+.big-kanji{width:72px;height:72px;border-radius:12px;display:flex;align-items:center;
+  justify-content:center;font-size:46px;font-family:serif;color:#fff;flex-shrink:0}
+.panel-info{flex:1}
+.panel-name{font-size:16px;font-weight:500;color:var(--color-text-primary)}
+.panel-yomi{font-size:13px;color:var(--color-text-secondary);margin-top:2px}
+.panel-meaning{font-size:13px;color:var(--color-text-secondary);margin-top:4px;line-height:1.6}
+.count-badge{padding:3px 10px;border-radius:10px;font-size:12px;font-weight:500}
+.grid-label{font-size:12px;color:var(--color-text-secondary);margin-bottom:8px;font-weight:500}
+.kanji-grid{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.kc{width:52px;height:64px;border-radius:10px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;cursor:pointer;border:0.5px solid transparent;
+  transition:all .15s;gap:2px}
+.kc:hover{transform:scale(1.1)}
+.kc .k{font-size:28px;font-family:serif;color:#fff;line-height:1}
+.kc .r{font-size:10px;color:rgba(255,255,255,0.85);line-height:1}
+.kc .g{font-size:10px;color:rgba(255,255,255,0.7);line-height:1}
+.detail-box{background:var(--color-background-secondary);border-radius:var(--border-radius-md);
+  padding:12px 14px;font-size:13px;line-height:1.8;color:var(--color-text-secondary);min-height:48px}
+.quiz-section{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);
+  border-radius:var(--border-radius-lg);padding:16px}
+.quiz-head{font-size:14px;font-weight:500;color:var(--color-text-primary);margin-bottom:12px}
+.quiz-maker{display:flex;flex-direction:column;gap:10px}
+.quiz-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.quiz-row label{font-size:13px;color:var(--color-text-secondary);min-width:80px}
+.quiz-row select{padding:6px 10px;border-radius:var(--border-radius-md);
+  border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);
+  color:var(--color-text-primary);font-family:var(--font-sans);font-size:13px}
+.make-btn{padding:8px 20px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);
+  background:var(--color-background-primary);color:var(--color-text-primary);
+  font-size:13px;cursor:pointer;font-family:var(--font-sans)}
+.make-btn:hover{background:var(--color-background-secondary)}
+.quiz-preview{margin-top:12px;background:var(--color-background-secondary);
+  border-radius:var(--border-radius-md);padding:14px;display:none}
+.quiz-q{font-size:15px;font-weight:500;color:var(--color-text-primary);margin-bottom:10px}
+.quiz-choices{display:flex;gap:8px;flex-wrap:wrap}
+.qch{padding:8px 16px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);
+  background:var(--color-background-primary);font-size:14px;font-family:serif;
+  color:var(--color-text-primary);cursor:pointer}
+.qch:hover{background:var(--color-background-secondary)}
+.qch.ok{background:#e1f5ee;border-color:#2d9a6e;color:#0f6e56}
+.qch.ng{background:#fcebeb;border-color:#c0392b;color:#791f1f}
+.quiz-ans{margin-top:8px;font-size:13px;color:var(--color-text-secondary);min-height:20px}
+</style>
+
+<div class="wrap">
+  <h1>ぶしゅのなかまをみつけよう</h1>
+  <p class="sub">ぶしゅをえらぶと　なかまの　かんじが　ずらっとでてくるよ！</p>
+  <div class="bushu-tabs" id="bushu-tabs"></div>
+  <div class="panel" id="main-panel">
+    <div class="panel-head">
+      <div class="big-kanji" id="big-k"></div>
+      <div class="panel-info">
+        <div class="panel-name" id="p-name"></div>
+        <div class="panel-yomi" id="p-yomi"></div>
+        <div class="panel-meaning" id="p-meaning"></div>
+      </div>
+      <span class="count-badge" id="p-count"></span>
+    </div>
+    <div class="grid-label">なかまのかんじ（クリックすると　いみがでるよ）</div>
+    <div class="kanji-grid" id="kanji-grid"></div>
+    <div class="detail-box" id="detail-box">かんじを　クリックしてみよう！</div>
+  </div>
+
+  <div class="quiz-section">
+    <div class="quiz-head">クイズをつくってみよう！</div>
+    <div class="quiz-maker">
+      <div class="quiz-row">
+        <label>もんだいの　かんじ</label>
+        <select id="q-kanji"></select>
+      </div>
+      <div class="quiz-row">
+        <label>もんだいの　しゅるい</label>
+        <select id="q-type">
+          <option value="bushu">このかんじの　ぶしゅはどれ？</option>
+          <option value="read">このかんじの　よみかたは？</option>
+          <option value="member">このぶしゅの　なかまは？</option>
+        </select>
+      </div>
+      <button class="make-btn" onclick="makeQuiz()">クイズをつくる！</button>
+    </div>
+    <div class="quiz-preview" id="quiz-preview">
+      <div class="quiz-q" id="quiz-q"></div>
+      <div class="quiz-choices" id="quiz-choices"></div>
+      <div class="quiz-ans" id="quiz-ans"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const BUSHU=[
+  {k:"木",color:"#228B22",name:"き・きへん",yomi:"き、もく、ぼく",meaning:"きのみき・えだ・ねのかたち。しぜんのきにかんけいするかんじのなかま。",
+   members:[
+    {k:"林",r:"はやし",g:"きがならんでいる"},
+    {k:"森",r:"もり",g:"きがたくさんある"},
+    {k:"松",r:"まつ",g:"まつのき"},
+    {k:"桜",r:"さくら",g:"さくらのき"},
+    {k:"梅",r:"うめ",g:"うめのき"},
+    {k:"橋",r:"はし",g:"かわをわたる"},
+    {k:"机",r:"つくえ",g:"きでつくるもの"},
+    {k:"本",r:"ほん",g:"もとのいみはきのみき"},
+    {k:"植",r:"うえる",g:"きをうえる"},
+    {k:"板",r:"いた",g:"きのいた"},
+    {k:"根",r:"ね",g:"きのね"},
+    {k:"葉",r:"は",g:"きのは（くさかんむり）"},
+    {k:"棒",r:"ぼう",g:"きのぼう"},
+    {k:"柱",r:"はしら",g:"たてるはしら"},
+    {k:"木",r:"き",g:"きそのもの"},
+  ]},
+  {k:"水",color:"#1E90FF",name:"みず・さんずい",yomi:"みず、すい",meaning:"みずがながれるかたち。みず・うみ・かわにかんけいするかんじのなかま。",
+   members:[
+    {k:"海",r:"うみ",g:"おおきなうみ"},
+    {k:"池",r:"いけ",g:"こうえんのいけ"},
+    {k:"川",r:"かわ",g:"ながれるかわ"},
+    {k:"泳",r:"およぐ",g:"みずをおよぐ"},
+    {k:"波",r:"なみ",g:"うみのなみ"},
+    {k:"洗",r:"あらう",g:"みずであらう"},
+    {k:"泣",r:"なく",g:"なみだがでる"},
+    {k:"湖",r:"みずうみ",g:"おおきないけ"},
+    {k:"流",r:"ながれる",g:"みずがながれる"},
+    {k:"深",r:"ふかい",g:"みずがふかい"},
+    {k:"漁",r:"りょう",g:"さかなをとる"},
+    {k:"港",r:"みなと",g:"ふねのみなと"},
+    {k:"温",r:"あたたかい",g:"あたたかいおゆ"},
+    {k:"氷",r:"こおり",g:"こおったみず"},
+    {k:"汽",r:"き",g:"じょうきのき"},
+  ]},
+  {k:"火",color:"#FF4500",name:"ひ・ひへん・れんが",yomi:"ひ、か",meaning:"ほのおがもえるかたち。ひ・あたたかさにかんけいするかんじのなかま。",
+   members:[
+    {k:"炎",r:"ほのお",g:"もえるほのお"},
+    {k:"灯",r:"あかり",g:"ひのあかり"},
+    {k:"焼",r:"やく",g:"ひでやく"},
+    {k:"燃",r:"もえる",g:"ひがもえる"},
+    {k:"炭",r:"すみ",g:"やいたすみ"},
+    {k:"熱",r:"あつい",g:"ひのあつさ"},
+    {k:"煙",r:"けむり",g:"ひのけむり"},
+    {k:"照",r:"てらす",g:"ひかりでてらす"},
+    {k:"烏",r:"からす",g:"くろいとり"},
+    {k:"火",r:"ひ",g:"ひそのもの"},
+    {k:"秋",r:"あき",g:"ひがてるあき"},
+    {k:"災",r:"わざわい",g:"ひのわざわい"},
+    {k:"炒",r:"いためる",g:"ひでいためる"},
+  ]},
+  {k:"草",color:"#55A300",name:"くさかんむり",yomi:"くさ、そう",meaning:"くさがはえているかたち（うえにつく）。はな・くさ・やさいのなかまのかんじ。",
+   members:[
+    {k:"花",r:"はな",g:"きれいなはな"},
+    {k:"葉",r:"は",g:"みどりのは"},
+    {k:"草",r:"くさ",g:"のはらのくさ"},
+    {k:"茶",r:"ちゃ",g:"おちゃのき"},
+    {k:"芽",r:"め",g:"でてきたばかりのめ"},
+    {k:"薬",r:"くすり",g:"くさからつくるくすり"},
+    {k:"菜",r:"な",g:"やさいのな"},
+    {k:"苺",r:"いちご",g:"いちごのくだもの"},
+    {k:"蓮",r:"はす",g:"いけのはす"},
+    {k:"藤",r:"ふじ",g:"ふじのはな"},
+    {k:"芸",r:"げい",g:"わざをみがく"},
+    {k:"英",r:"えい",g:"はなのはなびら"},
+    {k:"若",r:"わかい",g:"わかいくさ"},
+  ]},
+  {k:"口",color:"#E86020",name:"くち・くちへん",yomi:"くち、こう",meaning:"くちのかたち。はなす・よぶ・たべるにかんけいするかんじのなかま。",
+   members:[
+    {k:"叫",r:"さけぶ",g:"おおきなこえでさけぶ"},
+    {k:"唄",r:"うた",g:"くちでうたう"},
+    {k:"味",r:"あじ",g:"くちでかんじるあじ"},
+    {k:"唇",r:"くちびる",g:"くちのまわり"},
+    {k:"鳴",r:"なく",g:"とりがなく"},
+    {k:"吹",r:"ふく",g:"くちからふく"},
+    {k:"歌",r:"うた",g:"うたをうたう"},
+    {k:"話",r:"はなす",g:"くちではなす"},
+    {k:"読",r:"よむ",g:"こえをだしてよむ"},
+    {k:"号",r:"ごう",g:"おおきなこえ"},
+    {k:"命",r:"いのち",g:"くちからでるいのちのことば"},
+    {k:"合",r:"あう",g:"くちがあわさる"},
+    {k:"吸",r:"すう",g:"いきをすう"},
+  ]},
+  {k:"日",color:"#FFB800",name:"ひ・にちへん",yomi:"ひ、にち、じつ",meaning:"たいようのかたち。ひかり・じかん・てんきにかんけいするかんじのなかま。",
+   members:[
+    {k:"明",r:"あかるい",g:"ひとつきであかるい"},
+    {k:"晴",r:"はれ",g:"ひがてるはれ"},
+    {k:"時",r:"とき",g:"じかんのながれ"},
+    {k:"昼",r:"ひる",g:"たいようがたかいひる"},
+    {k:"暗",r:"くらい",g:"ひがないくらさ"},
+    {k:"春",r:"はる",g:"あたたかいはる"},
+    {k:"夏",r:"なつ",g:"あつくひがながいなつ"},
+    {k:"昨",r:"さく",g:"きのうのこと"},
+    {k:"映",r:"うつる",g:"ひかりでうつる"},
+    {k:"暑",r:"あつい",g:"なつのあつさ"},
+    {k:"早",r:"はやい",g:"ひがでてすぐ"},
+    {k:"旅",r:"たび",g:"たびにでかける"},
+    {k:"星",r:"ほし",g:"よるのほし"},
+  ]},
+];
+
+let curIdx=0;
+let selKanji=null;
+
+function init(){
+  const tabs=document.getElementById("bushu-tabs");
+  tabs.innerHTML=BUSHU.map((b,i)=>`
+    <button class="bt${i===0?" active":""}" id="bt-${i}" onclick="selectBushu(${i})">
+      <span class="bt-dot" style="background:${b.color}"></span>${b.k}（${b.name}）
+    </button>`).join("");
+  renderPanel();
+}
+
+function selectBushu(i){
+  curIdx=i; selKanji=null;
+  document.querySelectorAll(".bt").forEach((b,j)=>{
+    b.classList.toggle("active",j===i);
+    b.style.background=j===i?BUSHU[i].color:"";
+    b.style.color=j===i?"#fff":"";
+  });
+  renderPanel();
+  updateQuizSelect();
+}
+
+function renderPanel(){
+  const b=BUSHU[curIdx];
+  document.getElementById("big-k").textContent=b.k;
+  document.getElementById("big-k").style.background=b.color;
+  document.getElementById("p-name").textContent="「"+b.k+"」"+b.name;
+  document.getElementById("p-yomi").textContent="よみかた："+b.yomi;
+  document.getElementById("p-meaning").textContent=b.meaning;
+  const cnt=document.getElementById("p-count");
+  cnt.textContent=b.members.length+"こ　のなかま";
+  cnt.style.background=b.color+"22";
+  cnt.style.color=b.color;
+  const grid=document.getElementById("kanji-grid");
+  grid.innerHTML=b.members.map((m,i)=>`
+    <div class="kc" style="background:${b.color}" onclick="showDetail(${i})" title="${m.k}">
+      <span class="k">${m.k}</span>
+      <span class="r">${m.r}</span>
+    </div>`).join("");
+  document.getElementById("detail-box").textContent="かんじをクリックしてみよう！";
+}
+
+function showDetail(i){
+  const b=BUSHU[curIdx];
+  const m=b.members[i];
+  selKanji=m;
+  document.getElementById("detail-box").innerHTML=
+    `<span style="font-size:28px;font-family:serif;color:${b.color};margin-right:8px">${m.k}</span>`+
+    `<strong style="color:var(--color-text-primary)">${m.r}</strong>　`+
+    `<span>${m.g}</span>`;
+}
+
+function updateQuizSelect(){
+  const b=BUSHU[curIdx];
+  const sel=document.getElementById("q-kanji");
+  sel.innerHTML=b.members.map(m=>`<option value="${m.k}">${m.k}（${m.r}）</option>`).join("");
+}
+
+function makeQuiz(){
+  const b=BUSHU[curIdx];
+  const type=document.getElementById("q-type").value;
+  const kval=document.getElementById("q-kanji").value;
+  const m=b.members.find(x=>x.k===kval)||b.members[0];
+  const preview=document.getElementById("quiz-preview");
+  const qEl=document.getElementById("quiz-q");
+  const choicesEl=document.getElementById("quiz-choices");
+  const ansEl=document.getElementById("quiz-ans");
+  preview.style.display="block";
+  ansEl.textContent="";
+
+  if(type==="bushu"){
+    qEl.textContent="「"+m.k+"」の　ぶしゅは　どれ？";
+    const others=BUSHU.filter(x=>x.k!==b.k);
+    const wrong=shuffle(others).slice(0,3).map(x=>({label:x.k,ok:false}));
+    const choices=shuffle([{label:b.k,ok:true},...wrong]);
+    choicesEl.innerHTML=choices.map((c,i)=>`
+      <button class="qch" onclick="answerQuiz(${i},${c.ok},this,'${b.k}のなかまだから　せいかい！')">${c.label}</button>`).join("");
+  } else if(type==="read"){
+    qEl.textContent="「"+m.k+"」の　よみかたは？";
+    const others=b.members.filter(x=>x.k!==m.k);
+    const wrong=shuffle(others).slice(0,3).map(x=>({label:x.r,ok:false}));
+    const choices=shuffle([{label:m.r,ok:true},...wrong]);
+    choicesEl.innerHTML=choices.map((c,i)=>`
+      <button class="qch" onclick="answerQuiz(${i},${c.ok},this,'「${m.k}」は　「${m.r}」とよみます！')">${c.label}</button>`).join("");
+  } else {
+    qEl.textContent="「"+b.k+"（"+b.name+"）」の　なかまは　どれ？";
+    const wrongBushu=shuffle(BUSHU.filter(x=>x.k!==b.k)).slice(0,3);
+    const wrongK=wrongBushu.map(wb=>shuffle(wb.members)[0]);
+    const correctK=shuffle(b.members)[0];
+    const choices=shuffle([{label:correctK.k,ok:true},...wrongK.map(x=>({label:x.k,ok:false}))]);
+    choicesEl.innerHTML=choices.map((c,i)=>`
+      <button class="qch" onclick="answerQuiz(${i},${c.ok},this,'「${correctK.k}」は　「${b.k}」のなかまです！')">${c.label}</button>`).join("");
+  }
+}
+
+function answerQuiz(i,ok,el,msg){
+  document.querySelectorAll(".qch").forEach(b=>b.disabled=true);
+  el.classList.add(ok?"ok":"ng");
+  if(!ok){document.querySelectorAll(".qch").forEach(b=>{if(b.textContent===msg.split("「")[1]?.split("」")[0]) b.classList.add("ok")});}
+  document.getElementById("quiz-ans").textContent=(ok?"⭕ せいかい！　":"❌ ざんねん！　")+msg;
+}
+
+function shuffle(a){return a.slice().sort(()=>Math.random()-0.5)}
+
+init();
+updateQuizSelect();
+</script>
