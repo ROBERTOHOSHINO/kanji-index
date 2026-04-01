@@ -1,0 +1,163 @@
+
+<style>
+  canvas { display: block; }
+  #info { font-size: 12px; color: var(--color-text-secondary); font-family: var(--font-mono); margin-top: 8px; }
+  #controls { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; margin-bottom: 12px; }
+  #controls label { font-size: 13px; color: var(--color-text-secondary); }
+  #controls input[type=range] { width: 100px; }
+  #controls span { font-size: 13px; font-weight: 500; min-width: 32px; }
+  #title-bar { font-family: var(--font-mono); font-size: 11px; color: var(--color-text-tertiary); margin-bottom: 12px; letter-spacing: 0.05em; }
+</style>
+
+<div style="padding: 1rem 0;">
+  <div id="title-bar">future-ledger-sphere-prototype / v1982.0</div>
+  <div id="controls">
+    <label>回転速度</label>
+    <input type="range" id="speed" min="1" max="10" value="3" step="1">
+    <span id="speed-out">3</span>
+    <label>点の密度</label>
+    <input type="range" id="density" min="200" max="1200" value="600" step="100">
+    <span id="density-out">600</span>
+  </div>
+  <canvas id="c" style="width:100%; border-radius: var(--border-radius-md);"></canvas>
+  <div id="info">// rotating sphere — 3D projection via cos/sin — 1982 algorithm</div>
+</div>
+
+<script>
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+
+function resize() {
+  const w = canvas.parentElement.clientWidth || 600;
+  canvas.width = w;
+  canvas.height = Math.min(w, 480);
+}
+resize();
+
+const speedSlider = document.getElementById('speed');
+const densitySlider = document.getElementById('density');
+const speedOut = document.getElementById('speed-out');
+const densityOut = document.getElementById('density-out');
+
+speedSlider.addEventListener('input', () => { speedOut.textContent = speedSlider.value; });
+densitySlider.addEventListener('input', () => {
+  densityOut.textContent = densitySlider.value;
+  buildPoints();
+});
+
+let points = [];
+const R = 1.0;
+
+function buildPoints() {
+  points = [];
+  const N = parseInt(densitySlider.value);
+  // Fibonacci sphere for even distribution
+  const phi = Math.PI * (3 - Math.sqrt(5));
+  for (let i = 0; i < N; i++) {
+    const y = 1 - (i / (N - 1)) * 2;
+    const r = Math.sqrt(1 - y * y);
+    const theta = phi * i;
+    points.push({ x: Math.cos(theta) * r, y: y, z: Math.sin(theta) * r });
+  }
+}
+buildPoints();
+
+let angle = 0;
+let frame = 0;
+
+function lerp(a, b, t) { return a + (b - a) * t; }
+
+function draw() {
+  const W = canvas.width;
+  const H = canvas.height;
+  const cx = W / 2;
+  const cy = H / 2;
+  const scale = Math.min(W, H) * 0.38;
+
+  // dark background
+  ctx.fillStyle = '#06090f';
+  ctx.fillRect(0, 0, W, H);
+
+  // subtle grid lines (retro feel)
+  ctx.strokeStyle = 'rgba(30,60,90,0.4)';
+  ctx.lineWidth = 0.5;
+  const step = Math.round(scale * 0.5);
+  for (let x = cx % step; x < W; x += step) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke(); }
+  for (let y = cy % step; y < H; y += step) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
+
+  const speed = parseFloat(speedSlider.value);
+  angle += speed * 0.003;
+
+  // sort by z for painter's algorithm
+  const cos = Math.cos(angle);
+  const sin = Math.sin(angle);
+
+  const projected = points.map((p) => {
+    const rx = p.x * cos - p.z * sin;
+    const rz = p.x * sin + p.z * cos;
+    const ry = p.y;
+    const z = rz;
+    const sx = cx + rx * scale;
+    const sy = cy - ry * scale;
+    return { sx, sy, z, ry, rx };
+  });
+
+  projected.sort((a, b) => a.z - b.z);
+
+  // traveling yellow "comet" point — moves along a great circle
+  frame++;
+  const cometT = (frame * speed * 0.008) % (Math.PI * 2);
+  const cometX3 = Math.cos(cometT);
+  const cometY3 = Math.sin(cometT * 0.7);
+  const cometZ3 = Math.sin(cometT);
+  const crx = cometX3 * cos - cometZ3 * sin;
+  const crz = cometX3 * sin + cometZ3 * cos;
+  const csx = cx + crx * scale;
+  const csy = cy - cometY3 * scale;
+
+  projected.forEach((p) => {
+    const depth = (p.z + 1) / 2; // 0..1
+    const brightness = 0.15 + depth * 0.7;
+
+    // distance from comet
+    const dx = p.sx - csx;
+    const dy = p.sy - csy;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    const influence = Math.max(0, 1 - dist / (scale * 0.35));
+
+    // interpolate blue → yellow
+    const r = Math.round(lerp(20 + brightness * 30, 255, influence));
+    const g = Math.round(lerp(80 + brightness * 80, 220, influence * 0.9));
+    const b = Math.round(lerp(180 + brightness * 60, 20, influence));
+    const alpha = 0.25 + brightness * 0.65;
+
+    const dotSize = 1.2 + depth * 1.8 + influence * 2.5;
+
+    ctx.beginPath();
+    ctx.arc(p.sx, p.sy, dotSize, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(${r},${g},${b},${alpha})`;
+    ctx.fill();
+  });
+
+  // draw comet glow
+  const grad = ctx.createRadialGradient(csx, csy, 0, csx, csy, scale * 0.08);
+  grad.addColorStop(0, 'rgba(255,230,60,0.9)');
+  grad.addColorStop(0.4, 'rgba(255,180,20,0.3)');
+  grad.addColorStop(1, 'rgba(255,140,0,0)');
+  ctx.beginPath();
+  ctx.arc(csx, csy, scale * 0.08, 0, Math.PI * 2);
+  ctx.fillStyle = grad;
+  ctx.fill();
+
+  // comet core
+  ctx.beginPath();
+  ctx.arc(csx, csy, 3, 0, Math.PI * 2);
+  ctx.fillStyle = '#fff8a0';
+  ctx.fill();
+
+  requestAnimationFrame(draw);
+}
+
+draw();
+window.addEventListener('resize', () => { resize(); });
+</script>
