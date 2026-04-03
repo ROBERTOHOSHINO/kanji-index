@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>天然色漢字INDEX™ — CAMPFIRE プロジェクトストーリー</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;500;700&family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #1a1814;
+  --ink2: #4a4740;
+  --ink3: #8a8880;
+  --paper: #faf8f3;
+  --paper2: #f3f0e8;
+  --paper3: #ebe7dc;
+  --teal: #1D9E75;
+  --teal-l: #E1F5EE;
+  --amber: #BA7517;
+  --amber-l: #FAEEDA;
+  --blue: #185FA5;
+  --blue-l: #E6F1FB;
+  --coral: #993C1D;
+  --coral-l: #FAECE7;
+  --purple: #534AB7;
+  --border: rgba(60,55,40,0.12);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.8;
+}
+ruby rt {
+  font-size: 0.5em;
+  color: var(--ink3);
+  letter-spacing: 0.05em;
+}
+
+/* ── NAV ── */
+.nav {
+  position: sticky; top: 0; z-index: 100;
+  background: var(--paper);
+  border-bottom: 0.5px solid var(--border);
+  padding: 0 2rem;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 52px;
+}
+.nav-logo { font-family: 'Noto Serif JP', serif; font-size: 13px; font-weight: 500; letter-spacing: 0.5px; color: var(--ink); }
+.nav-note { font-size: 11px; color: var(--ink3); }
+
+/* ── HERO ── */
+.hero {
+  max-width: 680px; margin: 0 auto;
+  padding: 5rem 2rem 3rem;
+  position: relative;
+}
+.hero-ripple {
+  position: absolute; top: 3rem; right: -2rem;
+  width: 260px; height: 260px;
+  pointer-events: none; opacity: 0.18;
+}
+.hero-eyebrow {
+  font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--ink3); margin-bottom: 1.5rem;
+}
+.hero-title {
+  font-family: 'Noto Serif JP', serif;
+  font-size: clamp(26px, 5vw, 38px);
+  font-weight: 300;
+  line-height: 1.5;
+  letter-spacing: 0.03em;
+  color: var(--ink);
+  margin-bottom: 1.5rem;
+}
+.hero-title em {
+  font-style: normal;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--teal) 0%, var(--blue) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero-lead {
+  font-size: 15px; color: var(--ink2); line-height: 1.9;
+  border-left: 2px solid var(--teal);
+  padding-left: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+/* ── WAVE DIVIDER ── */
+.wave-sep { text-align: center; margin: 2.5rem 0; color: var(--ink3); font-size: 18px; letter-spacing: 8px; }
+
+/* ── STORY SECTIONS ── */
+.story { max-width: 680px; margin: 0 auto; padding: 0 2rem; }
+
+.story-block { margin-bottom: 3rem; }
+.story-label {
+  font-size: 10px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--ink3); margin-bottom: 1rem;
+  display: flex; align-items: center; gap: 10px;
+}
+.story-label::after { content: ''; flex: 1; height: 0.5px; background: var(--border); }
+
+.story-h2 {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 20px; font-weight: 500;
+  line-height: 1.6; margin-bottom: 1rem;
+  color: var(--ink);
+}
+.story-p {
+  font-size: 14px; color: var(--ink2);
+  line-height: 2.0; margin-bottom: 1rem;
+}
+
+/* ── SCENE CARD ── */
+.scene-card {
+  background: var(--paper2);
+  border: 0.5px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  position: relative;
+  overflow: hidden;
+}
+.scene-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+}
+.scene-card.teal::before { background: var(--teal); }
+.scene-card.amber::before { background: var(--amber); }
+.scene-card.blue::before { background: var(--blue); }
+.scene-card.coral::before { background: var(--coral); }
+.scene-quote {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 15px; font-weight: 400;
+  line-height: 2.0; color: var(--ink);
+  margin-bottom: 0.75rem;
+}
+.scene-who {
+  font-size: 11px; color: var(--ink3);
+  display: flex; align-items: center; gap: 6px;
+}
+.scene-who::before { content: '—'; }
+
+/* ── COLOR TAGS ── */
+.color-tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 1rem 0; }
+.ctag {
+  font-size: 12px; padding: 4px 12px; border-radius: 20px;
+  border: 0.5px solid; display: inline-flex; align-items: center; gap: 5px;
+}
+.ctag-dot { width: 6px; height: 6px; border-radius: 50%; }
+
+/* ── WHO GRID ── */
+.who-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin: 1.5rem 0; }
+.who-card {
+  background: var(--paper2);
+  border: 0.5px solid var(--border);
+  border-radius: 10px;
+  padding: 1rem 1.1rem;
+}
+.who-role { font-size: 11px; color: var(--ink3); margin-bottom: 4px; }
+.who-name { font-size: 13px; font-weight: 500; margin-bottom: 5px; }
+.who-thought { font-size: 12px; color: var(--ink2); line-height: 1.65; }
+
+/* ── RIPPLE VISUAL ── */
+.ripple-visual { text-align: center; padding: 2rem 0; }
+.ripple-svg { width: 100%; max-width: 320px; }
+
+/* ── RETURN TIERS ── */
+.tier-list { display: flex; flex-direction: column; gap: 6px; margin: 1rem 0; }
+.tier-item {
+  display: flex; align-items: flex-start; gap: 12px;
+  background: var(--paper2); border: 0.5px solid var(--border);
+  border-radius: 8px; padding: 0.875rem 1rem;
+}
+.tier-amount { font-size: 13px; font-weight: 500; min-width: 72px; color: var(--ink); }
+.tier-desc { font-size: 12px; color: var(--ink2); line-height: 1.6; }
+.tier-key { font-weight: 500; color: var(--ink); }
+
+/* ── CTA ── */
+.cta-block {
+  background: var(--ink);
+  border-radius: 14px;
+  padding: 2.5rem 2rem;
+  text-align: center;
+  margin: 2rem 0 3rem;
+}
+.cta-title {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 20px; font-weight: 400;
+  color: var(--paper); margin-bottom: 0.75rem; line-height: 1.7;
+}
+.cta-sub { font-size: 13px; color: var(--paper3); margin-bottom: 1.5rem; line-height: 1.8; }
+.cta-btn {
+  display: inline-block;
+  background: var(--teal);
+  color: white; font-size: 14px; font-weight: 500;
+  padding: 12px 32px; border-radius: 8px;
+  letter-spacing: 0.5px;
+  transition: opacity 0.15s;
+  text-decoration: none;
+}
+.cta-btn:hover { opacity: 0.85; }
+
+/* ── FOOTER ── */
+.footer {
+  text-align: center; padding: 2rem;
+  font-size: 11px; color: var(--ink3);
+  border-top: 0.5px solid var(--border);
+  max-width: 680px; margin: 0 auto;
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.hero { animation: fadeUp 0.7s ease both; }
+.story-block { animation: fadeUp 0.5s ease both; }
+.story-block:nth-child(2) { animation-delay: 0.05s; }
+.story-block:nth-child(3) { animation-delay: 0.1s; }
+.story-block:nth-child(4) { animation-delay: 0.15s; }
+.story-block:nth-child(5) { animation-delay: 0.2s; }
+
+@media (max-width: 560px) {
+  .who-grid { grid-template-columns: 1fr; }
+  .hero-ripple { display: none; }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <span class="nav-logo">天然色漢字INDEX™</span>
+  <span class="nav-note">CAMPFIRE プロジェクトストーリー（草稿）</span>
+</nav>
+
+<!-- ── HERO ── -->
+<div class="hero">
+
+  <!-- さざ波 SVG（背景装飾） -->
+  <svg class="hero-ripple" viewBox="0 0 260 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="130" cy="130" r="30"  stroke="#1D9E75" stroke-width="0.8" opacity="0.9"/>
+    <circle cx="130" cy="130" r="55"  stroke="#1D9E75" stroke-width="0.6" opacity="0.65"/>
+    <circle cx="130" cy="130" r="82"  stroke="#185FA5" stroke-width="0.5" opacity="0.45"/>
+    <circle cx="130" cy="130" r="110" stroke="#185FA5" stroke-width="0.4" opacity="0.3"/>
+    <circle cx="130" cy="130" r="140" stroke="#534AB7" stroke-width="0.3" opacity="0.18"/>
+  </svg>
+
+  <p class="hero-eyebrow">DUNKSOFT Co., Ltd. — CAMPFIRE 2026</p>
+
+  <h1 class="hero-title">
+    一冊の本に<ruby>関<rt>かか</rt></ruby>わった<br>
+    すべての人の<ruby>思<rt>おも</rt></ruby>いを、<br>
+    <em>色と漢字で未来へ。</em>
+  </h1>
+
+  <p class="hero-lead">
+    著者、<ruby>編集者<rt>へんしゅうしゃ</rt></ruby>、書店員、POPを書いた人。<br>
+    一冊の本には、<ruby>数<rt>かず</rt></ruby>えきれないほどの「思い」が宿っています。<br>
+    その思いに、色をつけて残す<ruby>場所<rt>ばしょ</rt></ruby>をつくりたいのです。
+  </p>
+
+</div>
+
+<!-- ── STORY ── -->
+<div class="story">
+
+  <!-- 01 きっかけ -->
+  <div class="story-block">
+    <p class="story-label">01 — きっかけ</p>
+    <h2 class="story-h2">
+      <ruby>本屋<rt>ほんや</rt></ruby>の棚の前で、<br>ふと<ruby>気<rt>き</rt></ruby>づいたこと。
+    </h2>
+    <p class="story-p">
+      書棚に<ruby>並<rt>なら</rt></ruby>ぶ本の背表紙を眺めていたとき、あることに気づきました。<br>
+      「哲学」「経済」「物語」——<ruby>同<rt>おな</rt></ruby>じ漢字でも、それが<ruby>持<rt>も</rt></ruby>つ意味と色はまったく違う。
+    </p>
+    <p class="story-p">
+      漢字を<ruby>構成<rt>こうせい</rt></ruby>する「<ruby>部首<rt>ぶしゅ</rt></ruby>」には、もともと意味のカテゴリーがあります。
+      「水」の<ruby>部首<rt>ぶしゅ</rt></ruby>を持つ漢字は<ruby>青<rt>あお</rt></ruby>に近く、「火」は<ruby>赤<rt>あか</rt></ruby>に近い。
+      「木」は<ruby>緑<rt>みどり</rt></ruby>、「金」は<ruby>黄金色<rt>こがねいろ</rt></ruby>。
+    </p>
+    <p class="story-p">
+      この<ruby>発見<rt>はっけん</rt></ruby>から、<strong>天然色漢字INDEX™</strong>は生まれました。
+      本のタイトルや著者名に使われている漢字を部首で分類し、
+      その本が持つ「固有の色」を可視化するシステムです。
+    </p>
+
+    <div class="color-tags">
+      <span class="ctag" style="background:#E1F5EE;color:#085041;border-color:#1D9E75">
+        <span class="ctag-dot" style="background:#1D9E75"></span>
+        <ruby>水<rt>みず</rt></ruby>・<ruby>木<rt>き</rt></ruby>の部首 → 緑・青
+      </span>
+      <span class="ctag" style="background:#FAECE7;color:#4A1B0C;border-color:#993C1D">
+        <span class="ctag-dot" style="background:#993C1D"></span>
+        <ruby>火<rt>ひ</rt></ruby>・<ruby>心<rt>こころ</rt></ruby>の部首 → 赤・珊瑚
+      </span>
+      <span class="ctag" style="background:#FAEEDA;color:#412402;border-color:#BA7517">
+        <span class="ctag-dot" style="background:#BA7517"></span>
+        <ruby>金<rt>かね</rt></ruby>・<ruby>土<rt>つち</rt></ruby>の部首 → 琥珀・黄金
+      </span>
+      <span class="ctag" style="background:#EEEDFE;color:#26215C;border-color:#534AB7">
+        <span class="ctag-dot" style="background:#534AB7"></span>
+        <ruby>言<rt>こと</rt></ruby>・<ruby>人<rt>ひと</rt></ruby>の部首 → 紫・藍
+      </span>
+    </div>
+  </div>
+
+  <div class="wave-sep">〜 〜 〜</div>
+
+  <!-- 02 本に関わる人たちへ -->
+  <div class="story-block">
+    <p class="story-label">02 — 本に関わるすべての人へ</p>
+    <h2 class="story-h2">
+      あなたの「この本への<ruby>思<rt>おも</rt></ruby>い」を、<br>
+      未来の<ruby>誰<rt>だれ</rt></ruby>かへ。
+    </h2>
+    <p class="story-p">
+      一冊の本が生まれるまでに、どれほど多くの人が関わっているか——
+      著者だけではありません。<ruby>何度<rt>なんど</rt></ruby>も原稿を読み返した<ruby>担当編集者<rt>たんとうへんしゅうしゃ</rt></ruby>、
+      どの棚に<ruby>置<rt>お</rt></ruby>くか悩んだ書店員、
+      手書きのPOPに思いを込めた<ruby>販促<rt>はんそく</rt></ruby>担当者。
+    </p>
+    <p class="story-p">
+      天然色漢字INDEXは、そのすべての人が「この本への思い」を漢字と色で記録し、
+      未来へ伝えていける場所にしたいと<ruby>考<rt>かんが</rt></ruby>えています。
+    </p>
+
+    <!-- シーンカード群 -->
+    <div class="scene-card teal">
+      <p class="scene-quote">
+        「10年かけて書いた。<ruby>登場人物<rt>とうじょうじんぶつ</rt></ruby>の名前に使った漢字には、
+        ぜんぶ理由がある。その色を、誰かに知ってほしかった。」
+      </p>
+      <span class="scene-who"><ruby>著者<rt>ちょしゃ</rt></ruby>・小説家</span>
+    </div>
+
+    <div class="scene-card amber">
+      <p class="scene-quote">
+        「タイトルを決めるのに半年かかった。
+        あの漢字を<ruby>選<rt>えら</rt></ruby>んだ理由を、いつかちゃんと残しておきたかった。」
+      </p>
+      <span class="scene-who"><ruby>編集者<rt>へんしゅうしゃ</rt></ruby>・大手出版社</span>
+    </div>
+
+    <div class="scene-card blue">
+      <p class="scene-quote">
+        「毎日この棚の前でお客さんと話す。
+        この本の隣に置く本を決めるのが、私の仕事の醍醐味なんです。」
+      </p>
+      <span class="scene-who">書店員・人文書フロア</span>
+    </div>
+
+    <div class="scene-card coral">
+      <p class="scene-quote">
+        「POPは50文字しか書けない。
+        でもあの50文字に、この本のすべてを込めた。」
+      </p>
+      <span class="scene-who">書店<ruby>販促<rt>はんそく</rt></ruby>担当</span>
+    </div>
+  </div>
+
+  <div class="wave-sep">〜 〜 〜</div>
+
+  <!-- 03 コミュニティ -->
+  <div class="story-block">
+    <p class="story-label">03 — コミュニティの姿</p>
+    <h2 class="story-h2">
+      さざ波のように、<br>
+      <ruby>広<rt>ひろ</rt></ruby>がっていく場所。
+    </h2>
+    <p class="story-p">
+      一冊の本を<ruby>起点<rt>きてん</rt></ruby>に、関わった人全員がつながる。
+      著者の思いが編集者へ、編集者の思いが書店員へ、書店員の思いが読者へ——
+      さざ波のように、静かに、でも確かに広がっていく。
+    </p>
+
+    <!-- さざ波ビジュアル -->
+    <div class="ripple-visual">
+      <svg class="ripple-svg" viewBox="0 0 320 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- 中心：本 -->
+        <rect x="142" y="90" width="36" height="46" rx="3" fill="#1D9E75" opacity="0.9"/>
+        <text x="160" y="117" text-anchor="middle" font-family="'Noto Serif JP',serif" font-size="11" fill="white" font-weight="500">本</text>
+
+        <!-- さざ波 -->
+        <ellipse cx="160" cy="113" rx="42" ry="28" stroke="#1D9E75" stroke-width="0.8" stroke-dasharray="2 3" opacity="0.7"/>
+        <ellipse cx="160" cy="113" rx="68" ry="44" stroke="#185FA5" stroke-width="0.6" stroke-dasharray="2 4" opacity="0.5"/>
+        <ellipse cx="160" cy="113" rx="96" ry="60" stroke="#534AB7" stroke-width="0.5" stroke-dasharray="2 5" opacity="0.35"/>
+        <ellipse cx="160" cy="113" rx="128" ry="78" stroke="#BA7517" stroke-width="0.4" stroke-dasharray="2 6" opacity="0.22"/>
+
+        <!-- ラベル -->
+        <text x="160" y="62" text-anchor="middle" font-family="'Noto Sans JP',sans-serif" font-size="10" fill="#0F6E56"><ruby>著者<rt></rt></ruby>著者</text>
+        <text x="252" y="80" text-anchor="start"  font-family="'Noto Sans JP',sans-serif" font-size="10" fill="#0C447C">編集者</text>
+        <text x="252" y="148" text-anchor="start" font-family="'Noto Sans JP',sans-serif" font-size="10" fill="#3C3489">書店員</text>
+        <text x="160" y="172" text-anchor="middle" font-family="'Noto Sans JP',sans-serif" font-size="10" fill="#633806">読者</text>
+        <text x="40"  y="148" text-anchor="end"   font-family="'Noto Sans JP',sans-serif" font-size="10" fill="#712B13">海外</text>
+        <text x="40"  y="80"  text-anchor="end"   font-family="'Noto Sans JP',sans-serif" font-size="10" fill="#444441">図書館</text>
+
+        <!-- 点 -->
+        <circle cx="160" cy="66" r="3" fill="#1D9E75" opacity="0.8"/>
+        <circle cx="248" cy="82" r="3" fill="#185FA5" opacity="0.7"/>
+        <circle cx="248" cy="144" r="3" fill="#534AB7" opacity="0.7"/>
+        <circle cx="160" cy="165" r="3" fill="#BA7517" opacity="0.7"/>
+        <circle cx="44" cy="144" r="3" fill="#993C1D" opacity="0.7"/>
+        <circle cx="44" cy="82" r="3" fill="#888780" opacity="0.6"/>
+      </svg>
+    </div>
+
+    <p class="story-p">
+      ふりがな（ルビ）があるから、小学生にも届く。<br>
+      英語・中国語の注釈があるから、海外の読者にも届く。<br>
+      一冊の本が持つ「漢字の色」が、<ruby>国境<rt>こっきょう</rt></ruby>を越えて伝わる。
+    </p>
+
+    <div class="who-grid">
+      <div class="who-card">
+        <div class="who-role">著者</div>
+        <div class="who-name"><ruby>書き手<rt>かきて</rt></ruby>の意図を色で残す</div>
+        <div class="who-thought">タイトルに込めた漢字の意味、登場人物の名前の由来。作家本人にしか語れない「この本の色」を記録する。</div>
+      </div>
+      <div class="who-card">
+        <div class="who-role"><ruby>編集者<rt>へんしゅうしゃ</rt></ruby></div>
+        <div class="who-name">生みの苦しみを<ruby>未来<rt>みらい</rt></ruby>に</div>
+        <div class="who-thought">タイトル選定の葛藤、カバーデザインの言葉選び。本が完成するまでの「編集の色」を残す。</div>
+      </div>
+      <div class="who-card">
+        <div class="who-role">書店員</div>
+        <div class="who-name">棚づくりの哲学を語る</div>
+        <div class="who-thought">なぜこの本の隣にあの本を置いたのか。書店員の「選書の色」が次の読者への道案内になる。</div>
+      </div>
+      <div class="who-card">
+        <div class="who-role">POP<ruby>作成者<rt>さくせいしゃ</rt></ruby></div>
+        <div class="who-name">50文字に込めた思いを</div>
+        <div class="who-thought">手書きのPOP、フェアの<ruby>企画書<rt>きかくしょ</rt></ruby>。店頭から消えてしまう「その瞬間の言葉」を記録する。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wave-sep">〜 〜 〜</div>
+
+  <!-- 04 支援のお返し -->
+  <div class="story-block">
+    <p class="story-label">04 — 支援してくださる方へ</p>
+    <h2 class="story-h2">
+      あなたの本棚にも、<br>
+      固有の色がある。
+    </h2>
+    <p class="story-p">
+      このプロジェクトへの参加は、新しい「本との関わり方」の始まりです。
+      支援者の方には、そのお返しとして次のリターンをご用意しています。
+    </p>
+
+    <div class="tier-list">
+      <div class="tier-item">
+        <span class="tier-amount">¥1,000</span>
+        <span class="tier-desc"><span class="tier-key">応援コース：</span>プロジェクト進捗レポート＋世界観解説動画（限定）</span>
+      </div>
+      <div class="tier-item">
+        <span class="tier-amount">¥5,000</span>
+        <span class="tier-desc"><span class="tier-key">★ 本棚の色コース：</span>あなたが選んだ本3冊を天然色漢字INDEXに登録。「あなたの本棚の漢字色マップ」PDF（SNS投稿用）をお届け</span>
+      </div>
+      <div class="tier-item">
+        <span class="tier-amount">¥10,000</span>
+        <span class="tier-desc"><span class="tier-key">VICKEYこどもNISAコース：</span>子ども向け金融教育デジタル教材セット＋保護者向けガイド＋オンライン説明会招待</span>
+      </div>
+      <div class="tier-item">
+        <span class="tier-amount">¥30,000</span>
+        <span class="tier-desc"><span class="tier-key">名誉支援者コース：</span>お名前・肩書きをINDEXサイトに永久掲載。あなたのお名前を漢字INDEXした特製証書PDF</span>
+      </div>
+      <div class="tier-item">
+        <span class="tier-amount">¥100,000〜</span>
+        <span class="tier-desc"><span class="tier-key">法人・協賛パートナーコース：</span>ロゴ掲載＋正式サービス優先契約権＋「共同研究協力機関」クレジット</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-block">
+    <p class="cta-title">
+      一冊の本に宿る思いを、<br>
+      一緒に未来へ届けませんか。
+    </p>
+    <p class="cta-sub">
+      目標金額 ¥3,000,000<br>
+      CAMPFIRE にて2026年公開予定
+    </p>
+    <a href="#" class="cta-btn">プロジェクトを支援する →</a>
+  </div>
+
+</div><!-- /story -->
+
+<div class="footer">
+  <p>天然色漢字INDEX™ · COLORFUL KANJI INDEX® · DUNKSOFT Co., Ltd. 株式会社ダンクソフト</p>
+  <p style="margin-top:4px;">© 2026 DUNKSOFT Co., Ltd. — CAMPFIRE プロジェクトストーリー 草稿</p>
+</div>
+
+</body>
+</html>
