@@ -1,26 +1,42 @@
-
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>future-ledger-sphere-prototype</title>
 <style>
-  canvas { display: block; }
-  #info { font-size: 12px; color: var(--color-text-secondary); font-family: var(--font-mono); margin-top: 8px; }
-  #controls { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; margin-bottom: 12px; }
-  #controls label { font-size: 13px; color: var(--color-text-secondary); }
-  #controls input[type=range] { width: 100px; }
-  #controls span { font-size: 13px; font-weight: 500; min-width: 32px; }
-  #title-bar { font-family: var(--font-mono); font-size: 11px; color: var(--color-text-tertiary); margin-bottom: 12px; letter-spacing: 0.05em; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #04080f; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; font-family: monospace; }
+#wrap { width: min(680px, 98vw); }
+#titlebar { font-size: 11px; color: #3a5a7a; letter-spacing: 0.08em; margin-bottom: 10px; padding: 0 2px; }
+canvas { display: block; width: 100%; border-radius: 8px; }
+#controls { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; margin-top: 10px; padding: 0 2px; }
+#controls label { font-size: 11px; color: #4a7090; }
+#controls input[type=range] { width: 90px; accent-color: #4a90d0; }
+#controls span { font-size: 11px; color: #6aafcf; min-width: 28px; }
+#legend { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 10px; padding: 0 2px; }
+.leg { display: flex; align-items: center; gap: 5px; font-size: 10px; color: #4a7090; }
+.dot { width: 8px; height: 8px; border-radius: 50%; }
+#caption { font-size: 10px; color: #2a4a6a; margin-top: 8px; padding: 0 2px; letter-spacing: 0.04em; }
 </style>
-
-<div style="padding: 1rem 0;">
-  <div id="title-bar">future-ledger-sphere-prototype / v1982.0</div>
+</head>
+<body>
+<div id="wrap">
+  <div id="titlebar">future-ledger-sphere-prototype / v1982.2026 &nbsp;—&nbsp; UBIQUITOUS PLANET</div>
+  <canvas id="c"></canvas>
   <div id="controls">
-    <label>回転速度</label>
+    <label>rotation</label>
     <input type="range" id="speed" min="1" max="10" value="3" step="1">
     <span id="speed-out">3</span>
-    <label>点の密度</label>
-    <input type="range" id="density" min="200" max="1200" value="600" step="100">
-    <span id="density-out">600</span>
+    <label>density</label>
+    <input type="range" id="density" min="300" max="1400" value="700" step="100">
+    <span id="density-out">700</span>
+    <label>travelers</label>
+    <input type="range" id="ntravel" min="1" max="8" value="5" step="1">
+    <span id="ntravel-out">5</span>
   </div>
-  <canvas id="c" style="width:100%; border-radius: var(--border-radius-md);"></canvas>
-  <div id="info">// rotating sphere — 3D projection via cos/sin — 1982 algorithm</div>
+  <div id="legend"></div>
+  <div id="caption">// 1982 algorithm — cos/sin 3D→2D projection — now traveling the ubiquitous planet</div>
 </div>
 
 <script>
@@ -28,42 +44,112 @@ const canvas = document.getElementById('c');
 const ctx = canvas.getContext('2d');
 
 function resize() {
-  const w = canvas.parentElement.clientWidth || 600;
+  const w = canvas.parentElement.clientWidth || 680;
   canvas.width = w;
-  canvas.height = Math.min(w, 480);
+  canvas.height = Math.round(w * 0.72);
 }
 resize();
+window.addEventListener('resize', () => { resize(); });
 
-const speedSlider = document.getElementById('speed');
-const densitySlider = document.getElementById('density');
+const speedEl = document.getElementById('speed');
+const densityEl = document.getElementById('density');
+const ntravelEl = document.getElementById('ntravel');
 const speedOut = document.getElementById('speed-out');
 const densityOut = document.getElementById('density-out');
+const ntravelOut = document.getElementById('ntravel-out');
 
-speedSlider.addEventListener('input', () => { speedOut.textContent = speedSlider.value; });
-densitySlider.addEventListener('input', () => {
-  densityOut.textContent = densitySlider.value;
-  buildPoints();
-});
+// Traveler definitions — each a journey on the planet
+const TRAVELER_DEFS = [
+  { name: 'Tokyo',    color: [80,  200, 255], trail: [40, 160, 220] },
+  { name: 'San Francisco', color: [255, 210, 60],  trail: [200, 160, 20] },
+  { name: 'Venezia',  color: [255, 130, 80],  trail: [200, 80,  30] },
+  { name: 'Claude',   color: [160, 255, 160], trail: [80,  200, 80]  },
+  { name: 'note.com', color: [220, 120, 255], trail: [160, 60, 210]  },
+  { name: 'memory',   color: [255, 200, 200], trail: [200, 120, 120] },
+  { name: '1982',     color: [200, 240, 255], trail: [100, 180, 220] },
+  { name: 'future',   color: [255, 255, 160], trail: [210, 210, 60]  },
+];
 
 let points = [];
-const R = 1.0;
 
 function buildPoints() {
   points = [];
-  const N = parseInt(densitySlider.value);
-  // Fibonacci sphere for even distribution
+  const N = parseInt(densityEl.value);
   const phi = Math.PI * (3 - Math.sqrt(5));
   for (let i = 0; i < N; i++) {
     const y = 1 - (i / (N - 1)) * 2;
-    const r = Math.sqrt(1 - y * y);
+    const r = Math.sqrt(Math.max(0, 1 - y * y));
     const theta = phi * i;
-    points.push({ x: Math.cos(theta) * r, y: y, z: Math.sin(theta) * r });
+    points.push({ x: Math.cos(theta) * r, y, z: Math.sin(theta) * r });
   }
 }
 buildPoints();
 
+// Each traveler has an orbit axis and phase
+function makeTraveler(def, idx, total) {
+  const axisTheta = (idx / total) * Math.PI * 2;
+  const axisPhi   = (idx / total) * Math.PI * 1.3 + 0.4;
+  // orbit axis unit vector
+  const ax = Math.sin(axisPhi) * Math.cos(axisTheta);
+  const ay = Math.cos(axisPhi);
+  const az = Math.sin(axisPhi) * Math.sin(axisTheta);
+  return {
+    ...def,
+    ax, ay, az,
+    phase: (idx / total) * Math.PI * 2,
+    speed: 0.7 + idx * 0.13,
+    trailHistory: []
+  };
+}
+
+let travelers = [];
+function rebuildTravelers() {
+  const n = parseInt(ntravelEl.value);
+  travelers = TRAVELER_DEFS.slice(0, n).map((d, i) => makeTraveler(d, i, n));
+  buildLegend();
+}
+rebuildTravelers();
+
+function buildLegend() {
+  const el = document.getElementById('legend');
+  el.innerHTML = '';
+  travelers.forEach(t => {
+    const [r,g,b] = t.color;
+    el.innerHTML += `<div class="leg"><div class="dot" style="background:rgb(${r},${g},${b})"></div>${t.name}</div>`;
+  });
+}
+
+// Sliders
+speedEl.addEventListener('input', () => { speedOut.textContent = speedEl.value; });
+densityEl.addEventListener('input', () => { densityOut.textContent = densityEl.value; buildPoints(); });
+ntravelEl.addEventListener('input', () => { ntravelOut.textContent = ntravelEl.value; rebuildTravelers(); });
+
 let angle = 0;
 let frame = 0;
+
+function getTravelerPos3D(t, time) {
+  // Orbit in a great circle defined by axis (ax,ay,az)
+  // Use Rodrigues rotation to get position on sphere
+  const a = t.phase + time * t.speed * 0.012;
+  // perpendicular vectors to axis
+  // find two vectors perpendicular to (ax,ay,az)
+  const ax = t.ax, ay = t.ay, az = t.az;
+  // pick arbitrary non-parallel
+  let ux, uy, uz;
+  if (Math.abs(ax) < 0.9) { ux=0; uy=-az; uz=ay; }
+  else { ux=-az; uy=0; uz=ax; }
+  const ulen = Math.sqrt(ux*ux+uy*uy+uz*uz);
+  ux/=ulen; uy/=ulen; uz/=ulen;
+  // cross product axis × u
+  const vx = ay*uz - az*uy;
+  const vy = az*ux - ax*uz;
+  const vz = ax*uy - ay*ux;
+  return {
+    x: Math.cos(a)*ux + Math.sin(a)*vx,
+    y: Math.cos(a)*uy + Math.sin(a)*vy,
+    z: Math.cos(a)*uz + Math.sin(a)*vz
+  };
+}
 
 function lerp(a, b, t) { return a + (b - a) * t; }
 
@@ -72,92 +158,131 @@ function draw() {
   const H = canvas.height;
   const cx = W / 2;
   const cy = H / 2;
-  const scale = Math.min(W, H) * 0.38;
+  const scale = Math.min(W, H) * 0.40;
 
-  // dark background
-  ctx.fillStyle = '#06090f';
+  ctx.fillStyle = '#04080f';
   ctx.fillRect(0, 0, W, H);
 
-  // subtle grid lines (retro feel)
-  ctx.strokeStyle = 'rgba(30,60,90,0.4)';
-  ctx.lineWidth = 0.5;
-  const step = Math.round(scale * 0.5);
-  for (let x = cx % step; x < W; x += step) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke(); }
-  for (let y = cy % step; y < H; y += step) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
+  // subtle grid
+  ctx.strokeStyle = 'rgba(20,50,80,0.35)';
+  ctx.lineWidth = 0.4;
+  const step = Math.round(scale * 0.45);
+  for (let x = cx % step; x < W; x += step) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
+  for (let y = cy % step; y < H; y += step) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
 
-  const speed = parseFloat(speedSlider.value);
-  angle += speed * 0.003;
+  const spd = parseFloat(speedEl.value);
+  angle += spd * 0.003;
+  frame++;
 
-  // sort by z for painter's algorithm
-  const cos = Math.cos(angle);
-  const sin = Math.sin(angle);
+  const cosA = Math.cos(angle);
+  const sinA = Math.sin(angle);
 
-  const projected = points.map((p) => {
-    const rx = p.x * cos - p.z * sin;
-    const rz = p.x * sin + p.z * cos;
-    const ry = p.y;
-    const z = rz;
-    const sx = cx + rx * scale;
-    const sy = cy - ry * scale;
-    return { sx, sy, z, ry, rx };
+  // project point from 3D→2D with Y-axis rotation
+  function project(px, py, pz) {
+    const rx = px * cosA - pz * sinA;
+    const rz = px * sinA + pz * cosA;
+    return { sx: cx + rx * scale, sy: cy - py * scale, z: rz };
+  }
+
+  // compute traveler positions in 3D (world space, before globe rotation)
+  const travelerPos = travelers.map(t => {
+    const p3 = getTravelerPos3D(t, frame);
+    // store trail
+    t.trailHistory.push({ ...p3 });
+    if (t.trailHistory.length > 28) t.trailHistory.shift();
+    return p3;
   });
 
+  // project all sphere points
+  const projected = points.map(p => {
+    const { sx, sy, z } = project(p.x, p.y, p.z);
+    return { sx, sy, z, py: p.y };
+  });
   projected.sort((a, b) => a.z - b.z);
 
-  // traveling yellow "comet" point — moves along a great circle
-  frame++;
-  const cometT = (frame * speed * 0.008) % (Math.PI * 2);
-  const cometX3 = Math.cos(cometT);
-  const cometY3 = Math.sin(cometT * 0.7);
-  const cometZ3 = Math.sin(cometT);
-  const crx = cometX3 * cos - cometZ3 * sin;
-  const crz = cometX3 * sin + cometZ3 * cos;
-  const csx = cx + crx * scale;
-  const csy = cy - cometY3 * scale;
+  // project traveler positions (also rotate with globe)
+  const travelerProj = travelerPos.map(p => project(p.x, p.y, p.z));
+  const trailProj = travelers.map(t =>
+    t.trailHistory.map(p => project(p.x, p.y, p.z))
+  );
 
-  projected.forEach((p) => {
-    const depth = (p.z + 1) / 2; // 0..1
-    const brightness = 0.15 + depth * 0.7;
+  // draw sphere points — blend color based on proximity to any traveler
+  projected.forEach(p => {
+    const depth = (p.z + 1) / 2;
+    const brightness = 0.15 + depth * 0.72;
 
-    // distance from comet
-    const dx = p.sx - csx;
-    const dy = p.sy - csy;
-    const dist = Math.sqrt(dx * dx + dy * dy);
-    const influence = Math.max(0, 1 - dist / (scale * 0.35));
+    // base color: deep ocean blue
+    let cr = 15 + brightness * 35;
+    let cg = 50 + brightness * 90;
+    let cb = 120 + brightness * 80;
+    let totalInf = 0;
 
-    // interpolate blue → yellow
-    const r = Math.round(lerp(20 + brightness * 30, 255, influence));
-    const g = Math.round(lerp(80 + brightness * 80, 220, influence * 0.9));
-    const b = Math.round(lerp(180 + brightness * 60, 20, influence));
-    const alpha = 0.25 + brightness * 0.65;
+    travelers.forEach((t, ti) => {
+      const tp = travelerProj[ti];
+      const dx = p.sx - tp.sx;
+      const dy = p.sy - tp.sy;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+      const inf = Math.max(0, 1 - dist / (scale * 0.32));
+      if (inf > 0) {
+        cr = lerp(cr, t.color[0], inf * 0.85);
+        cg = lerp(cg, t.color[1], inf * 0.85);
+        cb = lerp(cb, t.color[2], inf * 0.85);
+        totalInf += inf;
+      }
+    });
 
-    const dotSize = 1.2 + depth * 1.8 + influence * 2.5;
+    const alpha = 0.22 + brightness * 0.65;
+    const dotSize = 1.1 + depth * 1.9 + Math.min(totalInf, 1) * 2.2;
 
     ctx.beginPath();
     ctx.arc(p.sx, p.sy, dotSize, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(${r},${g},${b},${alpha})`;
+    ctx.fillStyle = `rgba(${Math.round(cr)},${Math.round(cg)},${Math.round(cb)},${alpha.toFixed(2)})`;
     ctx.fill();
   });
 
-  // draw comet glow
-  const grad = ctx.createRadialGradient(csx, csy, 0, csx, csy, scale * 0.08);
-  grad.addColorStop(0, 'rgba(255,230,60,0.9)');
-  grad.addColorStop(0.4, 'rgba(255,180,20,0.3)');
-  grad.addColorStop(1, 'rgba(255,140,0,0)');
-  ctx.beginPath();
-  ctx.arc(csx, csy, scale * 0.08, 0, Math.PI * 2);
-  ctx.fillStyle = grad;
-  ctx.fill();
+  // draw trails + glow for each traveler
+  travelers.forEach((t, ti) => {
+    const trail = trailProj[ti];
+    const tp = travelerProj[ti];
+    const [r, g, b] = t.color;
+    const [tr, tg, tb] = t.trail;
 
-  // comet core
-  ctx.beginPath();
-  ctx.arc(csx, csy, 3, 0, Math.PI * 2);
-  ctx.fillStyle = '#fff8a0';
-  ctx.fill();
+    // trail
+    trail.forEach((tp2, i) => {
+      if (tp2.z < -0.1) return; // behind sphere
+      const frac = i / trail.length;
+      const alpha = frac * 0.55;
+      const size = 1.0 + frac * 2.2;
+      ctx.beginPath();
+      ctx.arc(tp2.sx, tp2.sy, size, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${tr},${tg},${tb},${alpha.toFixed(2)})`;
+      ctx.fill();
+    });
+
+    // only draw glow + core if on front hemisphere
+    if (tp.z > -0.05) {
+      // glow
+      const gr = ctx.createRadialGradient(tp.sx, tp.sy, 0, tp.sx, tp.sy, scale * 0.07);
+      gr.addColorStop(0, `rgba(${r},${g},${b},0.85)`);
+      gr.addColorStop(0.45, `rgba(${r},${g},${b},0.22)`);
+      gr.addColorStop(1, `rgba(${r},${g},${b},0)`);
+      ctx.beginPath();
+      ctx.arc(tp.sx, tp.sy, scale * 0.07, 0, Math.PI * 2);
+      ctx.fillStyle = gr;
+      ctx.fill();
+
+      // core
+      ctx.beginPath();
+      ctx.arc(tp.sx, tp.sy, 2.8, 0, Math.PI * 2);
+      ctx.fillStyle = `rgb(${Math.min(255,r+60)},${Math.min(255,g+60)},${Math.min(255,b+60)})`;
+      ctx.fill();
+    }
+  });
 
   requestAnimationFrame(draw);
 }
 
 draw();
-window.addEventListener('resize', () => { resize(); });
 </script>
+</body>
+</html>
